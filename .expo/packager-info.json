@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
+  "packagerPid": null,
+  "expoServerNgrokUrl": "https://sr-psf.anonymous.fidelcly.exp.direct",
+  "packagerNgrokUrl": "https://sr-psf.anonymous.fidelcly.exp.direct",
+  "ngrokPid": 4656,
+  "webpackServerPort": null
+}
