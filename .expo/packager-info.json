@@ -3,8 +3,8 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://sr-psf.anonymous.fidelcly.exp.direct",
-  "packagerNgrokUrl": "https://sr-psf.anonymous.fidelcly.exp.direct",
-  "ngrokPid": 4656,
-  "webpackServerPort": null
+  "expoServerNgrokUrl": "https://sr-psf.anonymous.app.exp.direct",
+  "packagerNgrokUrl": "https://sr-psf.anonymous.app.exp.direct",
+  "ngrokPid": 27896,
+  "webpackServerPort": 19006
 }
