@@ -1,52 +1,65 @@
 import { View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 import { Ionicons } from '@expo/vector-icons';
 
+import HomeScreen from './screens/HomeScreen';
+import MapScreen from './screens/MapScreen';
+import ScanScreen from './screens/ScanScreen';
+import CardScreen from './screens/CardScreen';
+import ProfilScreen from './screens/ProfilScreen';
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, backgroundColor:'#e67e22'}}>   
-    </View>
-  );
- }
- 
- function PageAScreen(){
-  return (
-    <View style={{ flex: 1, backgroundColor:'#2ecc71'}}>
-    </View>
-  );
- }
- 
+
+
+ const Stack = createStackNavigator();
  const Tab = createBottomTabNavigator();
- 
- export default function App() {
-  return (
-    <NavigationContainer>
+
+ const BottomNavigator = () => {
+    return (
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color }) => {
             let iconName;
   
             if (route.name === 'Home') {
-              iconName = 'ios-information-circle';
-            } else if (route.name === 'PageA') {
-              iconName = 'ios-options';
+              iconName = 'md-home';
+            } else if (route.name === 'Map') {
+              iconName = 'map-outline';
+            } else if (route.name === 'Scan') {
+              iconName = 'qr-code-outline';
+            } else if (route.name === 'Card') {
+              iconName = 'card-outline';
+            } else if (route.name === 'Profil') {
+              iconName = 'person-circle-outline';
             }
   
             return <Ionicons name={iconName} size={25} color={color} />;
           },
         })}
         tabBarOptions={{
-          activeTintColor: '#0984e3',
+          activeTintColor: '#5DB075',
        inactiveTintColor: '#dfe6e9',
         }}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="PageA" component={PageAScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen name="Scan" component={ScanScreen} />
+        <Tab.Screen name="Card" component={CardScreen} />
+        <Tab.Screen name="Profil" component={ProfilScreen} />
       </Tab.Navigator>
+    )
+ }
+ 
+ export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}> 
+        {/* <Stack.Screen name='Home' component={HomeScreen} /> */}
+        <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
   }
