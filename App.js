@@ -40,13 +40,25 @@ import ProfilScreen from './screens/ProfilScreen';
           },
         })}
         tabBarOptions={{
+          // showLabel:false,
+          style:{
+            position: 'absolute',
+            bottom: 15,
+            left:15,
+            right:15,
+            elevation:0,
+            borderRadius:15,
+            height:90,
+          },
           activeTintColor: '#5DB075',
        inactiveTintColor: '#dfe6e9',
         }}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
+
         <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Scan" component={ScanScreen} />
+
         <Tab.Screen name="Card" component={CardScreen} />
         <Tab.Screen name="Profil" component={ProfilScreen} />
       </Tab.Navigator>
