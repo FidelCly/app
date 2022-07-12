@@ -5,8 +5,6 @@ import * as Location from 'expo-location';
 import {View, Text} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-
-
 export default function MapScreen(){
 
 
@@ -27,7 +25,6 @@ export default function MapScreen(){
       let location = await Location.getCurrentPositionAsync({});
       // setLocation(location);
       console.log(location);
-
       setPin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
