@@ -1,13 +1,4 @@
-import { View, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import {createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import username from './reducers/username'
-
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 
 import HomeScreen from './screens/HomeScreen';
 import MapScreen from './screens/MapScreen';
@@ -16,9 +7,20 @@ import CardScreen from './screens/CardScreen';
 import ProfilScreen from './screens/ProfilScreen';
 import LoginScreen from './screens/LoginScreen';
 
-const store = createStore(combineReducers({username}))
- const Stack = createStackNavigator();
- const Tab = createBottomTabNavigator();
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { Ionicons } from '@expo/vector-icons';
+
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import username from './reducers/username';
+
+const store = createStore(combineReducers({username}));
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 
  const BottomNavigator = () => {
@@ -71,12 +73,12 @@ const store = createStore(combineReducers({username}))
  export default function App() {
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}> 
-        <Stack.Screen name='Login' component={LoginScreen} />
-        <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}> 
+          <Stack.Screen name='Login' component={LoginScreen} />
+          <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
   }

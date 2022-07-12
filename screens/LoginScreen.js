@@ -1,42 +1,48 @@
 import React, { useState } from 'react';
-import {View, Pressable, Text, StyleSheet} from 'react-native';
+import {View, Pressable, Text, StyleSheet, Image} from 'react-native';
 import {Input, Button} from '@rneui/themed';
 import { Icon } from "@rneui/themed";
+
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import { connect } from 'react-redux';
 
 export function LoginScreen(props){
 
-  const [text, setText] = useState('');
   const [username, setUsername] = useState('');
   
     return (
         <View style={{ flex: 1, backgroundColor:'#fff', alignItems:'center', justifyContent: 'center'}}>
+          
+          <Image
+            style={{width:286, height:199}}
+            source={require('../assets/secure_login.png')}
+          />
           <Input
             containerStyle={{ width:'70%'}}
-            inputStyle={{marginLeft:10}}
-            placeholder='John'
+            inputStyle={{
+              marginLeft:10,
+              
+            
+            }}
+            placeholder='Email'
             leftIcon = {
-              <Icon
-                name='user'
-                size={24}
-                color='#eb4d4b'
-                />
+              <FontAwesome5 name="user-alt" size={24} color="black" />
             }
-            onChangeText = {(val) => setPseudo(val)}
+            onChangeText = {(val) => setUsername(val)}
             
           />
           <Input
             containerStyle={{marginBottom:25, width:'70%'}}
             inputStyle={{marginLeft:10}}
-            placeholder='Password'
+            placeholder='Mot de passe'
+            type='password'
+            secureTextEntry={true}
             leftIcon = {
-              <Icon
-                name='user'
-                size={24}
-                color='#eb4d4b'
-                />
+              <FontAwesome5 name="key" size={24} color="black" />
             }
+            errorStyle={{ color: 'red' }}
+            renderErrorMessage='ENTER A VALID ERROR HERE'
             
           />
           <Pressable
@@ -44,11 +50,17 @@ export function LoginScreen(props){
             type = "solid"
             style={styles.buttonConnect}
             onPress={()=>
-              props.navigation.navigate('BottomNavigator', {screen:'Scan'})
+              {
+                props.onSubmitUsername(username); 
+                props.navigation.navigate('BottomNavigator', {screen:'Scan'});
+                console.log(username);
+              }
+              
               }
           >
             <Text style={{color: 'white', fontSize:18}}>Se connecter</Text>
           </Pressable>
+          <Text style={{margin:10}}>Mot de passe oublié?</Text>
         </View>
       );
 }
@@ -56,7 +68,7 @@ export function LoginScreen(props){
 const styles = StyleSheet.create({
 
   buttonConnect:{
-    backgroundColor:'#E5B824',
+    backgroundColor:'#5DB075',
     paddingTop: 10,
     paddingBottom: 10,
     paddingRight: 30,
@@ -69,7 +81,8 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch){
   return {
     onSubmitUsername : function(username){
-      dispatch ({type: 'saveUsername', username: username})
+      dispatch ({type: 'saveUsername', username: username});
+
     }
   }
 }

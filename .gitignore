@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+.expo/web/cache
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
