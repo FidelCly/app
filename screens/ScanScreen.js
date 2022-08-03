@@ -5,10 +5,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 
 
 
-export default function ScanScreen(){
+export default function ScanScreen(props){
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState('Not yet scanned');
+  const [text, setText] = useState("Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet");
 
   const askForCameraPermission = () => {
     (async () => {
@@ -34,7 +34,7 @@ export default function ScanScreen(){
   if (hasPermission === false) {
     return(
       <View style={styles.container}>
-        <Text>No access to camera</Text>
+        <Text>Autorisation nécessaire pour accéder à la caméra</Text>
         <Button title={'Allow Camera'} onPress={() => askForCameraPermission()}/>
       </View>
 
@@ -51,9 +51,16 @@ export default function ScanScreen(){
           </View>
           <Text style={styles.maintext}>{text}</Text>
           {scanned && 
+          <View>
             <Pressable style={styles.buttonTapAgain} onPress={() => setScanned(false)}>
               <Text style={{color: 'white', fontSize:18}}>Scanne à nouveau</Text>
-            </Pressable >}
+            </Pressable >
+            <Pressable style={styles.addWallet} onPress={() => props.navigation.navigate('BottomNavigator', {screen:'Wallet'})}>
+              <Text style={{color: 'white', fontSize:18}}>Ajouter au Wallet</Text>
+            </Pressable > 
+          </View>
+             
+          }
         </View>
 
          
@@ -79,10 +86,12 @@ const styles = StyleSheet.create({
   },
   maintext:{
     fontSize:20,
-    fontWeight:'bold',
-    margin:20,
+    // textTransform: 'uppercase',
+    // letterSpacing: -1,
+    textAlign:'center',
+    paddingTop:30,
+    margin:10,
     color:'#fff',
-
   },
   buttonTapAgain:{
     backgroundColor:'#E5B824',
@@ -91,6 +100,16 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     paddingLeft:30,
     borderRadius:20,
+    marginTop:20,
+  },
+  addWallet:{
+    backgroundColor:'#E5B824',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 30,
+    paddingLeft:30,
+    borderRadius:20,
+    marginTop:20,
   }
 
 
