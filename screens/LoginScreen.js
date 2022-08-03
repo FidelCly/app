@@ -22,8 +22,6 @@ export function LoginScreen(props){
             containerStyle={{ width:'70%'}}
             inputStyle={{
               marginLeft:10,
-              
-            
             }}
             placeholder='Email'
             leftIcon = {

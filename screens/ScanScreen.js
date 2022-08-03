@@ -25,7 +25,7 @@ export default function ScanScreen(){
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-    console.log('Type:' + type + '\nData' + data);
+    console.log('Type:', type + '\nData URL QR CODE:', data);
   }
 
   if (hasPermission === null) {
