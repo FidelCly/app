@@ -53,7 +53,7 @@ export default function ScanScreen(props){
           {scanned && 
           <View>
             <Pressable style={styles.buttonTapAgain} onPress={() => setScanned(false)}>
-              <Text style={{color: 'white', fontSize:18}}>Scanne à nouveau</Text>
+              <Text style={{color: 'white', fontSize:18}}>Scanner à nouveau</Text>
             </Pressable >
             <Pressable style={styles.addWallet} onPress={() => props.navigation.navigate('BottomNavigator', {screen:'Wallet'})}>
               <Text style={{color: 'white', fontSize:18}}>Ajouter au Wallet</Text>
