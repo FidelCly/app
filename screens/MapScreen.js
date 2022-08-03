@@ -13,14 +13,6 @@ export default function MapScreen(){
     longitude: 2.333333,
   })
 
-  const [region, setRegion] = React.useState({
-    latitude: 48.8425461,
-    longitude: 2.5803917,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-
-  })
-  
 
   React.useEffect(() => {
     
@@ -32,7 +24,6 @@ export default function MapScreen(){
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      // setLocation(location);
       console.log("First localisation:",location);
       setPin({
         latitude: location.coords.latitude,
@@ -46,22 +37,22 @@ export default function MapScreen(){
     return (
         <MapView
           style={{flex:1}}
-          initialRegion={{
+          region={{
             latitude: pin.latitude,
             longitude: pin.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
-          onUserLocationChange={(e)=>{
+          // onUserLocationChange={(e)=>{
             // console.log("Localisation en temps réel :", e.nativeEvent.coordinate);
-            setPin({
-              latitude: e.nativeEvent.coordinate.latitude,
-              longitude: e.nativeEvent.coordinate.longitude,
-            });
+            // setPin({
+            //   latitude: e.nativeEvent.coordinate.latitude,
+            //   longitude: e.nativeEvent.coordinate.longitude,
+            // });
             // console.log("Localisation temps réel:", pin.latitude);
 
-          }}
+          // }}
 
         >
          <Marker key={"currentPos"}
@@ -69,9 +60,6 @@ export default function MapScreen(){
           pinColor="red"
           title="Hello"
           description="I'am here"
-          
-          
-          
         />
         </MapView>
       );
