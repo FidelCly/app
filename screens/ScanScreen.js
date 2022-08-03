@@ -34,7 +34,7 @@ export default function ScanScreen(props){
   if (hasPermission === false) {
     return(
       <View style={styles.container}>
-        <Text>Autorisation nécessaire pour accéder à la caméra</Text>
+        <Text>L'application nécessite une autorisation pour accéder à la caméra</Text>
         <Button title={'Allow Camera'} onPress={() => askForCameraPermission()}/>
       </View>
 
