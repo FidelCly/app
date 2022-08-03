@@ -50,7 +50,7 @@ export function LoginScreen(props){
             onPress={()=>
               {
                 props.onSubmitUsername(username); 
-                props.navigation.navigate('BottomNavigator', {screen:'Scan'});
+                props.navigation.navigate('BottomNavigator', {screen:'Scan QR Code'});
                 console.log(username);
               }
               

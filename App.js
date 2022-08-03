@@ -34,9 +34,9 @@ const Tab = createBottomTabNavigator();
               iconName = 'md-home';
             } else if (route.name === 'Map') {
               iconName = 'map-outline';
-            } else if (route.name === 'Scan') {
+            } else if (route.name === 'Scan QR Code') {
               iconName = 'qr-code-outline';
-            } else if (route.name === 'Cartes') {
+            } else if (route.name === 'Wallet') {
               iconName = 'card-outline';
             } else if (route.name === 'Profil') {
               iconName = 'person-circle-outline';
@@ -46,7 +46,7 @@ const Tab = createBottomTabNavigator();
           },
         })}
         tabBarOptions={{
-          showLabel:false,
+          showLabel:true,
           style:{
             // position: 'absolute',
           //   bottom: 15,
@@ -62,9 +62,9 @@ const Tab = createBottomTabNavigator();
         }}
       >
         <Tab.Screen name="Accueil" component={HomeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Scan" component={ScanScreen} />
-        <Tab.Screen name="Cartes" component={CardScreen} />
+        <Tab.Screen name="Map" component={MapScreen} options={{unmountOnBlur: true}} />
+        <Tab.Screen name="Scan QR Code" component={ScanScreen} options={{unmountOnBlur: true}} />
+        <Tab.Screen name="Wallet" component={CardScreen} />
         <Tab.Screen name="Profil" component={ProfilScreen} />
       </Tab.Navigator>
     )
