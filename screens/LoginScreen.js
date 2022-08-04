@@ -28,7 +28,6 @@ export function LoginScreen(props){
               <FontAwesome5 name="user-alt" size={24} color="black" />
             }
             onChangeText = {(val) => setUsername(val)}
-            
           />
           <Input
             containerStyle={{marginBottom:25, width:'70%'}}
@@ -41,7 +40,6 @@ export function LoginScreen(props){
             }
             errorStyle={{ color: 'red' }}
             renderErrorMessage='ENTER A VALID ERROR HERE'
-            
           />
           <Pressable
             title="Se connecter"
@@ -51,9 +49,7 @@ export function LoginScreen(props){
               {
                 props.onSubmitUsername(username); 
                 props.navigation.navigate('BottomNavigator', {screen:'Scan QR Code'});
-                console.log(username);
               }
-              
               }
           >
             <Text style={{color: 'white', fontSize:18}}>Se connecter</Text>

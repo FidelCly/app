@@ -25,7 +25,6 @@ export default function ScanScreen(props){
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setText(data);
-    console.log('Type:', type + '\nData URL QR CODE:', data);
   }
 
   if (hasPermission === null) {
@@ -37,7 +36,6 @@ export default function ScanScreen(props){
         <Text>L'application nécessite une autorisation pour accéder à la caméra</Text>
         <Button title={'Allow Camera'} onPress={() => askForCameraPermission()}/>
       </View>
-
     ) 
   }  
 
