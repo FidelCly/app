@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {View, Pressable, Text, StyleSheet, Image} from 'react-native';
-import {Input, Button} from '@rneui/themed';
-import { Icon } from "@rneui/themed";
+import {Input, Button, Icon } from '@rneui/themed';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch){
   return {
     onSubmitUsername : function(username){
-      dispatch ({type: 'saveUsername', username: username});
+      dispatch ({type: 'saveUsername', username});
 
     }
   }

@@ -10,13 +10,13 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
-const { width } = Dimensions.get('screen');
 import { EvilIcons } from '@expo/vector-icons';
 import {
   FlingGestureHandler,
   Directions,
   State,
 } from 'react-native-gesture-handler';
+const { width } = Dimensions.get('screen');
 
 
 

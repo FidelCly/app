@@ -15,12 +15,12 @@ export default function MapScreen(){
   React.useEffect(() => {
     
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-      let location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync({});
       setPin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
