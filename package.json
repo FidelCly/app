@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.jsx,.ts,.tsx .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
   "dependencies": {
