@@ -20,7 +20,7 @@ const DATA = [
   {
     title: "Exemple 1",
     location: "10 rue Zinedine Zidane, Paris",
-    coupon: "3 ",
+    coupon: "3",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg",
     promotion: "-30%",
@@ -28,7 +28,7 @@ const DATA = [
   {
     title: "Exemple 2",
     location: "12 rue Emmanuel Petit, Paris",
-    coupon: "5 ",
+    coupon: "5",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg",
     promotion: "une boisson offerte",
@@ -36,7 +36,7 @@ const DATA = [
   {
     title: "Exemple 3",
     location: "13 rue Didier Deschamps, Ivry",
-    coupon: "8 ",
+    coupon: "8",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg",
     promotion: "-15%",
@@ -44,7 +44,7 @@ const DATA = [
   {
     title: "Exemple 4",
     location: "14 avenue Youri Djorkaeff, Paris",
-    coupon: "9 ",
+    coupon: "9",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg",
     promotion: "-30%",
@@ -52,7 +52,7 @@ const DATA = [
   {
     title: "Exemple 5",
     location: "15 rue Lilian Thuram, Vitry-Sur-Seine",
-    coupon: "1 ",
+    coupon: "1",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg",
     promotion: "-10€",
@@ -60,7 +60,7 @@ const DATA = [
   {
     title: "Exemple 6",
     location: "16 rue Fabien Barthez, Ivry",
-    coupon: "3 ",
+    coupon: "3",
     imageCard:
       "https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg",
     promotion: "un cadeau",
@@ -119,7 +119,7 @@ const OverflowItems2 = ({ data, scrollXAnimated }) => {
           return (
             <View key={index} style={styles.itemContainer}>
               <Text style={[styles.coupon]}>
-                {item.coupon}coupons avant la promotion :
+                {item.coupon} coupons avant la promotion :
               </Text>
               <Text style={[styles.promotion]} numberOfLines={1}>
                 {item.promotion} !

@@ -11,3 +11,11 @@ Mobile app in React Native
 ## Pour afficher le rendu sur le navigateur
 - Cliquer sur "Run in web browser" - Un nouvel onglet s'ouvre http://localhost:19006/
 
+## Introduire des changement de code
+Avant de push des changements, il faut: 
+
+- Linter et formater le code:
+```
+npm run format
+npm run lint -- --fix
+```
