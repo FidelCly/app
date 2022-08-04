@@ -1,10 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import {View, Text} from 'react-native';
+import { View } from "react-native";
 
-export default function HomeScreen(){
-    return (
-        <View style={{ flex: 1, backgroundColor:'#e67e22'}}>   
-        </View>
-      );
+export default function HomeScreen() {
+  return <View style={{ flex: 1, backgroundColor: "#e67e22" }}></View>;
 }

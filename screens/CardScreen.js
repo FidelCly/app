@@ -1,92 +1,76 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   StatusBar,
   Image,
   FlatList,
-  Dimensions,
   Animated,
   Text,
   View,
   StyleSheet,
   SafeAreaView,
-} from 'react-native';
-import { EvilIcons } from '@expo/vector-icons';
+} from "react-native";
+import { EvilIcons } from "@expo/vector-icons";
 import {
   FlingGestureHandler,
   Directions,
   State,
-} from 'react-native-gesture-handler';
-const { width } = Dimensions.get('screen');
-
-
-
-
-
-
+} from "react-native-gesture-handler";
 
 const DATA = [
   {
-    title: 'Exemple 1',
-    location: '10 rue Zinedine Zidane, Paris',
-    coupon: '3 ',
+    title: "Exemple 1",
+    location: "10 rue Zinedine Zidane, Paris",
+    coupon: "3 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg',
-    promotion: '-30%',
+      "https://www.creative-flyers.com/wp-content/uploads/2020/07/Afro-vibes-flyer-template.jpg",
+    promotion: "-30%",
   },
   {
-    title: 'Exemple 2',
-    location: '12 rue Emmanuel Petit, Paris',
-    coupon: '5 ',
+    title: "Exemple 2",
+    location: "12 rue Emmanuel Petit, Paris",
+    coupon: "5 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg',
-    promotion: 'une boisson offerte',
-
+      "https://www.creative-flyers.com/wp-content/uploads/2019/11/Jungle-Party-Flyer-Template-1.jpg",
+    promotion: "une boisson offerte",
   },
   {
-    title: 'Exemple 3',
-    location: '13 rue Didier Deschamps, Ivry',
-    coupon: '8 ',
+    title: "Exemple 3",
+    location: "13 rue Didier Deschamps, Ivry",
+    coupon: "8 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg',
-    promotion: '-15%',
-
+      "https://www.creative-flyers.com/wp-content/uploads/2020/06/4th-Of-July-Invitation.jpg",
+    promotion: "-15%",
   },
   {
-    title: 'Exemple 4',
-    location: '14 avenue Youri Djorkaeff, Paris',
-    coupon: '9 ',
+    title: "Exemple 4",
+    location: "14 avenue Youri Djorkaeff, Paris",
+    coupon: "9 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg',
-    promotion: '-30%',
-
+      "https://www.creative-flyers.com/wp-content/uploads/2020/07/Summer-Music-Festival-Poster.jpg",
+    promotion: "-30%",
   },
   {
-    title: 'Exemple 5',
-    location: '15 rue Lilian Thuram, Vitry-Sur-Seine',
-    coupon: '1 ',
+    title: "Exemple 5",
+    location: "15 rue Lilian Thuram, Vitry-Sur-Seine",
+    coupon: "1 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg',
-    promotion: '-10€',
-
+      "https://www.creative-flyers.com/wp-content/uploads/2020/06/BBQ-Flyer-Psd-Template.jpg",
+    promotion: "-10€",
   },
   {
-    title: 'Exemple 6',
-    location: '16 rue Fabien Barthez, Ivry',
-    coupon: '3 ',
+    title: "Exemple 6",
+    location: "16 rue Fabien Barthez, Ivry",
+    coupon: "3 ",
     imageCard:
-      'https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg',
-    promotion: 'un cadeau',
-
+      "https://www.creative-flyers.com/wp-content/uploads/2020/06/Festival-Music-PSD-Template.jpg",
+    promotion: "un cadeau",
   },
-
 ];
-
 
 const OVERFLOW_HEIGHT = 90;
 const VISIBLE_ITEMS = 3;
 
-
-// HEADER - INFORMATION TEXTE 
+// HEADER - INFORMATION TEXTE
 
 const OverflowItems = ({ data, scrollXAnimated }) => {
   const inputRange = [-1, 0, 1];
@@ -106,14 +90,13 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
               <View style={styles.itemContainerRow}>
                 <Text style={[styles.location]}>
                   <EvilIcons
-                    name='location'
+                    name="location"
                     size={16}
-                    color='black'
+                    color="black"
                     style={{ marginRight: 5 }}
                   />
                   {item.location}
                 </Text>
-                
               </View>
             </View>
           );
@@ -122,7 +105,6 @@ const OverflowItems = ({ data, scrollXAnimated }) => {
     </View>
   );
 };
-
 
 const OverflowItems2 = ({ data, scrollXAnimated }) => {
   const inputRange = [-1, 0, 1];
@@ -136,11 +118,12 @@ const OverflowItems2 = ({ data, scrollXAnimated }) => {
         {data.map((item, index) => {
           return (
             <View key={index} style={styles.itemContainer}>
-              <Text style={[styles.coupon]}>{item.coupon}coupons avant la promotion :</Text>
+              <Text style={[styles.coupon]}>
+                {item.coupon}coupons avant la promotion :
+              </Text>
               <Text style={[styles.promotion]} numberOfLines={1}>
                 {item.promotion} !
               </Text>
-              
             </View>
           );
         })}
@@ -177,7 +160,7 @@ export default function CardScreen() {
 
   return (
     <FlingGestureHandler
-      key='left'
+      key="left"
       direction={Directions.LEFT}
       onHandlerStateChange={(ev) => {
         if (ev.nativeEvent.state === State.END) {
@@ -189,7 +172,7 @@ export default function CardScreen() {
       }}
     >
       <FlingGestureHandler
-        key='right'
+        key="right"
         direction={Directions.RIGHT}
         onHandlerStateChange={(ev) => {
           if (ev.nativeEvent.state === State.END) {
@@ -210,7 +193,7 @@ export default function CardScreen() {
             inverted
             contentContainerStyle={{
               flex: 1,
-              justifyContent: 'center',
+              justifyContent: "center",
               padding: 10,
               marginTop: 30,
             }}
@@ -248,7 +231,7 @@ export default function CardScreen() {
               return (
                 <Animated.View
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     left: -250 / 2,
                     opacity,
                     transform: [
@@ -272,7 +255,6 @@ export default function CardScreen() {
             }}
           />
           <OverflowItems2 data={data} scrollXAnimated={scrollXAnimated} />
-
         </SafeAreaView>
       </FlingGestureHandler>
     </FlingGestureHandler>
@@ -282,20 +264,20 @@ export default function CardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 28,
-    fontWeight: '900',
-    textTransform: 'uppercase',
+    fontWeight: "900",
+    textTransform: "uppercase",
     letterSpacing: -1,
   },
   promotion: {
     fontSize: 22,
     letterSpacing: -1,
-    fontWeight: '900',
-    textTransform: 'uppercase',
+    fontWeight: "900",
+    textTransform: "uppercase",
   },
   location: {
     fontSize: 16,
@@ -306,16 +288,16 @@ const styles = StyleSheet.create({
   itemContainer: {
     height: OVERFLOW_HEIGHT,
     padding: 20,
-    backgroundColor:'#fff',
+    backgroundColor: "#fff",
   },
   itemContainerRow: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    backgroundColor:'#fff',
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    backgroundColor: "#fff",
   },
   overflowContainer: {
     height: OVERFLOW_HEIGHT,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 });
