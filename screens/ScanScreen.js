@@ -56,7 +56,7 @@ export default function ScanScreen(props){
               <Text style={{color: 'white', fontSize:18}}>Scanner à nouveau</Text>
             </Pressable >
             <Pressable style={styles.addWallet} onPress={() => props.navigation.navigate('BottomNavigator', {screen:'Cartes Fid'})}>
-              <Text style={{color: 'white', fontSize:18}}>Ajouter aux Cartes Fid</Text>
+              <Text style={{color: 'white', fontSize:18}}>Ajouter aux Cartes</Text>
             </Pressable > 
           </View>
              
