@@ -29,7 +29,7 @@ export default function ScanScreen(props){
   }
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Demande d'autorisation de la caméra</Text>;
   }
   if (hasPermission === false) {
     return(
@@ -45,7 +45,7 @@ export default function ScanScreen(props){
         <View style={styles.container}>
           <View style={styles.barcodebox}>
           <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            onBarCodeScanned={scanned ? false : handleBarCodeScanned}
             style={{height:400, width:400}}
           />
           </View>
@@ -55,8 +55,8 @@ export default function ScanScreen(props){
             <Pressable style={styles.buttonTapAgain} onPress={() => setScanned(false)}>
               <Text style={{color: 'white', fontSize:18}}>Scanner à nouveau</Text>
             </Pressable >
-            <Pressable style={styles.addWallet} onPress={() => props.navigation.navigate('BottomNavigator', {screen:'Wallet'})}>
-              <Text style={{color: 'white', fontSize:18}}>Ajouter au Wallet</Text>
+            <Pressable style={styles.addWallet} onPress={() => props.navigation.navigate('BottomNavigator', {screen:'Cartes Fid'})}>
+              <Text style={{color: 'white', fontSize:18}}>Ajouter aux Cartes Fid</Text>
             </Pressable > 
           </View>
              

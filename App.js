@@ -32,11 +32,11 @@ const Tab = createBottomTabNavigator();
   
             if (route.name === 'Accueil') {
               iconName = 'md-home';
-            } else if (route.name === 'Map') {
+            } else if (route.name === 'Plan') {
               iconName = 'map-outline';
             } else if (route.name === 'Scan QR Code') {
               iconName = 'qr-code-outline';
-            } else if (route.name === 'Wallet') {
+            } else if (route.name === 'Cartes Fid') {
               iconName = 'card-outline';
             } else if (route.name === 'Profil') {
               iconName = 'person-circle-outline';
@@ -62,9 +62,9 @@ const Tab = createBottomTabNavigator();
         }}
       >
         <Tab.Screen name="Accueil" component={HomeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} options={{unmountOnBlur: true}} />
+        <Tab.Screen name="Plan" component={MapScreen} options={{unmountOnBlur: true}} />
         <Tab.Screen name="Scan QR Code" component={ScanScreen} options={{unmountOnBlur: true}} />
-        <Tab.Screen name="Wallet" component={CardScreen} />
+        <Tab.Screen name="Cartes Fid" component={CardScreen} />
         <Tab.Screen name="Profil" component={ProfilScreen} />
       </Tab.Navigator>
     )

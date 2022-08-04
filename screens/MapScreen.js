@@ -7,12 +7,10 @@ import MapView, { Marker } from 'react-native-maps';
 
 export default function MapScreen(){
 
-
   const [pin, setPin] = React.useState({
     latitude: 48.866667,
     longitude: 2.333333,
   })
-
 
   React.useEffect(() => {
     
@@ -22,15 +20,11 @@ export default function MapScreen(){
         setErrorMsg('Permission to access location was denied');
         return;
       }
-
       let location = await Location.getCurrentPositionAsync({});
-      console.log("First localisation:",location);
       setPin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      })
-      
-      ;
+      });
     })();
   }, []);
 
@@ -44,16 +38,6 @@ export default function MapScreen(){
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
-          // onUserLocationChange={(e)=>{
-            // console.log("Localisation en temps réel :", e.nativeEvent.coordinate);
-            // setPin({
-            //   latitude: e.nativeEvent.coordinate.latitude,
-            //   longitude: e.nativeEvent.coordinate.longitude,
-            // });
-            // console.log("Localisation temps réel:", pin.latitude);
-
-          // }}
-
         >
          <Marker key={"currentPos"}
           coordinate={pin}
