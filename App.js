@@ -1,0 +1,84 @@
+import React from 'react';
+
+import HomeScreen from './screens/HomeScreen';
+import MapScreen from './screens/MapScreen';
+import ScanScreen from './screens/ScanScreen';
+import CardScreen from './screens/CardScreen';
+import ProfilScreen from './screens/ProfilScreen';
+import LoginScreen from './screens/LoginScreen';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { Ionicons } from '@expo/vector-icons';
+
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import username from './reducers/username';
+
+const store = createStore(combineReducers({username}));
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+
+ const BottomNavigator = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color }) => {
+            let iconName;
+  
+            if (route.name === 'Accueil') {
+              iconName = 'md-home';
+            } else if (route.name === 'Plan') {
+              iconName = 'map-outline';
+            } else if (route.name === 'Scan QR Code') {
+              iconName = 'qr-code-outline';
+            } else if (route.name === 'Cartes Fid') {
+              iconName = 'card-outline';
+            } else if (route.name === 'Profil') {
+              iconName = 'person-circle-outline';
+            }
+  
+            return <Ionicons name={iconName} size={25} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          showLabel:true,
+          style:{
+            // position: 'absolute',
+          //   bottom: 15,
+          //   left:15,
+          //   right:15,
+          //   elevation:0,
+            // borderRadius:15,
+            height:70,
+            paddingBottom:10,
+          },
+          activeTintColor: '#5DB075',
+       inactiveTintColor: '#dfe6e9',
+        }}
+      >
+        <Tab.Screen name="Accueil" component={HomeScreen} />
+        <Tab.Screen name="Plan" component={MapScreen} options={{unmountOnBlur: true}} />
+        <Tab.Screen name="Scan QR Code" component={ScanScreen} options={{unmountOnBlur: true}} />
+        <Tab.Screen name="Cartes Fid" component={CardScreen} />
+        <Tab.Screen name="Profil" component={ProfilScreen} />
+      </Tab.Navigator>
+    )
+ }
+ 
+ export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}> 
+          <Stack.Screen name='Login' component={LoginScreen} />
+          <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
+  }
