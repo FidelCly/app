@@ -13,7 +13,6 @@ dist-ssr
 *.local
 
 .expo/web/cache
-.expo
 
 # Editor directories and files
 .vscode/*
