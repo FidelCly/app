@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Button, Text, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 
@@ -34,13 +34,15 @@ export default function ScanScreen(props) {
   if (hasPermission === false) {
     return (
       <View style={styles.container}>
-        <Text>
+        <Text style={styles.errorMsg}>
           L'application nécessite une autorisation pour accéder à la caméra
         </Text>
-        <Button
+        <Pressable
           title={"Allow Camera"}
           onPress={() => askForCameraPermission()}
-        />
+        >
+          <Text style={styles.buttonAllowCamera}>Autoriser la caméra</Text>
+        </Pressable>
       </View>
     );
   }
@@ -101,12 +103,16 @@ const styles = StyleSheet.create({
   },
   maintext: {
     fontSize: 20,
-    // textTransform: 'uppercase',
-    // letterSpacing: -1,
     textAlign: "center",
     paddingTop: 30,
     margin: 10,
     color: "#fff",
+  },
+  errorMsg: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 20,
+    padding: 30,
   },
   buttonTapAgain: {
     backgroundColor: "#E5B824",
@@ -125,5 +131,16 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     borderRadius: 20,
     marginTop: 20,
+  },
+  buttonAllowCamera: {
+    backgroundColor: "#E5B824",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 30,
+    paddingLeft: 30,
+    borderRadius: 20,
+    marginTop: 20,
+    color: "#fff",
+    fontSize: 16,
   },
 });
