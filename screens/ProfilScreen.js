@@ -1,17 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 
 const ProfilScreen = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [emailUserAPI, setEmailUserAPI] = useState([]);
+
+  const urlAPI = "http://20.74.119.86:3000/users/1";
+
+  useEffect(() => {
+    fetch(urlAPI)
+      .then((response) => response.json())
+      .then((json) => setEmailUserAPI(json.email))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+        {isLoading ? (
+          <Text>Loading ...</Text>
+        ) : (
+          <View>
+            <Text>{emailUserAPI}</Text>
+          </View>
+        )}
         <Text style={styles.textStyle}>
           Présentez votre QR code unique à votre commerçant pour profiter du
           programme de fidélité
         </Text>
         <QRCode
-          value="lao"
+          value={emailUserAPI}
           size={180}
           color="black"
           backgroundColor="white"
