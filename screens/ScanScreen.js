@@ -4,12 +4,22 @@ import { View, StyleSheet, Text, Pressable } from "react-native";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 
+import defaultServer from "../config/global.js";
+
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState(
+  const [shopIdScan, setShopIdScan] = useState(
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
+  const idUser = 1;
+  const urlShop = "https://betea.fr/";
+  const urlPostCard = defaultServer + "/wallet/";
+  const currentDate = new Date();
+  const endAtDate = new Date();
+
+  const urlGetNameShop = defaultServer + "/shops/" + shopIdScan;
+  const [nameShop, setNameShop] = useState("");
 
   const askForCameraPermission = () => {
     (async () => {
@@ -25,7 +35,35 @@ export default function ScanScreen(props) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(data);
+    setShopIdScan(data);
+    console.log(data);
+    console.log(currentDate);
+    console.log(endAtDate);
+  };
+
+  const getNameShop = (data) => {
+    fetch(urlGetNameShop)
+      .then((response) => response.json())
+      .then((json) => setNameShop(json.companyName));
+  };
+  getNameShop();
+
+  const handleClick = () => {
+    fetch(urlPostCard, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: urlShop,
+        shopId: shopIdScan,
+        userId: idUser,
+        startAt: currentDate,
+        endAt: endAtDate,
+      }),
+    });
   };
 
   if (hasPermission === null) {
@@ -55,7 +93,7 @@ export default function ScanScreen(props) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
+      <Text style={styles.maintext}>{nameShop}</Text>
       {scanned && (
         <View>
           <Pressable
@@ -69,9 +107,13 @@ export default function ScanScreen(props) {
           <Pressable
             style={styles.addWallet}
             onPress={() =>
-              props.navigation.navigate("BottomNavigator", {
-                screen: "Cartes Fid",
-              })
+              props.navigation.navigate(
+                "BottomNavigator",
+                {
+                  screen: "Cartes Fid",
+                },
+                handleClick()
+              )
             }
           >
             <Text style={{ color: "white", fontSize: 18 }}>
