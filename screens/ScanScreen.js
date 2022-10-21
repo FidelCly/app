@@ -11,8 +11,8 @@ export default function ScanScreen(props) {
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
   const idUser = 1;
-  const urlShop = "https://betea.fr/";
-  const urlPostCard = API_URL + "/wallet/";
+  const urlShop = "https://besttea.fr/";
+  const urlPostCard = API_URL + "/cards/";
   const currentDate = new Date();
   const endAtDate = new Date();
 
