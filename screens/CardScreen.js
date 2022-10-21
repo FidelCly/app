@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import defaultServer from "../config/global.js";
+import { API_URL } from "@env";
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
@@ -21,7 +21,7 @@ const CardScreen = () => {
   const [getWalletFromUser, setGetWalletFromUser] = useState([]);
 
   // URL API Affiche les cartes clients que le user a enregistré dans son wallet
-  const urlGetWalletFromUser = defaultServer + "/users/" + userId + "/wallet/";
+  const urlGetWalletFromUser = API_URL + "/users/" + userId + "/wallet/";
   const [selectedId, setSelectedId] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
@@ -30,28 +30,14 @@ const CardScreen = () => {
       const response = await fetch(urlGetWalletFromUser);
       const json = await response.json();
       setGetWalletFromUser(json);
-      console.log(json);
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
   };
 
-  // URL API Récupérer les shops selon l'id
-  // const urlGetNameShop = defaultServer + "/shops/" + shopId;
-  // const [nameShop, setNameShop] = useState("");
-  // const [shopId, setShopId] = useState([]);
-
-  // const getNameShop = (dataName) => {
-  //   fetch(urlGetNameShop)
-  //     .then((response) => response.json())
-  //     .then((json) => setNameShop(json.companyName));
-  // };
-
   useEffect(() => {
     getWalletFromApi();
-    // getNameShop();
   }, []);
 
   const renderItem = ({ item }) => {

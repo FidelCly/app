@@ -1,10 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
-
 import { BarCodeScanner } from "expo-barcode-scanner";
-
-import defaultServer from "../config/global.js";
+import { API_URL } from "@env";
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -14,11 +12,11 @@ export default function ScanScreen(props) {
   );
   const idUser = 1;
   const urlShop = "https://betea.fr/";
-  const urlPostCard = defaultServer + "/wallet/";
+  const urlPostCard = API_URL + "/wallet/";
   const currentDate = new Date();
   const endAtDate = new Date();
 
-  const urlGetNameShop = defaultServer + "/shops/" + shopIdScan;
+  const urlGetNameShop = API_URL + "/shops/" + shopIdScan;
   const [nameShop, setNameShop] = useState("");
 
   const askForCameraPermission = () => {
@@ -36,9 +34,6 @@ export default function ScanScreen(props) {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setShopIdScan(data);
-    console.log(data);
-    console.log(currentDate);
-    console.log(endAtDate);
   };
 
   const getNameShop = (data) => {

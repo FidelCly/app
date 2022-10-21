@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 
-import defaultServer from "../config/global.js";
+import { API_URL } from "@env";
 
 const ProfilScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const [emailUserAPI, setEmailUserAPI] = useState([]);
 
   const idUser = "1";
-  const urlAPIUsers = defaultServer + "/users/" + idUser;
+  const urlAPIUsers = API_URL + "/users/" + idUser;
 
   useEffect(() => {
     fetch(urlAPIUsers)
