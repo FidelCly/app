@@ -18,7 +18,7 @@
     "@react-navigation/native": "^5.9.8",
     "@react-navigation/stack": "^5.14.9",
     "@rneui/base": "^4.0.0-rc.5",
-    "@rneui/themed": "^4.0.0-rc.6",
+    "@rneui/themed": "^4.0.0-rc.7",
     "expo": "~45.0.0",
     "expo-barcode-scanner": "~11.4.0",
     "expo-location": "~14.3.0",
