@@ -38,6 +38,8 @@ const CardScreen = () => {
 
   useEffect(() => {
     getWalletFromApi();
+
+    setLoading(false);
   }, []);
 
   const renderItem = ({ item }) => {
@@ -98,5 +100,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  buttonRefresh: {
+    backgroundColor: "#E5B824",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 30,
+    paddingLeft: 30,
+    borderRadius: 20,
+    marginTop: 20,
   },
 });

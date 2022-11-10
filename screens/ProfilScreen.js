@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { API_URL } from "@env";
 
@@ -26,7 +27,10 @@ const ProfilScreen = () => {
           <Text>Chargement ...</Text>
         ) : (
           <View>
-            <Text>{emailUserAPI}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold", padding: 20 }}>
+              <Ionicons name="person-sharp" size={24} color="black" />
+              {emailUserAPI}
+            </Text>
           </View>
         )}
         <Text style={styles.textStyle}>

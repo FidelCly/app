@@ -11,7 +11,7 @@ export default function ScanScreen(props) {
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
   const idUser = 1;
-  const urlShop = "https://besttea.fr/";
+  const urlShop = "https://betea.fr/";
   const urlPostCard = API_URL + "/cards/";
   const currentDate = new Date();
   const endAtDate = new Date();
@@ -43,7 +43,7 @@ export default function ScanScreen(props) {
   };
   getNameShop();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     fetch(urlPostCard, {
       method: "POST",
       mode: "no-cors",
@@ -58,6 +58,9 @@ export default function ScanScreen(props) {
         startAt: currentDate,
         endAt: endAtDate,
       }),
+    });
+    await props.navigation.navigate("BottomNavigator", {
+      screen: "Cartes Fid",
     });
   };
 
@@ -99,18 +102,7 @@ export default function ScanScreen(props) {
               Scanner à nouveau
             </Text>
           </Pressable>
-          <Pressable
-            style={styles.addWallet}
-            onPress={() =>
-              props.navigation.navigate(
-                "BottomNavigator",
-                {
-                  screen: "Cartes Fid",
-                },
-                handleClick()
-              )
-            }
-          >
+          <Pressable style={styles.addWallet} onPress={() => handleClick()}>
             <Text style={{ color: "white", fontSize: 18 }}>
               Ajouter aux Cartes
             </Text>

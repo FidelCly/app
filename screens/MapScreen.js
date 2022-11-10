@@ -57,24 +57,6 @@ export default function MapScreen(props) {
     );
   }
 
-  // React.useEffect(() => {
-  //   (async () => {
-  //     const { status } = await Location.requestForegroundPermissionsAsync();
-  //     console.log(status);
-  //     if (status !== "granted") {
-  //       setErrorMsg("L'autorisation d'accéder à la position a été refusée");
-  //       console.log(errorMsg);
-  //       return;
-  //     }
-  //     console.log(errorMsg);
-  //     const location = await Location.getCurrentPositionAsync({});
-  //     setPin({
-  //       latitude: location.coords.latitude,
-  //       longitude: location.coords.longitude,
-  //     });
-  //   })();
-  // }, []);
-
   return (
     <View style={{ flex: 1 }}>
       <MapView
