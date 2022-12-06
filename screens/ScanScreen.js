@@ -1,15 +1,23 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
-
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { API_URL } from "@env";
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [text, setText] = useState(
+  const [shopIdScan, setShopIdScan] = useState(
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
+  const idUser = 1;
+  const urlShop = "https://betea.fr/";
+  const urlPostCard = API_URL + "/cards/";
+  const currentDate = new Date();
+  const endAtDate = new Date();
+
+  const urlGetNameShop = API_URL + "/shops/" + shopIdScan;
+  const [nameShop, setNameShop] = useState("");
 
   const askForCameraPermission = () => {
     (async () => {
@@ -25,7 +33,35 @@ export default function ScanScreen(props) {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    setText(data);
+    setShopIdScan(data);
+  };
+
+  const getNameShop = (data) => {
+    fetch(urlGetNameShop)
+      .then((response) => response.json())
+      .then((json) => setNameShop(json.companyName));
+  };
+  getNameShop();
+
+  const handleClick = async () => {
+    fetch(urlPostCard, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: urlShop,
+        shopId: shopIdScan,
+        userId: idUser,
+        startAt: currentDate,
+        endAt: endAtDate,
+      }),
+    });
+    await props.navigation.navigate("BottomNavigator", {
+      screen: "Cartes Fid",
+    });
   };
 
   if (hasPermission === null) {
@@ -55,7 +91,7 @@ export default function ScanScreen(props) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <Text style={styles.maintext}>{text}</Text>
+      <Text style={styles.maintext}>{nameShop}</Text>
       {scanned && (
         <View>
           <Pressable
@@ -66,14 +102,7 @@ export default function ScanScreen(props) {
               Scanner à nouveau
             </Text>
           </Pressable>
-          <Pressable
-            style={styles.addWallet}
-            onPress={() =>
-              props.navigation.navigate("BottomNavigator", {
-                screen: "Cartes Fid",
-              })
-            }
-          >
+          <Pressable style={styles.addWallet} onPress={() => handleClick()}>
             <Text style={{ color: "white", fontSize: 18 }}>
               Ajouter aux Cartes
             </Text>

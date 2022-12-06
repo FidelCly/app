@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import defaultServer from "../config/global.js";
+import { API_URL } from "@env";
 
 const ProfilScreen = () => {
   const [isLoading, setLoading] = useState(true);
   const [emailUserAPI, setEmailUserAPI] = useState([]);
 
-  const idUser = 1;
-  const urlAPI = defaultServer + "/users/" + idUser;
+  const idUser = "1";
+  const urlAPIUsers = API_URL + "/users/" + idUser;
 
   useEffect(() => {
-    fetch(urlAPI)
+    fetch(urlAPIUsers)
       .then((response) => response.json())
-      .then((json) => setEmailUserAPI(json.email))
+      .then((json) => setEmailUserAPI(json.username))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
@@ -23,10 +24,13 @@ const ProfilScreen = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         {isLoading ? (
-          <Text>Loading ...</Text>
+          <Text>Chargement ...</Text>
         ) : (
           <View>
-            <Text>{emailUserAPI}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold", padding: 20 }}>
+              <Ionicons name="person-sharp" size={24} color="black" />
+              {emailUserAPI}
+            </Text>
           </View>
         )}
         <Text style={styles.textStyle}>
@@ -34,7 +38,7 @@ const ProfilScreen = () => {
           programme de fidélité
         </Text>
         <QRCode
-          value={emailUserAPI}
+          value={idUser}
           size={180}
           color="black"
           backgroundColor="white"
