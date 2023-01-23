@@ -12,12 +12,12 @@ import { API_URL } from "@env";
 
 const Item = ({ item, onPress, backgroundColor, textColor }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>{item.url}</Text>
+    <Text style={[styles.title, textColor]}>{item.shop.companyName}</Text>
   </TouchableOpacity>
 );
 
 const CardScreen = () => {
-  const userId = 1;
+  const userId = 2;
   const [getWalletFromUser, setGetWalletFromUser] = useState([]);
 
   // URL API Affiche les cartes clients que le user a enregistré dans son wallet
@@ -25,18 +25,18 @@ const CardScreen = () => {
   const [selectedId, setSelectedId] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
-  const getWalletFromApi = async () => {
-    try {
-      const response = await fetch(urlGetWalletFromUser);
-      const json = await response.json();
-      setGetWalletFromUser(json);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    async function getWalletFromApi() {
+      try {
+        const response = await fetch(urlGetWalletFromUser);
+        const json = await response.json();
+        setGetWalletFromUser(json);
+        console.log(getWalletFromUser);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    }
     getWalletFromApi();
 
     setLoading(false);
