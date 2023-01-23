@@ -14,24 +14,32 @@ export default function MapScreen(props) {
 
   const [hasPermissionLocation, setHasPermissionLocation] = useState(null);
 
-  const askForLocationPermission = () => {
-    (async () => {
+  const askForLocationPermissionAgain = async () => {
+    const location = await Location.getCurrentPositionAsync({});
+    setPin({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+  };
+
+  useEffect(() => {
+    async function askForLocationPermission() {
       const { status } = await Location.requestForegroundPermissionsAsync();
       setHasPermissionLocation(status === "granted");
       setPin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-    })();
-  };
-
-  useEffect(async () => {
+    }
     askForLocationPermission();
-    const location = await Location.getCurrentPositionAsync({});
-    setPin({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
+    async function getCurrentLocation() {
+      const location = await Location.getCurrentPositionAsync({});
+      setPin({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    }
+    getCurrentLocation();
   }, []);
 
   if (hasPermissionLocation === null) {
@@ -46,7 +54,7 @@ export default function MapScreen(props) {
         </Text>
         <Pressable
           title={"Autoriser la localisation"}
-          onPress={() => askForLocationPermission()}
+          onPress={() => askForLocationPermissionAgain()}
           style={styles.text}
         >
           <Text style={styles.buttonAllowLocation}>
