@@ -1,72 +1,44 @@
 import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, SafeAreaView, StyleSheet, Text } from "react-native";
+import Carousel from "react-native-snap-carousel";
 
 import { API_URL } from "@env";
-
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
-  <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-    <Text style={[styles.title, textColor]}>{item.shop.companyName}</Text>
-  </TouchableOpacity>
-);
+import Card from "../components/Card";
 
 const CardScreen = () => {
-  const userId = 2;
-  const [getWalletFromUser, setGetWalletFromUser] = useState([]);
-
-  // URL API Affiche les cartes clients que le user a enregistré dans son wallet
-  const urlGetWalletFromUser = API_URL + "/users/" + userId + "/wallet/";
-  const [selectedId, setSelectedId] = useState(null);
+  const url = `${API_URL}/users/1/wallet/`;
+  const [infoUserWallet, setInfoUserWallet] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function getWalletFromApi() {
-      try {
-        const response = await fetch(urlGetWalletFromUser);
-        const json = await response.json();
-        setGetWalletFromUser(json);
-        console.log(getWalletFromUser);
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    }
-    getWalletFromApi();
-
-    setLoading(false);
+    fetch(url)
+      .then((res) => res.json())
+      .then((json) => setInfoUserWallet(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
   }, []);
 
-  const renderItem = ({ item }) => {
-    const backgroundColor = item.id === selectedId ? "#367a4a" : "#5DB075";
-    const color = item.id === selectedId ? "white" : "black";
-
+  const _renderItem = ({ item, index }) => {
     return (
-      <Item
-        item={item}
-        onPress={() => setSelectedId(item.id)}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
+      <Card style={styles.card}>
+        <Text style={styles.sectionTitle}>{item.shop.companyName}</Text>
+        <Text style={styles.sectionTitle}>{item.shop.activity}</Text>
+      </Card>
     );
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.carouselContainer}>
         {isLoading ? (
-          <Text>Chargement ...</Text>
+          <Text>Chargement de vos cartes de fidélité...</Text>
         ) : (
-          <FlatList
-            data={getWalletFromUser}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            extraData={selectedId}
+          <Carousel
+            data={infoUserWallet}
+            renderItem={_renderItem}
+            sliderWidth={300}
+            itemWidth={300}
+            showsHorizontalScrollIndicator={false}
           />
         )}
       </View>
@@ -74,40 +46,28 @@ const CardScreen = () => {
   );
 };
 
-export default CardScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
     paddingTop: 50,
-    paddingLeft: 10,
-    paddingBottom: 50,
-    paddingRight: 10,
   },
-  textStyle: {
-    textAlign: "center",
-    margin: 10,
+  carouselContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    paddingTop: 80,
+    marginLeft: 30,
   },
-  item: {
+  card: {
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 10,
   },
-  title: {
+  sectionTitle: {
     fontSize: 32,
   },
-  buttonRefresh: {
-    backgroundColor: "#E5B824",
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
-    borderRadius: 20,
-    marginTop: 20,
-  },
 });
+
+export default CardScreen;
