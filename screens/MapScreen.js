@@ -26,10 +26,6 @@ export default function MapScreen(props) {
     async function askForLocationPermission() {
       const { status } = await Location.requestForegroundPermissionsAsync();
       setHasPermissionLocation(status === "granted");
-      setPin({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
     }
     askForLocationPermission();
     async function getCurrentLocation() {

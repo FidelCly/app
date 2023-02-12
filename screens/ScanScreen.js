@@ -4,20 +4,20 @@ import { View, StyleSheet, Text, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { API_URL } from "@env";
 
+const idUser = 1;
+const urlShop = "https://betea.fr/";
+const urlPostCard = API_URL + "/cards/";
+
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [shopIdScan, setShopIdScan] = useState(
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
-  const idUser = 1;
-  const urlShop = "https://betea.fr/";
-  const urlPostCard = API_URL + "/cards/";
+  const [nameShop, setNameShop] = useState("");
+
   const currentDate = new Date();
   const endAtDate = new Date();
-
-  const urlGetNameShop = API_URL + "/shops/" + shopIdScan;
-  const [nameShop, setNameShop] = useState("");
 
   const askForCameraPermission = () => {
     (async () => {
@@ -31,17 +31,22 @@ export default function ScanScreen(props) {
     askForCameraPermission();
   }, []);
 
+  useEffect(() => {
+    if (
+      shopIdScan !==
+      "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
+    ) {
+      const urlGetNameShop = API_URL + "/shops/" + shopIdScan;
+      fetch(urlGetNameShop)
+        .then((response) => response.json())
+        .then((json) => setNameShop(json.companyName));
+    }
+  }, [shopIdScan]);
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setShopIdScan(data);
   };
-
-  const getNameShop = (data) => {
-    fetch(urlGetNameShop)
-      .then((response) => response.json())
-      .then((json) => setNameShop(json.companyName));
-  };
-  getNameShop();
 
   const handleClick = async () => {
     fetch(urlPostCard, {
