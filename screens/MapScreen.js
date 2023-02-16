@@ -86,10 +86,6 @@ export default function MapScreen(props) {
     );
   }
 
-  console.log("url", url);
-  console.log("pin", pin);
-  console.log("shopNearMyPosition", shopNearMyPosition);
-
   return (
     <View style={{ flex: 1 }}>
       {isLoading ? (
