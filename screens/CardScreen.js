@@ -98,6 +98,8 @@ const CardScreen = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  console.log("infoUserWallet", infoUserWallet);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.carouselContainer}>

@@ -1,42 +1,67 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
-
 import * as Location from "expo-location";
-
 import MapView, { Marker } from "react-native-maps";
 
+import { API_URL } from "@env";
+
 export default function MapScreen(props) {
-  const [pin, setPin] = React.useState({
+  const [pin, setPin] = useState({
     latitude: 48.866667,
     longitude: 2.333333,
   });
-
   const [hasPermissionLocation, setHasPermissionLocation] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+  const [shopNearMyPosition, setShopNearMyPosition] = useState([]);
 
-  const askForLocationPermissionAgain = async () => {
+  const askForLocationPermissionAgain = useCallback(async () => {
     const location = await Location.getCurrentPositionAsync({});
     setPin({
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     });
+  }, []);
+
+  const url = useMemo(() => {
+    return `${API_URL}/shops/?d=3000&long=${pin.longitude}&lat=${pin.latitude}`;
+  }, [pin]);
+  const mapStyle = [
+    // Commerces et activités
+    {
+      featureType: "poi",
+      stylers: [{ visibility: "off" }],
+    },
+    // Transport en commun
+    {
+      featureType: "transit",
+      stylers: [{ visibility: "off" }],
+    },
+  ];
+
+  const markerIcons = {
+    Restauration: require("../src/icon_restauration.png"),
+    Supply: require("../src/icon_supply.png"),
+    Entertainment: require("../src/icon_entertainement.png"),
+    Store: require("../src/icon_store.png"),
+    Service: require("../src/icon_service.png"),
   };
 
   useEffect(() => {
-    async function askForLocationPermission() {
+    (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       setHasPermissionLocation(status === "granted");
-    }
-    askForLocationPermission();
-    async function getCurrentLocation() {
-      const location = await Location.getCurrentPositionAsync({});
-      setPin({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-    }
-    getCurrentLocation();
-  }, []);
+      if (status === "granted") {
+        const { coords } = await Location.getCurrentPositionAsync({});
+        setPin({ latitude: coords.latitude, longitude: coords.longitude });
+        fetch(url)
+          .then((res) => res.json())
+          .then((json) => setShopNearMyPosition(json))
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+      }
+    })();
+  }, [askForLocationPermissionAgain, url]);
 
   if (hasPermissionLocation === null) {
     return <Text>Demande d'autorisation de la localisation</Text>;
@@ -61,31 +86,60 @@ export default function MapScreen(props) {
     );
   }
 
+  console.log("url", url);
+  console.log("pin", pin);
+  console.log("shopNearMyPosition", shopNearMyPosition);
+
   return (
     <View style={{ flex: 1 }}>
-      <MapView
-        style={styles.map}
-        region={{
-          latitude: pin.latitude,
-          longitude: pin.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        showsUserLocation={true}
-      >
-        <Marker
-          key={"currentPos"}
-          coordinate={pin}
-          pinColor="red"
-          title="Hello"
-          description="I'am here"
-        />
-      </MapView>
+      {isLoading ? (
+        <View style={styles.onLoading}>
+          <Text>Chargement des données ...</Text>
+        </View>
+      ) : (
+        <MapView
+          style={styles.map}
+          customMapStyle={mapStyle}
+          initialRegion={{
+            latitude: pin.latitude,
+            longitude: pin.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showsUserLocation={true}
+        >
+          <Marker
+            key={"currentPos"}
+            coordinate={pin}
+            pinColor="red"
+            title="Hello"
+            description="I'am here"
+          />
+          {shopNearMyPosition.map((shop) => (
+            <Marker
+              key={shop.id}
+              coordinate={{
+                latitude: parseFloat(shop.lat),
+                longitude: parseFloat(shop.long),
+              }}
+              title={shop.companyName}
+              description={shop.activity}
+              image={markerIcons[shop.activity]}
+            />
+          ))}
+        </MapView>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  onLoading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: "#6600ff",
