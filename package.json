@@ -21,7 +21,7 @@
     "@rneui/themed": "^4.0.0-rc.7",
     "axios": "^1.2.2",
     "deprecated-react-native-prop-types": "^4.0.0",
-    "expo": "~45.0.0",
+    "expo": "~47.0.13",
     "expo-barcode-scanner": "~11.4.0",
     "expo-constants": "~13.1.1",
     "expo-file-system": "^15.1.1",
