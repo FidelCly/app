@@ -6,7 +6,8 @@ import { IShop, IShopState } from "../interfaces/shop.interface";
 const initialShopState: IShopState = {
 	shops: [] as IShop[],
 	currentShop: {} as IShop,
-	shopLoader: false
+	shopLoader: false,
+	shopError: null
 };
 
 export const getShop = createAsyncThunk(ShopActionTypes.GetShop, async (payload: any) => {
@@ -33,6 +34,7 @@ export const shopReducer = createSlice({
 			.addCase(getShops.rejected, (state, action) => {
 				state.shops = state.shops;
 				state.shopLoader = false;
+				state.shopError = action.error.message;
 			})
 			.addCase(getShop.pending, (state, action) => {
 				state.shopLoader = true;
@@ -44,6 +46,7 @@ export const shopReducer = createSlice({
 			.addCase(getShop.rejected, (state, action) => {
 				state.currentShop = state.currentShop;
 				state.shopLoader = false;
+				state.shopError = action.error.message;
 			});
 	}
 });

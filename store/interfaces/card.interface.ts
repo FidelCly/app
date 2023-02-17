@@ -19,4 +19,5 @@ export interface ICardState {
 	cards: ICard[]; // Array of cards maybe not needed
 	currentCard: ICard;
 	cardLoader: boolean;
+	cardError: string;
 }

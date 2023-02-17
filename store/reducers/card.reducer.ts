@@ -6,7 +6,8 @@ import { ICard, ICardState } from "../interfaces/card.interface";
 const initialCardState: ICardState = {
 	cards: [],
 	currentCard: null,
-	cardLoader: false
+	cardLoader: false,
+	cardError: null
 };
 
 export const getCards = createAsyncThunk(CardActionTypes.GetCards, async (payload: any) => {
@@ -31,7 +32,6 @@ export const cardReducer = createSlice({
 				state.cardLoader = true;
 			})
 			.addCase(getCards.fulfilled, (state, action) => {
-				state.currentCard = null;
 				state.cards = action.payload;
 				state.cardLoader = false;
 			})
@@ -44,10 +44,12 @@ export const cardReducer = createSlice({
 			})
 			.addCase(setCard.fulfilled, (state, action) => {
 				state.currentCard = action.payload;
+				state.cards = [...state.cards, action.payload];
 				state.cardLoader = false;
 			})
 			.addCase(setCard.rejected, (state, action) => {
 				state.currentCard = null;
+				state.cardError = action.error.message;
 				state.cardLoader = false;
 			})
 			.addCase(deleteCard.pending, (state, action) => {
@@ -55,10 +57,12 @@ export const cardReducer = createSlice({
 			})
 			.addCase(deleteCard.fulfilled, (state, action) => {
 				state.currentCard = null;
+				state.cards = state.cards.filter((card) => card.id !== action.payload.id);
 				state.cardLoader = false;
 			})
 			.addCase(deleteCard.rejected, (state, action) => {
 				state.currentCard = state.currentCard;
+				state.cardError = action.error.message;
 				state.cardLoader = false;
 			});
 	}

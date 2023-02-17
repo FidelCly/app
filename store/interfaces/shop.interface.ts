@@ -23,4 +23,5 @@ export interface IShopState {
 	shops: IShop[];
 	currentShop: IShop;
 	shopLoader: boolean;
+	shopError: string;
 }
