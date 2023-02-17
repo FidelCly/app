@@ -12,6 +12,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { GetUser } from "./redux/actions/users";
 
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
@@ -22,25 +24,27 @@ const store = createStore(combineReducers({ username }));
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
+useDispatch(GetUser({ id: 1, name: "", username: "" }));
+const currentUser = useSelector((state) => state.users.currentUser);
+console.log("🚀 ~ currentUser", currentUser);
 const BottomNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color }) => {
-          let iconName;
+	return (
+		<Tab.Navigator
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ color }) => {
+					let iconName;
 
-          if (route.name === "Accueil") {
-            iconName = "md-home";
-          } else if (route.name === "Plan") {
-            iconName = "map-outline";
-          } else if (route.name === "Scan QR Code") {
-            iconName = "qr-code-outline";
-          } else if (route.name === "Cartes Fid") {
-            iconName = "card-outline";
-          } else if (route.name === "Profil") {
-            iconName = "person-circle-outline";
-          }
+					if (route.name === "Accueil") {
+						iconName = "md-home";
+					} else if (route.name === "Plan") {
+						iconName = "map-outline";
+					} else if (route.name === "Scan QR Code") {
+						iconName = "qr-code-outline";
+					} else if (route.name === "Cartes Fid") {
+						iconName = "card-outline";
+					} else if (route.name === "Profil") {
+						iconName = "person-circle-outline";
+					}
 
           return <Ionicons name={iconName} size={25} color={color} />;
         },

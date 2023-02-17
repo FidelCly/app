@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { SafeAreaView, Text, View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { getWallerFromApi } from "../services";
 import { View, SafeAreaView, StyleSheet, Text, Pressable } from "react-native";
 import DeckSwiper from "react-native-deck-swiper";
 
