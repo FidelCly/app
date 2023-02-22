@@ -48,7 +48,7 @@
     "use-sync-external-store": "^1.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.6",
+    "@babel/core": "^7.21.0",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
