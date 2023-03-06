@@ -43,22 +43,15 @@ const BottomNavigator = () => {
 
           return <Ionicons name={iconName} size={25} color={color} />;
         },
+        tabBarActiveTintColor: "#5DB075",
+        tabBarInactiveTintColor: "#dfe6e9",
+        tabBarShowLabel: true,
+        tabBarStyle: [
+          {
+            display: "flex",
+          },
+        ],
       })}
-      tabBarOptions={{
-        showLabel: true,
-        style: {
-          // position: 'absolute',
-          //   bottom: 15,
-          //   left:15,
-          //   right:15,
-          //   elevation:0,
-          // borderRadius:15,
-          height: 70,
-          paddingBottom: 10,
-        },
-        activeTintColor: "#5DB075",
-        inactiveTintColor: "#dfe6e9",
-      }}
     >
       <Tab.Screen name="Accueil" component={HomeScreen} />
       <Tab.Screen
