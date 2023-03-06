@@ -3,10 +3,11 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
-
-import { API_URL } from "@env";
+import Slider from "@react-native-community/slider";
 
 export default function MapScreen(props) {
+  const API_URL = process.env.API_URL;
+
   const [pin, setPin] = useState({
     latitude: 48.866667,
     longitude: 2.333333,
@@ -14,6 +15,7 @@ export default function MapScreen(props) {
   const [hasPermissionLocation, setHasPermissionLocation] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [shopNearMyPosition, setShopNearMyPosition] = useState([]);
+  const [distance, setDistance] = useState(3000);
 
   const askForLocationPermissionAgain = useCallback(async () => {
     const location = await Location.getCurrentPositionAsync({});
@@ -24,7 +26,7 @@ export default function MapScreen(props) {
   }, []);
 
   const url = useMemo(() => {
-    return `${API_URL}/shops/?d=3000&long=${pin.longitude}&lat=${pin.latitude}`;
+    return `${API_URL}/shops/?d=${distance}&long=${pin.longitude}&lat=${pin.latitude}`;
   }, [pin]);
   const mapStyle = [
     // Commerces et activités
@@ -63,6 +65,16 @@ export default function MapScreen(props) {
     })();
   }, [askForLocationPermissionAgain, url]);
 
+  const handleDistanceChange = (newDistance) => {
+    setDistance(newDistance);
+    fetch(
+      `${API_URL}/shops/?d=${newDistance}&long=${pin.longitude}&lat=${pin.latitude}`
+    )
+      .then((res) => res.json())
+      .then((json) => setShopNearMyPosition(json))
+      .catch((error) => console.error(error));
+  };
+
   if (hasPermissionLocation === null) {
     return <Text>Demande d'autorisation de la localisation</Text>;
   }
@@ -88,6 +100,17 @@ export default function MapScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
+      <View style={styles.sliderContainer}>
+        <Slider
+          style={styles.slider}
+          value={distance}
+          minimumValue={100}
+          maximumValue={5000}
+          step={100}
+          onValueChange={handleDistanceChange}
+        />
+        <Text style={styles.sliderValue}>{distance} m</Text>
+      </View>
       {isLoading ? (
         <View style={styles.onLoading}>
           <Text>Chargement des données ...</Text>
@@ -163,5 +186,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#fff",
     fontSize: 16,
+  },
+  sliderContainer: {
+    backgroundColor: "transparent",
+  },
+  slider: {
+    marginTop: 10,
+  },
+  sliderValue: {
+    paddingLeft: 20,
   },
 });
