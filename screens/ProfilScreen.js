@@ -3,9 +3,8 @@ import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { API_URL } from "@env";
-
 const ProfilScreen = () => {
+  const API_URL = process.env.API_URL;
   const [isLoading, setLoading] = useState(true);
   const [emailUserAPI, setEmailUserAPI] = useState([]);
 
