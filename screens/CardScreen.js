@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, SafeAreaView, StyleSheet, Text } from "react-native";
 import Swiper from "react-native-swiper";
 
-import { API_URL } from "@env";
 import Card from "../components/Card";
 
 import {
@@ -12,6 +11,8 @@ import {
   Fontisto,
   MaterialIcons,
 } from "@expo/vector-icons";
+
+const API_URL = process.env.API_URL;
 
 const ViewCardCheck = ({ soldeTampons, totalTampons }) => {
   const views = [];
