@@ -7,14 +7,14 @@ import { ICard } from "../store/interfaces";
  * @returns
  */
 export const getUserCards = async (userId: number) => {
-	const url = API_URL + "/users/" + userId + "/wallet/";
-	try {
-		const response = await fetch(url);
-		console.log("🚀 ~ getUserCards ~ response", response);
-		return response.json();
-	} catch (error) {
-		return error;
-	}
+  const url = API_URL + "/user/" + userId + "/wallet/";
+  try {
+    const response = await fetch(url);
+    console.log("🚀 ~ getUserCards ~ response", response);
+    return response.json();
+  } catch (error) {
+    return error;
+  }
 };
 
 /**
@@ -23,23 +23,23 @@ export const getUserCards = async (userId: number) => {
  * @returns
  */
 export const addCardToWallet = async (card: ICard) => {
-	const url = API_URL + "/cards";
+  const url = API_URL + "/card";
 
-	try {
-		const response = await fetch(url, {
-			method: "POST",
-			mode: "no-cors",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json"
-			},
-			body: JSON.stringify(card)
-		});
-		console.log("🚀 ~ addCardToWal ~ data", response);
-		return response.json();
-	} catch (error) {
-		console.log("🚀 ~ addCardToWal ~ error", error);
-	}
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(card),
+    });
+    console.log("🚀 ~ addCardToWal ~ data", response);
+    return response.json();
+  } catch (error) {
+    console.log("🚀 ~ addCardToWal ~ error", error);
+  }
 };
 
 /**
@@ -47,18 +47,18 @@ export const addCardToWallet = async (card: ICard) => {
  * @param cardId
  */
 export const deleteCard = async (cardId: number) => {
-	const url = API_URL + "/cards" + cardId;
+  const url = API_URL + "/card" + cardId;
 
-	try {
-		await fetch(url, {
-			method: "DELETE",
-			mode: "no-cors",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json"
-			}
-		});
-	} catch (error) {
-		console.log("🚀 ~ deleteCard ~ error", error);
-	}
+  try {
+    await fetch(url, {
+      method: "DELETE",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+  } catch (error) {
+    console.log("🚀 ~ deleteCard ~ error", error);
+  }
 };

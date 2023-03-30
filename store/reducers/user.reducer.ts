@@ -4,36 +4,39 @@ import { UserActionTypes } from "../actions/user.actions";
 import { IUserState } from "../interfaces/user.interface";
 
 const initialUserState: IUserState = {
-	authenticated: false,
-	currentUser: null,
-	userLoader: false
+  authenticated: false,
+  currentUser: null,
+  userLoader: false,
 };
 
-export const getUser = createAsyncThunk(UserActionTypes.GetUser, async (payload: any) => {
-	return await getUserById(payload.userId);
-});
+export const getUser = createAsyncThunk(
+  UserActionTypes.GetUser,
+  async (payload: any) => {
+    return await getUserById(payload);
+  }
+);
 
 // user reducer with createSlice
 export const userReducer = createSlice({
-	name: "users",
-	initialState: { ...initialUserState },
-	reducers: {},
-	extraReducers(builder) {
-		builder
-			.addCase(getUser.pending, (state, action) => {
-				state.userLoader = true;
-			})
-			.addCase(getUser.fulfilled, (state, action) => {
-				state.currentUser = action.payload;
-				state.authenticated = false;
-				state.userLoader = true;
-			})
-			.addCase(getUser.rejected, (state, action) => {
-				state.currentUser = null;
-				state.authenticated = false;
-				state.userLoader = false;
-			});
-	}
+  name: "users",
+  initialState: { ...initialUserState },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(getUser.pending, (state, action) => {
+        state.userLoader = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.currentUser = action.payload;
+        state.authenticated = false;
+        state.userLoader = false;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.currentUser = null;
+        state.authenticated = false;
+        state.userLoader = false;
+      });
+  },
 });
 
 export default userReducer.reducer;

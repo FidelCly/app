@@ -1,5 +1,5 @@
 import React from "react";
-
+import store from "./store/store";
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
 import ScanScreen from "./screens/ScanScreen";
@@ -10,7 +10,7 @@ import LoginScreen from "./screens/LoginScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { Provider } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { GetUser } from "./redux/actions/users";
@@ -28,23 +28,23 @@ useDispatch(GetUser({ id: 1, name: "", username: "" }));
 const currentUser = useSelector((state) => state.users.currentUser);
 console.log("🚀 ~ currentUser", currentUser);
 const BottomNavigator = () => {
-	return (
-		<Tab.Navigator
-			screenOptions={({ route }) => ({
-				tabBarIcon: ({ color }) => {
-					let iconName;
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
+          let iconName;
 
-					if (route.name === "Accueil") {
-						iconName = "md-home";
-					} else if (route.name === "Plan") {
-						iconName = "map-outline";
-					} else if (route.name === "Scan QR Code") {
-						iconName = "qr-code-outline";
-					} else if (route.name === "Cartes Fid") {
-						iconName = "card-outline";
-					} else if (route.name === "Profil") {
-						iconName = "person-circle-outline";
-					}
+          if (route.name === "Accueil") {
+            iconName = "md-home";
+          } else if (route.name === "Plan") {
+            iconName = "map-outline";
+          } else if (route.name === "Scan QR Code") {
+            iconName = "qr-code-outline";
+          } else if (route.name === "Cartes Fid") {
+            iconName = "card-outline";
+          } else if (route.name === "Profil") {
+            iconName = "person-circle-outline";
+          }
 
           return <Ionicons name={iconName} size={25} color={color} />;
         },

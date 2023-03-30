@@ -6,65 +6,69 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 // import { connect } from "react-redux";
 
-export function LoginScreen(props) {
-	const [username, setUsername] = useState("");
+export default function LoginScreen(props) {
+  const [username, setUsername] = useState("");
+  console.log("🚀 ~ LoginScreen ~ username:", username);
 
-	return (
-		<View
-			style={{
-				flex: 1,
-				backgroundColor: "#fff",
-				alignItems: "center",
-				justifyContent: "center"
-			}}
-		>
-			<Image style={{ width: 286, height: 199 }} source={require("../assets/secure_login.png")} />
-			<Input
-				containerStyle={{ width: "70%" }}
-				inputStyle={{
-					marginLeft: 10
-				}}
-				placeholder="Email"
-				leftIcon={<FontAwesome5 name="user-alt" size={24} color="black" />}
-				onChangeText={(val) => setUsername(val)}
-			/>
-			<Input
-				containerStyle={{ marginBottom: 25, width: "70%" }}
-				inputStyle={{ marginLeft: 10 }}
-				placeholder="Mot de passe"
-				type="password"
-				secureTextEntry={true}
-				leftIcon={<FontAwesome5 name="key" size={24} color="black" />}
-				errorStyle={{ color: "red" }}
-				renderErrorMessage="ENTER A VALID ERROR HERE"
-			/>
-			<Pressable
-				title="Se connecter"
-				type="solid"
-				style={styles.buttonConnect}
-				onPress={() => {
-					props.onSubmitUsername(username);
-					props.navigation.navigate("BottomNavigator", {
-						screen: "Profil"
-					});
-				}}
-			>
-				<Text style={{ color: "white", fontSize: 18 }}>Se connecter</Text>
-			</Pressable>
-			<Text style={{ margin: 10 }}>Mot de passe oublié?</Text>
-		</View>
-	);
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Image
+        style={{ width: 286, height: 199 }}
+        source={require("../assets/secure_login.png")}
+      />
+      <Input
+        containerStyle={{ width: "70%" }}
+        inputStyle={{
+          marginLeft: 10,
+        }}
+        placeholder="Email"
+        leftIcon={<FontAwesome5 name="user-alt" size={24} color="black" />}
+        onChangeText={(val) => setUsername(val)}
+      />
+      <Input
+        containerStyle={{ marginBottom: 25, width: "70%" }}
+        inputStyle={{ marginLeft: 10 }}
+        placeholder="Mot de passe"
+        type="password"
+        secureTextEntry={true}
+        leftIcon={<FontAwesome5 name="key" size={24} color="black" />}
+        errorStyle={{ color: "red" }}
+        renderErrorMessage="ENTER A VALID ERROR HERE"
+      />
+      <Pressable
+        title="Se connecter"
+        type="solid"
+        style={styles.buttonConnect}
+        onPress={() => {
+          // props.onSubmitUsername(username);
+          props.navigation.navigate("BottomNavigator", {
+            screen: "Profil",
+          });
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 18 }}>Se connecter</Text>
+      </Pressable>
+      <Text style={{ margin: 10 }}>Mot de passe oublié?</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	buttonConnect: {
-		backgroundColor: "#5DB075",
-		paddingTop: 10,
-		paddingBottom: 10,
-		paddingRight: 30,
-		paddingLeft: 30,
-		borderRadius: 20
-	}
+  buttonConnect: {
+    backgroundColor: "#5DB075",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 30,
+    paddingLeft: 30,
+    borderRadius: 20,
+  },
 });
 
 // function mapDispatchToProps(dispatch) {
@@ -75,4 +79,4 @@ const styles = StyleSheet.create({
 // 	};
 // }
 
-// export default connect(null, mapDispatchToProps)(LoginScreen);
+// export connect(null, mapDispatchToProps)(LoginScreen);

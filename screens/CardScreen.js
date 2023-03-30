@@ -1,12 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, Text, View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { getWallerFromApi } from "../services";
-import { View, SafeAreaView, StyleSheet, Text, Pressable } from "react-native";
-import DeckSwiper from "react-native-deck-swiper";
+import React, { useEffect } from "react";
+import { View, SafeAreaView, StyleSheet, Text } from "react-native";
+import Swiper from "react-native-swiper";
 
-const API_URL = process.env.API_URL;
+import Card from "../components/Card";
+import { getCards } from "../store/reducers/card.reducer";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  Ionicons,
+  Fontisto,
+  MaterialIcons,
+} from "@expo/vector-icons";
 
-const renderCard = (props, card) => {
+const ViewCardCheck = ({ soldeTampons, totalTampons }) => {
+  const views = [];
+  const viewsPerLine = 5;
+
+  for (let i = 0; i < totalTampons; i++) {
+    if (i < soldeTampons) {
+      views.push(
+        <View
+          key={i}
+          style={{
+            backgroundColor: "#e67e22",
+            width: 50,
+            height: 50,
+            margin: 2,
+            borderRadius: 50,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <MaterialCommunityIcons
+            name="check-decagram"
+            size={40}
+            color="#424242"
+          />
+        </View>
+      );
+    } else {
+      views.push(
+        <View
+          key={i}
+          style={{
+            backgroundColor: "#e67e22",
+            width: 50,
+            height: 50,
+            margin: 2,
+            borderRadius: 50,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        />
+      );
+    }
+
+    if ((i + 1) % viewsPerLine === 0 && i !== totalTampons - 1) {
+      views.push(
+        <View key={`line-${i}`} style={{ width: "100%", height: 2 }} />
+      );
+    }
+  }
+
   return (
     <Pressable
       title="Go info"
@@ -26,57 +82,178 @@ const renderCard = (props, card) => {
   );
 };
 
-const CardScreen = (props) => {
-  const url = `${API_URL}/user/1`;
-  const [infoUserWallet, setInfoUserWallet] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
+const CardScreen = () => {
+  const userId = 1;
+  const cards = useSelector((state) => state.cards.cards);
+  // const currentCard = useSelector((state) => state.cards.currentCard);
+  const cardLoader = useSelector((state) => state.cards.cardLoader);
+  // const cardError = useSelector((state) => state.cards.cardError);
+  const dispatch = useDispatch();
+
+  const soldeTampons = 3;
+  const totalTampons = 10;
 
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((json) => {
-        setInfoUserWallet(json.cards);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    fetchWallet(userId);
   }, []);
 
-  const onSwiped = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-
-  const renderEmpty = () => {
-    return (
-      <View style={styles.empty}>
-        <Text style={styles.emptyText}>No more cards</Text>
-      </View>
-    );
-  };
-
-  const getStackSize = () => {
-    return infoUserWallet.length;
+  const fetchWallet = (userId) => {
+    dispatch(getCards(userId));
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        {isLoading ? (
+      <View style={styles.carouselContainer}>
+        {cardLoader ? (
           <View style={styles.onLoading}>
             <Text>Chargement de vos cartes de fidélité...</Text>
           </View>
         ) : (
           <View>
-            <DeckSwiper
-              cards={infoUserWallet}
-              cardIndex={currentIndex}
-              renderCard={(card) => renderCard(props, card)}
-              renderEmpty={renderEmpty}
-              onSwiped={onSwiped}
-              infinite
-              stackSize={getStackSize()}
-              backgroundColor={"red"}
-            />
+            {/* HEADER  */}
+            <View style={styles.header}>
+              <Text style={styles.textHeader}>Mes cartes favorites</Text>
+            </View>
+            {/* FIN HEADER  */}
+            <Swiper showsPagination={false} loop={false} autoplay={false}>
+              {cards.map((item, index) => (
+                <Card key={index}>
+                  {/* INFORMATIONS SHOP  */}
+                  <View style={styles.headerCard}>
+                    <Text style={styles.titleNameShop}>
+                      {item.shop.companyName}
+                    </Text>
+                    <View style={{ flexDirection: "row" }}>
+                      {item.shop.activity === "Restauration" ? (
+                        <MaterialCommunityIcons
+                          name={"food-fork-drink"}
+                          size={15}
+                          color="black"
+                        />
+                      ) : item.shop.activity === "Supply" ? (
+                        <AntDesign
+                          name={"shoppingcart"}
+                          size={15}
+                          color="black"
+                        />
+                      ) : item.shop.activity === "Entertainment" ? (
+                        <Ionicons
+                          name={"game-controller"}
+                          size={15}
+                          color="black"
+                        />
+                      ) : item.shop.activity === "Store" ? (
+                        <Fontisto
+                          name={"shopping-store"}
+                          size={15}
+                          color="black"
+                        />
+                      ) : item.shop.activity === "Service" ? (
+                        <MaterialIcons
+                          name={"miscellaneous-services"}
+                          size={15}
+                          color="black"
+                        />
+                      ) : null}
+                      <Text style={{ marginLeft: 10 }}>
+                        {item.shop.activity === "Restauration" ? (
+                          <Text>Restauration</Text>
+                        ) : item.shop.activity === "Supply" ? (
+                          <Text>Alimentation</Text>
+                        ) : item.shop.activity === "Entertainment" ? (
+                          <Text>Divertissement</Text>
+                        ) : item.shop.activity === "Store" ? (
+                          <Text>Magasin</Text>
+                        ) : item.shop.activity === "Service" ? (
+                          <Text>Service</Text>
+                        ) : null}
+                      </Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Ionicons
+                        name={"ios-location-sharp"}
+                        size={15}
+                        color="black"
+                      />
+                      <Text style={{ marginLeft: 10 }}>
+                        {item.shop.address}
+                      </Text>
+                      <Text style={{ marginLeft: 4 }}>{item.shop.zipCode}</Text>
+                      <Text style={{ marginLeft: 4 }}>Paris</Text>
+                    </View>
+                  </View>
+                  {/* FIN INFORMATIONS SHOP  */}
+                  {/* CARD   */}
+
+                  <View
+                    style={{
+                      backgroundColor: "#5DB075",
+                      height: heightCard,
+                      alignSelf: "center",
+                      width: "100%",
+                      borderRadius: 10,
+                      padding: 20,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.2,
+                      shadowRadius: 10,
+                      elevation: 5,
+                      marginBottom: 10,
+                      marginTop: 20,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        paddingBottom: 20,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          fontWeight: "bold",
+                          color: "white",
+                        }}
+                      >
+                        {item.shop.companyName}
+                      </Text>
+                      <View style={{ flexDirection: "row" }}>
+                        <Text style={styles.textCard}>
+                          {soldeTampons}/{totalTampons}
+                        </Text>
+                        <Text style={styles.textCard}> tampons</Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flexWrap: "wrap",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        maxWidth: "100%",
+                      }}
+                    >
+                      <ViewCardCheck
+                        key={index}
+                        soldeTampons={soldeTampons}
+                        totalTampons={totalTampons}
+                        style={{ width: 50 }}
+                      />
+                    </View>
+                  </View>
+                  {/* FIN CARD   */}
+
+                  <View style={styles.footerCard}>
+                    <View>
+                      <Text style={styles.footerText}>
+                        Intitulé de la promotion
+                      </Text>
+                    </View>
+                  </View>
+                </Card>
+              ))}
+            </Swiper>
           </View>
         )}
       </View>

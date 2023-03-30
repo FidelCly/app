@@ -1,8 +1,8 @@
 export interface IUtility {
-	// App loader
-	appLoading: boolean;
+  // App loader
+  appLoading: boolean;
 }
 
 export interface IUtilityState {
-	appLoading: boolean;
+  appLoading: boolean;
 }
