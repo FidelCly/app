@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import username from "./reducers/username";
+import CardScreenInfo from "./screens/CardScreenInfo";
 
 const store = createStore(combineReducers({ username }));
 
@@ -77,6 +78,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+          <Stack.Screen name="InfoCard" component={CardScreenInfo} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

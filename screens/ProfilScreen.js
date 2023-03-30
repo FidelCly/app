@@ -9,7 +9,7 @@ const ProfilScreen = () => {
   const [emailUserAPI, setEmailUserAPI] = useState([]);
 
   const idUser = "1";
-  const urlAPIUsers = API_URL + "/users/" + idUser;
+  const urlAPIUsers = API_URL + "/user/" + idUser;
 
   useEffect(() => {
     fetch(urlAPIUsers)

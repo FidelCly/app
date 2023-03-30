@@ -26,7 +26,7 @@ export default function MapScreen(props) {
   }, []);
 
   const url = useMemo(() => {
-    return `${API_URL}/shops/?d=${distance}&long=${pin.longitude}&lat=${pin.latitude}`;
+    return `${API_URL}/shop/?d=${distance}&long=${pin.longitude}&lat=${pin.latitude}`;
   }, [pin]);
   const mapStyle = [
     // Commerces et activités
@@ -68,7 +68,7 @@ export default function MapScreen(props) {
   const handleDistanceChange = (newDistance) => {
     setDistance(newDistance);
     fetch(
-      `${API_URL}/shops/?d=${newDistance}&long=${pin.longitude}&lat=${pin.latitude}`
+      `${API_URL}/shop/?d=${newDistance}&long=${pin.longitude}&lat=${pin.latitude}`
     )
       .then((res) => res.json())
       .then((json) => setShopNearMyPosition(json))
