@@ -5,8 +5,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { API_URL } from "@env";
 
 const idUser = 1;
-const urlShop = "https://betea.fr/";
-const urlPostCard = API_URL + "/cards/";
+const urlPostCard = API_URL + "/card/";
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -57,7 +56,6 @@ export default function ScanScreen(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url: urlShop,
         shopId: shopIdScan,
         userId: idUser,
         startAt: currentDate,
