@@ -1,12 +1,12 @@
 import React from "react";
-import store from "./store/store";
-import HomeScreen from "./screens/HomeScreen";
-import MapScreen from "./screens/MapScreen";
-import ScanScreen from "./screens/ScanScreen";
-import CardScreen from "./screens/CardScreen";
-import ProfilScreen from "./screens/ProfilScreen";
-import LoginScreen from "./screens/LoginScreen";
-
+import store from "./src/store/store";
+import HomeScreen from "./src/screens/HomeScreen";
+import MapScreen from "./src/screens/MapScreen";
+import ScanScreen from "./src/screens/ScanScreen";
+import CardScreen from "./src/screens/CardScreen";
+import ProfilScreen from "./src/screens/ProfilScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import CardScreenInfo from "./src/screens/CardScreenInfo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
