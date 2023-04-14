@@ -12,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
   "dependencies": {
-    "@expo/webpack-config": "^18.0.3",
+    "@expo/webpack-config": "^18.0.4",
     "@react-native-community/cli-server-api": "^8.0.4",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-masked-view/masked-view": "^0.2.9",
