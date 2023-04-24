@@ -59,7 +59,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.31.10",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.8"
   },
   "private": true,
   "optionalDependencies": {
