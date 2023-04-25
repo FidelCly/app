@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, Pressable, Text, StyleSheet, Image } from "react-native";
 import { Input } from "@rneui/themed";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { login } from "../services";
-
+import { login, register } from "../services";
 import { FontAwesome5 } from "@expo/vector-icons";
-
-// import { connect } from "react-redux";
+import { getUser } from "../store/reducers/user.reducer";
+import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen(props) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	// const [userId, setUserId] = useState("");
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		handleToken();
@@ -62,41 +63,65 @@ export default function LoginScreen(props) {
 				placeholder="Mot de passe"
 				type="password"
 				secureTextEntry={true}
-				leftIcon={<FontAwesome5 name="key" size={24} color="black" />}
 				onChangeText={(val) => setPassword(val)}
+				leftIcon={<FontAwesome5 name="key" size={24} color="black" />}
 				errorStyle={{ color: "red" }}
 				renderErrorMessage="ENTER A VALID ERROR HERE"
 			/>
 			<Pressable
-				title="Se connecter"
+				title="Creer mon compte"
 				type="solid"
 				style={styles.buttonConnect}
 				onPress={async () => {
-					await loginUser(email, password);
+					await registerUser(email, password);
+					// props.onSubmitemail(email);
+					dispatch(getUser(17));
 
 					props.navigation.navigate("BottomNavigator", {
 						screen: "Profil"
 					});
 				}}
 			>
-				<Text style={{ color: "white", fontSize: 18 }}>Se connecter</Text>
+				<Text style={{ color: "white", fontSize: 18 }}>Creer un compte</Text>
 			</Pressable>
-			<Text style={{ margin: 10 }}>Mot de passe oublié?</Text>
+			{/* <Text style={{ margin: 10 }}>Mot de passe oublié?</Text> */}
 		</View>
 	);
 }
 
-async function loginUser(email, password) {
+/**
+ * registerUser
+ */
+async function registerUser(email, password) {
+	// console.warn("🚀 ~ registerUser ~ email, password:", email, password);
 	try {
-		const loginUserData = await login(email, password);
+		const registerUserData = await register(email, password);
+		console.warn("🚀 ~ registerUser ~ data", registerUserData);
 
-		if (loginUserData && loginUserData.status === 200) {
-			await AsyncStorage.setItem("token", loginUserData.token);
+		if (registerUserData) {
+			console.warn("🚀 ~ registerUser ~ data.id:", registerUserData.id);
+			AsyncStorage.setItem("userId", registerUserData.id.toString());
+
+			const loginDatas = await login(email, password);
+			console.log("🚀 ~ registerUser ~ loginDatas:", loginDatas);
+			if (loginDatas && loginDatas.status === 200) {
+				AsyncStorage.setItem("token", loginDatas.token);
+			}
 		}
+
+		// navigate to profil screen
+
+		setTimeout(() => {
+			console.log("Waiting 3 seconds");
+		}, 3000);
+
+		// console.log("🚀 ~ registerUser ~  Redirect to profil screen:");
 	} catch (error) {
-		console.log("🚀 ~ loginUser ~ error", error);
+		console.log("🚀 ~ registerUser ~ error:", error);
 	}
 }
+
+// Styles
 
 const styles = StyleSheet.create({
 	buttonConnect: {

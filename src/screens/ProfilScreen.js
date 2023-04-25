@@ -3,21 +3,35 @@ import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "../store/reducers/user.reducer";
 
 const ProfilScreen = () => {
-  const userId = 1;
-  const user = useSelector((state) => state.users.currentUser);
-  const userLoader = useSelector((state) => state.users.userLoader);
-  const dispatch = useDispatch();
+	let userId = null;
+	const user = useSelector((state) => state.users.currentUser);
+	const userLoader = useSelector((state) => state.users.userLoader);
+	const dispatch = useDispatch();
 
-  const fetchUser = (userId) => {
-    dispatch(getUser(userId));
-  };
+	useEffect(() => {
+		getUserFromStore();
+	}, []);
 
-  useEffect(() => {
-    fetchUser(userId);
-  }, []);
+	const fetchUserFromStore = (userId) => {
+		dispatch(getUser(userId));
+	};
+
+	const getUserFromStore = async () => {
+		try {
+			const value = await AsyncStorage.getItem("userId");
+			if (value !== null) {
+				console.log("🚀 ~ getUserIdFromStorage ~ value:", value);
+				userId = Number(value);
+				fetchUserFromStore(userId);
+			}
+		} catch (e) {
+			console.log("🚀 ~ ProfilScreen ~ getUserIdFromStorage ~ e:", e);
+		}
+	};
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
