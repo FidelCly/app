@@ -6,11 +6,9 @@ import { API_URL } from "@env";
  * @returns
  */
 export const getShopById = async (shopId: number) => {
-  console.log("🚀 ~ getWalletFromApi ~ API_URL", API_URL);
   const url = API_URL + "/shop/" + shopId;
   try {
     const response = await fetch(url);
-    console.log("🚀 ~ getUserById ~ response", response);
     return response.json();
   } catch (error) {
     return error;
@@ -32,7 +30,6 @@ export const getNearShops = async (
   const url = API_URL + `/shop/?d=${distance}&long=${lng}&lat=${lat}`;
   try {
     const response = await fetch(url);
-    console.log("🚀 ~ getNearShop ~ response", response);
     return response.json();
   } catch (error) {
     return error;

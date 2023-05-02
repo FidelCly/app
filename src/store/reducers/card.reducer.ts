@@ -32,26 +32,32 @@ export const deleteCard = createAsyncThunk(
 );
 
 export const cardReducer = createSlice({
-	name: "cards",
-	initialState: { ...initialCardState },
-	reducers: {
-		GetCards: (state, action) => {
-			state.cards = action.payload;
-		},
-		SetCard: (state, action) => {
-			state.cards = [...state.cards, action.payload];
-			// Update Database
-			addCardToWallet(action.payload);
-		},
-		UpdateCard: (state, action) => {
-			state.cards = [state.cards.filter((c) => c.id !== action.payload.id), action.payload];
-			// Update Database
-			updateCard(action.payload);
-		},
-		DeleteCard: (state, action) => {
-			state.cards = state.cards.filter((c) => c.id !== action.payload.id);
-		}
-	}
+  name: "cards",
+  initialState: { ...initialCardState },
+  reducers: {
+    "cards/setCards": (state, action) => {
+      state.cards = action.payload;
+    },
+    "cards/SetCard": (state, action) => {
+      state.cards = [...state.cards, action.payload];
+      // Update Database
+      addCardToWallet(action.payload);
+    },
+    "cards/UpdateCard": (state, action) => {
+      state.cards = [
+        state.cards.filter((c) => c.id !== action.payload.id),
+        action.payload,
+      ];
+      // Update Database
+      updateCard(action.payload);
+    },
+    "cards/DeleteCard": (state, action) => {
+      state.cards = state.cards.filter((c) => c.id !== action.payload.id);
+    },
+  },
 });
+
+// export generated actions
+export const cardsActions = cardReducer.actions;
 
 export default cardReducer.reducer;

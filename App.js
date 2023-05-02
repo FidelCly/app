@@ -6,6 +6,7 @@ import ScanScreen from "./src/screens/ScanScreen";
 import CardScreen from "./src/screens/CardScreen";
 import ProfilScreen from "./src/screens/ProfilScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
+import LoginScreen from "./src/screens/LoginScreen";
 import CardScreenInfo from "./src/screens/CardScreenInfo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -79,8 +80,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: true }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
         </Stack.Navigator>

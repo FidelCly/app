@@ -31,15 +31,15 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#e67e22",
-    justifyContent: "center",
     alignItems: "center",
-    textAlign: "center",
+    backgroundColor: "#e67e22",
+    flex: 1,
+    justifyContent: "center",
     padding: 10,
+    textAlign: "center",
   },
   textStyle: {
-    textAlign: "center",
     margin: 10,
+    textAlign: "center",
   },
 });

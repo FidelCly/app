@@ -6,13 +6,12 @@ export interface IUser {
   username: string;
   email: string;
   isActive: boolean;
-  cards: ICard[];
-  createdAt: Date;
-  updatedAt: Date;
+  cards?: ICard[];
+  createdAt?: Date;
 }
 
 export interface IUserState {
   authenticated: boolean;
-  currentUser: IUser;
+  currentUser: IUser | null;
   userLoader: boolean;
 }

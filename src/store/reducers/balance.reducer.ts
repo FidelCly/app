@@ -18,20 +18,10 @@ export const getBalance = createAsyncThunk(
 export const balanceReducer = createSlice({
   name: "balances",
   initialState: { ...initialBalanceState },
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      .addCase(getBalance.pending, (state, action) => {
-        state.balanceLoader = true;
-      })
-      .addCase(getBalance.fulfilled, (state, action) => {
-        state.currentCardBalance = action.payload;
-        state.balanceLoader = false;
-      })
-      .addCase(getBalance.rejected, (state, action) => {
-        state.currentCardBalance = {} as IBalance;
-        state.balanceLoader = false;
-      });
+  reducers: {
+    GetBalance: (state, action) => {
+      state.currentCardBalance = action.payload;
+    },
   },
 });
 
