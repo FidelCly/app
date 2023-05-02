@@ -13,21 +13,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Provider } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { GetUser } from "./redux/actions/users";
-
-import { createStore, combineReducers } from "redux";
-import { Provider } from "react-redux";
-import username from "./reducers/username";
-import CardScreenInfo from "./screens/CardScreenInfo";
-
-const store = createStore(combineReducers({ username }));
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-useDispatch(GetUser({ id: 1, name: "", username: "" }));
-const currentUser = useSelector((state) => state.users.currentUser);
-console.log("🚀 ~ currentUser", currentUser);
+
 const BottomNavigator = () => {
   return (
     <Tab.Navigator

@@ -5,9 +5,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { API_URL } from "@env";
 import { getShop } from "../store/reducers/shop.reducer";
 import { useSelector, useDispatch } from "react-redux";
-
-const idUser = 1;
-const urlPostCard = API_URL + "/card/";
+import { addCardToWallet } from "../services";
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -15,10 +13,8 @@ export default function ScanScreen(props) {
   const [shopIdScan, setShopIdScan] = useState(
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
-  // const shops = useSelector((state) => state.shops.shops);
   const shop = useSelector((state) => state.shops.currentShop);
-  // const shopLoader = useSelector((state) => state.shops.shopLoader);
-  // const shopError = useSelector((state) => state.shops.shopError);
+
   const dispatch = useDispatch();
 
   const currentDate = new Date();
@@ -55,23 +51,14 @@ export default function ScanScreen(props) {
   };
 
   const handleClick = async () => {
-    fetch(urlPostCard, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        shopId: shopIdScan,
-        userId: idUser,
-        startAt: currentDate,
-        endAt: endAtDate,
-      }),
-    });
-    await props.navigation.navigate("BottomNavigator", {
-      screen: "Cartes Fid",
-    });
+    try {
+      await addCardToWallet(user.id, shop.id);
+      await props.navigation.navigate("BottomNavigator", {
+        screen: "Cartes Fid",
+      });
+    } catch (error) {
+      console.log("🚀 ~ handleClick ~ error:", error);
+    }
   };
 
   if (hasPermission === null) {

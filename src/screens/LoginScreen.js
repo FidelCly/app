@@ -3,15 +3,11 @@ import { View, Pressable, Text, StyleSheet, Image } from "react-native";
 import { Input } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { login } from "../services";
-
 import { FontAwesome5 } from "@expo/vector-icons";
-
-// import { connect } from "react-redux";
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [userId, setUserId] = useState("");
 
   useEffect(() => {
     handleToken();

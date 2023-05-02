@@ -8,7 +8,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [userId, setUserId] = useState("");
 
   useEffect(() => {
     handleToken();
@@ -22,7 +21,7 @@ export default function LoginScreen(props) {
     try {
       const token = await AsyncStorage.getItem("token");
       const userId = await AsyncStorage.getItem("userId");
-      if (token) {
+      if (userId && token) {
         props.navigation.navigate("BottomNavigator", {
           screen: "Profil",
         });
@@ -98,7 +97,6 @@ export default function LoginScreen(props) {
  * registerUser
  */
 async function registerUser(email, password) {
-  // console.warn("🚀 ~ registerUser ~ email, password:", email, password);
   try {
     const registerUserData = await register(email, password);
 

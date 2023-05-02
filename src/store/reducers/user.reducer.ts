@@ -16,14 +16,13 @@ export const getUser = createAsyncThunk(
   }
 );
 
-// user reducer with createSlice
 export const userReducer = createSlice({
   name: "users",
   initialState: { ...initialUserState },
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getUser.pending, (state, action) => {
+      .addCase(getUser.pending, (state) => {
         state.userLoader = true;
       })
       .addCase(getUser.fulfilled, (state, action) => {
@@ -31,7 +30,7 @@ export const userReducer = createSlice({
         state.authenticated = true;
         state.userLoader = false;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state) => {
         state.currentUser = null;
         state.authenticated = false;
         state.userLoader = false;

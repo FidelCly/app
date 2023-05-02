@@ -31,10 +31,11 @@ export const getUserCards = async (userId: number) => {
  * @param card
  * @returns
  */
-export const addCardToWallet = async (card: ICard) => {
+export const addCardToWallet = async (shopId: number, userId: number) => {
   const url = API_URL + "/card";
   try {
     const token = await AsyncStorage.getItem("token");
+    const nowDate = new Date();
     const response = await fetch(url, {
       method: "POST",
       mode: "no-cors",
@@ -43,7 +44,11 @@ export const addCardToWallet = async (card: ICard) => {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(card),
+      body: JSON.stringify({
+        shopId: shopId,
+        userId: userId,
+        endAt: nowDate.setDate(nowDate.getDate() + 365),
+      }),
     });
     return response.json();
   } catch (error) {

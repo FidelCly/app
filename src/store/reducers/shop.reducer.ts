@@ -30,7 +30,7 @@ export const shopReducer = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getShops.pending, (state, action) => {
+      .addCase(getShops.pending, (state) => {
         state.shopLoader = true;
       })
       .addCase(getShops.fulfilled, (state, action) => {
@@ -41,7 +41,7 @@ export const shopReducer = createSlice({
         state.shopLoader = false;
         state.shopError = action.error.message as string;
       })
-      .addCase(getShop.pending, (state, action) => {
+      .addCase(getShop.pending, (state) => {
         state.shopLoader = true;
       })
       .addCase(getShop.fulfilled, (state, action) => {

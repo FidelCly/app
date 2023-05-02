@@ -25,13 +25,10 @@ const renderCard = (props, card) => {
 
 const CardScreen = (props) => {
   const infoUserWallet = useSelector((state) => state.cards.cards);
-  // const user = useSelector((state) => state.users.currentUser);
   const cardLoader = useSelector((state) => state.cards.cardLoader);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    console.warn("🚀 ~ infoUserWallet (user cards):", infoUserWallet);
-  }, [infoUserWallet]);
+  useEffect(() => {}, [infoUserWallet]);
 
   const onSwiped = () => {
     setCurrentIndex(currentIndex + 1);
@@ -46,7 +43,7 @@ const CardScreen = (props) => {
   };
 
   const getStackSize = () => {
-    return 2; // infoUserWallet.length;
+    return infoUserWallet.length;
   };
 
   return (

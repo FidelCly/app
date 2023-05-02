@@ -67,26 +67,3 @@ export const logout = async () => {
     return error;
   }
 };
-
-/**
- * authGuard
- * @returns
- */
-export const authGuard = async () => {
-  const url = API_URL + "/auth";
-  try {
-    const token = AsyncStorage.getItem("token");
-    if (!token) return false;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return true;
-  } catch (error) {
-    return error;
-  }
-};
