@@ -27,7 +27,7 @@ export const getNearShops = async (
   lat: number,
   lng: number
 ) => {
-  const url = API_URL + `/shop/?d=${distance}&long=${lng}&lat=${lat}`;
+  const url = API_URL + `/shop/?distance=${distance}&long=${lng}&lat=${lat}`;
   try {
     const response = await fetch(url);
     return response.json();
