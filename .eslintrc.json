@@ -1,18 +1,41 @@
 {
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react", "react-native"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-native/all",
+    "prettier"
+  ],
   "env": {
+    "jest": true,
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:react/recommended", "standard", "prettier"],
   "parserOptions": {
+    "project": "tsconfig.json",
+    "ecmaVersion": 2018,
+    "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    }
   },
-  "plugins": ["react"],
   "rules": {
-    "react/prop-types": ["off"]
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "react-native/no-unused-styles": "warn",
+    "react-native/split-platform-components": "error",
+    "react-native/no-inline-styles": "warn",
+    "react-native/no-color-literals": "error",
+    "react-native/no-raw-text": "error",
+    "no-console": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

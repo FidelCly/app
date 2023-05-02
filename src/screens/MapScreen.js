@@ -42,11 +42,11 @@ export default function MapScreen(props) {
   ];
 
   const markerIcons = {
-    Restauration: require("../src/icon_restauration.png"),
-    Supply: require("../src/icon_supply.png"),
-    Entertainment: require("../src/icon_entertainement.png"),
-    Store: require("../src/icon_store.png"),
-    Service: require("../src/icon_service.png"),
+    Restauration: require("../assets/icon_restauration.png"),
+    Supply: require("../assets/icon_supply.png"),
+    Entertainment: require("../assets/icon_entertainement.png"),
+    Store: require("../assets/icon_store.png"),
+    Service: require("../assets/icon_service.png"),
   };
 
   useEffect(() => {
@@ -153,45 +153,45 @@ export default function MapScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  onLoading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
+  buttonAllowLocation: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    color: "#fff",
+    fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
   },
   container: {
-    flex: 1,
-    backgroundColor: "#6600ff",
     alignItems: "center",
+    backgroundColor: "#6600ff",
+    flex: 1,
     justifyContent: "center",
     textAlign: "center",
-  },
-  map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
   },
   errorMsg: {
     color: "white",
-    textAlign: "center",
     fontSize: 20,
     padding: 30,
+    textAlign: "center",
   },
-  buttonAllowLocation: {
-    backgroundColor: "#E5B824",
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
-    borderRadius: 20,
-    marginTop: 20,
-    color: "#fff",
-    fontSize: 16,
+  map: {
+    height: Dimensions.get("window").height,
+    width: Dimensions.get("window").width,
   },
-  sliderContainer: {
-    backgroundColor: "transparent",
+  onLoading: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    textAlign: "center",
   },
   slider: {
     marginTop: 10,
+  },
+  sliderContainer: {
+    backgroundColor: "transparent",
   },
   sliderValue: {
     paddingLeft: 20,

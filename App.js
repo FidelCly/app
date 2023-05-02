@@ -1,24 +1,18 @@
 import React from "react";
-
-import HomeScreen from "./screens/HomeScreen";
-import MapScreen from "./screens/MapScreen";
-import ScanScreen from "./screens/ScanScreen";
-import CardScreen from "./screens/CardScreen";
-import ProfilScreen from "./screens/ProfilScreen";
-import LoginScreen from "./screens/LoginScreen";
-
+import store from "./src/store/store";
+import HomeScreen from "./src/screens/HomeScreen";
+import MapScreen from "./src/screens/MapScreen";
+import ScanScreen from "./src/screens/ScanScreen";
+import CardScreen from "./src/screens/CardScreen";
+import ProfilScreen from "./src/screens/ProfilScreen";
+import RegisterScreen from "./src/screens/RegisterScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import CardScreenInfo from "./src/screens/CardScreenInfo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import { Ionicons } from "@expo/vector-icons";
-
-import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
-import username from "./reducers/username";
-import CardScreenInfo from "./screens/CardScreenInfo";
-
-const store = createStore(combineReducers({ username }));
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,8 +69,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: true }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
         </Stack.Navigator>

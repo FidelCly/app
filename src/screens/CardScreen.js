@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, SafeAreaView, StyleSheet, Text, Pressable } from "react-native";
 import DeckSwiper from "react-native-deck-swiper";
-
-const API_URL = process.env.API_URL;
+import { useSelector } from "react-redux";
 
 const renderCard = (props, card) => {
   return (
@@ -17,28 +16,19 @@ const renderCard = (props, card) => {
       }}
     >
       <View style={styles.card}>
-        <Text style={styles.cardText}>{card.shopId}</Text>
-        <Text style={styles.companyNameText}>{card.shop.companyName}</Text>
+        <Text style={styles.cardText}>{card?.shopId}</Text>
+        <Text style={styles.companyNameText}>{card?.shop?.companyName}</Text>
       </View>
     </Pressable>
   );
 };
 
 const CardScreen = (props) => {
-  const url = `${API_URL}/user/1`;
-  const [infoUserWallet, setInfoUserWallet] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const infoUserWallet = useSelector((state) => state.cards.cards);
+  const cardLoader = useSelector((state) => state.cards.cardLoader);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((json) => {
-        setInfoUserWallet(json.cards);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
+  useEffect(() => {}, [infoUserWallet]);
 
   const onSwiped = () => {
     setCurrentIndex(currentIndex + 1);
@@ -59,7 +49,7 @@ const CardScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        {isLoading ? (
+        {cardLoader ? (
           <View style={styles.onLoading}>
             <Text>Chargement de vos cartes de fidélité...</Text>
           </View>
@@ -83,50 +73,50 @@ const CardScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  onLoading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-  },
-
   card: {
+    alignItems: "center",
+    backgroundColor: "#5DB075",
+    borderColor: "#E8E8E8",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#E8E8E8",
-    backgroundColor: "#5DB075",
-    justifyContent: "center",
-    alignItems: "center",
     height: 200,
+    justifyContent: "center",
     width: 300,
   },
   cardText: {
     fontSize: 20,
   },
-  empty: {
+
+  companyNameText: {
+    bottom: 0,
+    color: "gray",
+    fontSize: 16,
+    position: "absolute",
+    right: 10,
+  },
+  container: {
+    backgroundColor: "white",
     flex: 1,
+  },
+  empty: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "#E8E8E8",
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#E8E8E8",
-    backgroundColor: "white",
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
     height: 400,
+    justifyContent: "center",
     width: 300,
   },
   emptyText: {
     fontSize: 20,
   },
-  companyNameText: {
-    fontSize: 16,
-    color: "gray",
-    position: "absolute",
-    bottom: 0,
-    right: 10,
+  onLoading: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
+    textAlign: "center",
   },
 });
 

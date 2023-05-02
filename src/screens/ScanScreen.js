@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { API_URL } from "@env";
-
-const idUser = 1;
-const urlPostCard = API_URL + "/card/";
+import { getShop } from "../store/reducers/shop.reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { addCardToWallet } from "../services";
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -13,7 +13,9 @@ export default function ScanScreen(props) {
   const [shopIdScan, setShopIdScan] = useState(
     "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
   );
-  const [nameShop, setNameShop] = useState("");
+  const shop = useSelector((state) => state.shops.currentShop);
+
+  const dispatch = useDispatch();
 
   const currentDate = new Date();
   const endAtDate = new Date();
@@ -35,12 +37,13 @@ export default function ScanScreen(props) {
       shopIdScan !==
       "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
     ) {
-      const urlGetNameShop = API_URL + "/shops/" + shopIdScan;
-      fetch(urlGetNameShop)
-        .then((response) => response.json())
-        .then((json) => setNameShop(json.companyName));
+      fetchShop(shopIdScan);
     }
   }, [shopIdScan]);
+
+  const fetchShop = (shopId) => {
+    dispatch(getShop(shopId));
+  };
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -48,23 +51,14 @@ export default function ScanScreen(props) {
   };
 
   const handleClick = async () => {
-    fetch(urlPostCard, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        shopId: shopIdScan,
-        userId: idUser,
-        startAt: currentDate,
-        endAt: endAtDate,
-      }),
-    });
-    await props.navigation.navigate("BottomNavigator", {
-      screen: "Cartes Fid",
-    });
+    try {
+      await addCardToWallet(user.id, shop.id);
+      await props.navigation.navigate("BottomNavigator", {
+        screen: "Cartes Fid",
+      });
+    } catch (error) {
+      console.log("🚀 ~ handleClick ~ error:", error);
+    }
   };
 
   if (hasPermission === null) {
@@ -94,7 +88,7 @@ export default function ScanScreen(props) {
           style={{ height: 400, width: 400 }}
         />
       </View>
-      <Text style={styles.maintext}>{nameShop}</Text>
+      <Text style={styles.maintext}>{shop?.companyName}</Text>
       {scanned && (
         <View>
           <Pressable
@@ -117,62 +111,62 @@ export default function ScanScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#5DB075",
-    alignItems: "center",
-    justifyContent: "center",
+  addWallet: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
   },
 
   barcodebox: {
     alignItems: "center",
-    justifyContent: "center",
-    height: 300,
-    width: 300,
-    overflow: "hidden",
-    borderRadius: 10,
     backgroundColor: "#5DB075",
-  },
-  maintext: {
-    fontSize: 20,
-    textAlign: "center",
-    paddingTop: 30,
-    margin: 10,
-    color: "#fff",
-  },
-  errorMsg: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 20,
-    padding: 30,
-  },
-  buttonTapAgain: {
-    backgroundColor: "#E5B824",
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
-    borderRadius: 20,
-    marginTop: 20,
-  },
-  addWallet: {
-    backgroundColor: "#E5B824",
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
-    borderRadius: 20,
-    marginTop: 20,
+    borderRadius: 10,
+    height: 300,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: 300,
   },
   buttonAllowCamera: {
     backgroundColor: "#E5B824",
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingRight: 30,
-    paddingLeft: 30,
     borderRadius: 20,
-    marginTop: 20,
     color: "#fff",
     fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  buttonTapAgain: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  container: {
+    alignItems: "center",
+    backgroundColor: "#5DB075",
+    flex: 1,
+    justifyContent: "center",
+  },
+  errorMsg: {
+    color: "white",
+    fontSize: 20,
+    padding: 30,
+    textAlign: "center",
+  },
+  maintext: {
+    color: "#fff",
+    fontSize: 20,
+    margin: 10,
+    paddingTop: 30,
+    textAlign: "center",
   },
 });

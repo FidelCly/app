@@ -117,32 +117,28 @@ export default function CardScreenInfo({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 10,
+  activityContainer: {
+    marginTop: 10,
   },
-  header: {
-    position: "absolute",
-    top: 40,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  activityText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  addressContainer: {
     alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  addressText: {
+    fontSize: 16,
+    marginLeft: 10,
+    textAlign: "center",
   },
   backButton: {
-    flexDirection: "row",
     alignItems: "center",
+    flexDirection: "row",
   },
   backButtonText: {
-    color: "green",
-    fontSize: 16,
-    marginLeft: 5,
-  },
-  optionsButtonText: {
     color: "green",
     fontSize: 16,
     marginLeft: 5,
@@ -151,69 +147,73 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   companyNameText: {
+    color: "orange",
     fontSize: 32,
     fontWeight: "bold",
-    color: "orange",
   },
-  addressContainer: {
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
+  container: {
+    backgroundColor: "#fff",
+    flex: 1,
+    padding: 10,
   },
-  addressText: {
-    marginLeft: 10,
-    fontSize: 16,
-    textAlign: "center",
-  },
-  activityContainer: {
-    marginTop: 10,
+  dateText: {
+    color: "#999",
+    fontSize: 14,
+    marginTop: 5,
+    textAlign: "left",
   },
 
-  activityText: {
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    left: 0,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    position: "absolute",
+    right: 0,
+    top: 40,
+  },
+  optionsButtonText: {
+    color: "green",
     fontSize: 16,
-    fontWeight: "bold",
-  },
-  textStyle: {
-    textAlign: "center",
-    margin: 10,
-  },
-  titleText: {
-    fontSize: 20,
-    fontWeight: "bold",
+    marginLeft: 5,
   },
   promotionsContainer: {
     backgroundColor: "#f0f0f0",
-    padding: 10,
+    borderRadius: 5,
     margin: 10,
     marginTop: 20,
-    borderRadius: 5,
+    padding: 10,
+  },
+  promotionsText: {
+    color: "#333",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   promotionsTextContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  promotionsText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
   promotionsTextLeft: {
     flex: 0.7,
   },
   promotionsTextRight: {
+    color: "#666",
     flex: 0.3,
     textAlign: "right",
-    color: "#666",
-  },
-  dateText: {
-    fontSize: 14,
-    color: "#999",
-    marginTop: 5,
-    textAlign: "left",
   },
   soldeTamponsText: {
     color: "green",
-    fontWeight: "bold",
     fontSize: 22,
+    fontWeight: "bold",
+  },
+  textStyle: {
+    margin: 10,
+    textAlign: "center",
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
