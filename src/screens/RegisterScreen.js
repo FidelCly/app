@@ -4,6 +4,7 @@ import { Input } from "@rneui/themed";
 import { login, register } from "../services";
 import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomButton from "../components/Button";
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("");
@@ -32,63 +33,68 @@ export default function LoginScreen(props) {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Image
-        style={{ width: 286, height: 199 }}
-        source={require("../assets/secure_login.png")}
-      />
-      <Input
-        containerStyle={{ width: "70%" }}
-        inputStyle={{
-          marginLeft: 10,
-        }}
-        placeholder="Email"
-        leftIcon={<FontAwesome5 name="user-alt" size={24} color="black" />}
-        onChangeText={(val) => setEmail(val)}
-      />
-      <Input
-        containerStyle={{ marginBottom: 25, width: "70%" }}
-        inputStyle={{ marginLeft: 10 }}
-        placeholder="Mot de passe"
-        type="password"
-        secureTextEntry={true}
-        onChangeText={(val) => setPassword(val)}
-        leftIcon={<FontAwesome5 name="key" size={24} color="black" />}
-        errorStyle={{ color: "red" }}
-        renderErrorMessage="ENTER A VALID ERROR HERE"
-      />
-      <Pressable
-        title="Creer mon compte"
-        type="solid"
-        style={styles.buttonConnect}
-        onPress={async () => {
-          await registerUser(email, password);
+    <View style={styles.registerScreen__container}>
+      <View style={styles.registerScreen__header}>
+        <Pressable
+          title="Retour"
+          type="solid"
+          style={styles.icon__retour}
+          onPress={() => props.navigation.navigate("Register")}
+        >
+          <FontAwesome5
+            name="arrow-left"
+            size={24}
+            style={styles.iconArrowLeft}
+          />
+          <Text style={styles.text__retour}>Retour</Text>
+        </Pressable>
+      </View>
+      <View style={styles.registerScreen__body}>
+        <Input
+          containerStyle={{ width: "85%" }}
+          inputStyle={styles.app__inputStyle}
+          placeholder="Adresse email"
+          onChangeText={(val) => setEmail(val)}
+        />
+        <Input
+          containerStyle={{ width: "85%" }}
+          inputStyle={styles.app__inputStyle}
+          placeholder="Mot de passe"
+          type="password"
+          secureTextEntry={true}
+          rightIcon={
+            <FontAwesome5 name="eye" size={24} style={styles.iconEye} />
+          }
+          onChangeText={(val) => setPassword(val)}
+          errorStyle={{ color: "red" }}
+          renderErrorMessage="Adresse email ou mot de passe incorrect"
+        />
 
-          props.navigation.navigate("BottomNavigator", {
-            screen: "Profil",
-          });
-        }}
-      >
-        <Text style={{ color: "white", fontSize: 18 }}>Creer un compte</Text>
-      </Pressable>
+        <View style={[styles.mb40]}>
+          <Pressable
+            title="Créer un compte"
+            type="solid"
+            onPress={async () => {
+              await registerUser(email, password);
+              props.navigation.navigate("BottomNavigator", {
+                screen: "Profil",
+              });
+            }}
+          >
+            <CustomButton title="Créer un compte" />
+          </Pressable>
+        </View>
 
-      <Text style={{ marginTop: 25 }}>Vous avez déjà un compte ?</Text>
-      <Pressable
-        title="Se connecter"
-        type="solid"
-        style={styles.buttonConnect}
-        onPress={() => props.navigation.navigate("Login")}
-      >
-        <Text style={{ margin: 10 }}> Se connecter !</Text>
-      </Pressable>
-      {/* <Text style={{ margin: 10 }}>Mot de passe oublié?</Text> */}
+        <View style={[styles.mb40]}></View>
+        <Text>Déjà inscrit ?</Text>
+        <Pressable
+          title="Se connecter"
+          type="solid"
+          onPress={() => props.navigation.navigate("Login")}
+        >
+          <Text style={[styles.text__greenUnderline]}>Se connecter</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -116,12 +122,47 @@ async function registerUser(email, password) {
 // Styles
 
 const styles = StyleSheet.create({
-  buttonConnect: {
-    backgroundColor: "#5DB075",
-    borderRadius: 20,
-    paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 10,
+  width100: {
+    width: "100%",
+    alignItems: "center",
+  },
+  mb40: {
+    marginBottom: 40,
+  },
+  registerScreen__container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  registerScreen__header: {
+    top: 50,
+  },
+  registerScreen__body: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  icon__retour: {
+    flexDirection: "row",
+    marginRight: 20,
+  },
+  text__retour: {
+    color: "#424242",
+    fontSize: 16,
+  },
+
+  app__inputStyle: {
+    padding: 10,
+    backgroundColor: "white",
+    fontSize: 16,
+  },
+  iconEye: { position: "absolute", right: 20, color: "grey" },
+  iconArrowLeft: { marginLeft: 20, marginRight: 20, color: "#5DB075" },
+
+  text__greenUnderline: {
+    color: "#5DB075",
+    textDecorationLine: "underline",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
