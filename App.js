@@ -75,7 +75,11 @@ export default function App() {
             component={LoginScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
         </Stack.Navigator>
