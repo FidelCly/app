@@ -1,5 +1,6 @@
 import React from "react";
 import store from "./src/store/store";
+import NewsScreen from "./src/screens/NewsScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 import MapScreen from "./src/screens/MapScreen";
 import ScanScreen from "./src/screens/ScanScreen";
@@ -48,7 +49,7 @@ const BottomNavigator = () => {
         ],
       })}
     >
-      <Tab.Screen name="Accueil" component={HomeScreen} />
+      <Tab.Screen name="Accueil" component={NewsScreen} />
       <Tab.Screen
         name="Plan"
         component={MapScreen}
@@ -70,6 +71,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: true }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}

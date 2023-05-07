@@ -35,20 +35,20 @@ export default function LoginScreen(props) {
   return (
     <View style={styles.registerScreen__container}>
       <View style={styles.registerScreen__header}>
+        <FontAwesome5
+          name="arrow-left"
+          size={24}
+          style={styles.iconArrowLeft}
+        />
         <Pressable
           title="Retour"
           type="solid"
-          style={styles.icon__retour}
-          onPress={() => props.navigation.navigate("Register")}
+          onPress={() => props.navigation.navigate("Home")}
         >
-          <FontAwesome5
-            name="arrow-left"
-            size={24}
-            style={styles.iconArrowLeft}
-          />
-          <Text style={styles.text__retour}>Retour</Text>
+          <Text style={[styles.text__retour]}>Retour</Text>
         </Pressable>
       </View>
+
       <View style={styles.registerScreen__body}>
         <Input
           containerStyle={{ width: "85%" }}
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   registerScreen__header: {
-    top: 50,
+    flexDirection: "row",
+    marginTop: 50,
   },
   registerScreen__body: {
     flex: 1,
