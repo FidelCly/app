@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getNearShops, getShopById } from "../../services";
 import { ShopActionTypes } from "../actions";
