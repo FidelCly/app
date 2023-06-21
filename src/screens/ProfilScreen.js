@@ -47,7 +47,14 @@ const ProfilScreen = (props) => {
           </View>
         ) : user && user !== null ? (
           <View>
-            <Text style={{ fontSize: 20, fontWeight: "bold", padding: 20 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                padding: 20,
+                marginTop: 30,
+              }}
+            >
               <Ionicons name="person-sharp" size={24} color="black" />
               {user.username}
             </Text>
@@ -88,23 +95,30 @@ const ProfilScreen = (props) => {
             </View>
           )}
 
-          <Pressable
-            style={{
-              backgroundColor: "#f15454",
-              padding: 10,
-              borderRadius: 10,
-              margin: 10,
-              display: "block",
-            }}
-            onPress={async () => {
-              const result = await logout();
-              if (result) {
-                props.navigation.navigate("Login");
-              }
-            }}
-          >
-            <Text style={{ color: "white" }}>Se déconnecter</Text>
-          </Pressable>
+          {
+            <Pressable
+              style={{
+                backgroundColor: "#f15454",
+                padding: 15,
+                borderRadius: 10,
+                marginBottom: 50,
+                display: "flex", // bug sur android, ne pas activer
+              }}
+              onPress={async () => {
+                try {
+                  const result = await logout();
+                  console.warn("🚀 ~ onPress={ ~ result:", result);
+                  if (result) {
+                    props.navigation.navigate("Login");
+                  }
+                } catch (error) {
+                  console.log("🚀 ~ onPress={ ~ error:", error);
+                }
+              }}
+            >
+              <Text style={{ color: "white" }}>Se déconnecter</Text>
+            </Pressable>
+          }
         </View>
       </View>
     </SafeAreaView>

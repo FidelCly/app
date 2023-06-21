@@ -1,4 +1,3 @@
-import { API_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
@@ -8,7 +7,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
  * @returns
  */
 export const login = async (email: string, password: string) => {
-  const url = API_URL + "/auth/login";
+  const url = process.env.API_URL + "/auth/login";
+
   try {
     const response = await fetch(url, {
       method: "PUT",
@@ -33,7 +33,7 @@ export const login = async (email: string, password: string) => {
  * @returns
  */
 export const register = async (email: string, password: string) => {
-  const url = API_URL + "/auth/register";
+  const url = process.env.API_URL + "/auth/register";
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -43,9 +43,9 @@ export const register = async (email: string, password: string) => {
       body: JSON.stringify({
         email,
         password,
+        role: "User",
       }),
     });
-
     return response.json();
   } catch (error) {
     return error;

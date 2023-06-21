@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCardBalanceById } from "../../services/balance-service";
 import { BalanceActionTypes } from "../actions/balance.actions";

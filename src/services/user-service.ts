@@ -1,8 +1,7 @@
-import { API_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getUserById = async (userId: number) => {
-  const url = API_URL + "/user/" + userId;
+export const getUserById = async (userId: string) => {
+  const url = process.env.API_URL + "/user/" + userId;
   try {
     const token = await AsyncStorage.getItem("token");
     const response = await fetch(url, {

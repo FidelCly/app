@@ -107,10 +107,9 @@ async function registerUser(email, password) {
     const registerUserData = await register(email, password);
 
     if (registerUserData) {
-      AsyncStorage.setItem("userId", registerUserData.uuid);
-
       const loginDatas = await login(email, password);
       if (loginDatas && loginDatas.status === 200) {
+        AsyncStorage.setItem("userId", loginDatas.userUuid);
         AsyncStorage.setItem("token", loginDatas.token);
       }
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getUserById } from "../../services/user-service";
 import { UserActionTypes } from "../actions/user.actions";

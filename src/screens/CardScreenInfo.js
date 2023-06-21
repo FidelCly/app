@@ -37,13 +37,7 @@ export default function CardScreenInfo({ route, navigation }) {
         >
           <Text style={styles.backButtonText}>Retour</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("ShopID :", shopId);
-            console.log("urlGetShopPromotion :", urlGetShopPromotion);
-            console.log("promotionShop :", promotionShop);
-          }}
-        >
+        <TouchableOpacity onPress={() => {}}>
           <Text style={styles.optionsButtonText}>Options</Text>
         </TouchableOpacity>
       </View>

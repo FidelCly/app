@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,10 +7,33 @@ import {
   Dimensions,
   Pressable,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { height, width } = Dimensions.get("window");
 
 export default function HomeScreen(props) {
+  useEffect(() => {
+    handleToken();
+  }, []);
+
+  /**
+   * handleToken
+   * @desc check if there's a token in the storage
+   */
+  const handleToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const userId = await AsyncStorage.getItem("userId");
+      if (token && userId) {
+        props.navigation.navigate("BottomNavigator", {
+          screen: "Profil",
+        });
+      }
+    } catch (error) {
+      console.log("🚀 ~ handleToken ~ error:", error);
+    }
+  };
+
   return (
     <View style={styles.container__homescreen}>
       <View>

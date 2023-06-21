@@ -1,4 +1,3 @@
-import { API_URL } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ICard } from "../store/interfaces";
 
@@ -8,7 +7,7 @@ import { ICard } from "../store/interfaces";
  * @returns
  */
 export const getUserCards = async (userId: number) => {
-  const url = API_URL + "/user/" + userId + "/wallet/";
+  const url = process.env.API_URL + "/user/" + userId + "/wallet/";
   try {
     const token = await AsyncStorage.getItem("token");
     const response = await fetch(url, {
@@ -32,7 +31,7 @@ export const getUserCards = async (userId: number) => {
  * @returns
  */
 export const addCardToWallet = async (shopId: number, userId: number) => {
-  const url = API_URL + "/card";
+  const url = process.env.API_URL + "/card";
   try {
     const token = await AsyncStorage.getItem("token");
     const nowDate = new Date();
@@ -58,7 +57,7 @@ export const addCardToWallet = async (shopId: number, userId: number) => {
 
 // update card
 export const updateCard = async (card: ICard) => {
-  const url = API_URL + "/card";
+  const url = process.env.API_URL + "/card";
 
   try {
     const token = await AsyncStorage.getItem("token");
@@ -83,7 +82,7 @@ export const updateCard = async (card: ICard) => {
  * @param cardId
  */
 export const deleteCard = async (cardId: number) => {
-  const url = API_URL + "/card" + cardId;
+  const url = process.env.API_URL + "/card" + cardId;
 
   try {
     const token = await AsyncStorage.getItem("token");

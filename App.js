@@ -61,7 +61,11 @@ const BottomNavigator = () => {
         options={{ unmountOnBlur: true }}
       />
       <Tab.Screen name="Cartes Fid" component={CardScreen} />
-      <Tab.Screen name="Profil" component={ProfilScreen} />
+      <Tab.Screen
+        name="Profil"
+        component={ProfilScreen}
+        options={{ headerLeft: () => null }}
+      />
     </Tab.Navigator>
   );
 };
@@ -70,7 +74,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: true }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="Home"
             component={HomeScreen}
