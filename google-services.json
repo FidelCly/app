@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1077277780944",
+    "project_id": "fidelcly-etna",
+    "storage_bucket": "fidelcly-etna.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077277780944:android:dececa22c83f7602b967d5",
+        "android_client_info": {
+          "package_name": "com.fidecly.fidelcly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077277780944-356rsn5njnk3p8nc5tkte98e4ii0idgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG-VA8PS-GV7o44JO1FpIXDPlQnVAS8uE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077277780944-356rsn5njnk3p8nc5tkte98e4ii0idgr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1077277780944-j2eitmnevhkiob64sioi93rqsjaoiio8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fidecly.fidelcly"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
