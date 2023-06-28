@@ -17,7 +17,7 @@
     "@react-native-community/cli-server-api": "^11.3.3",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-masked-view/masked-view": "0.2.8",
-    "@react-navigation/bottom-tabs": "^6.5.7",
+    "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "@reduxjs/toolkit": "^1.9.5",
