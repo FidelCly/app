@@ -54,11 +54,12 @@ const BottomNavigator = () => {
         name="Plan"
         component={MapScreen}
         options={{ unmountOnBlur: true }}
+        
       />
       <Tab.Screen
         name="Scan QR Code"
         component={ScanScreen}
-        options={{ unmountOnBlur: true }}
+        options={{ unmountOnBlur: true, headerShown: false }}
       />
       <Tab.Screen name="Cartes Fid" component={CardScreen} />
       <Tab.Screen
