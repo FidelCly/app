@@ -211,11 +211,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-	display: 'flex',
+	  display: 'flex',
   },
   cardText: {
     fontSize: 16,
-	fontWeight: "bold",
+	  fontWeight: "bold",
     color: "#424242",
     textAlign: 'center',
 },

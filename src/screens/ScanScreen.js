@@ -8,7 +8,7 @@ import { getCards } from "../store/reducers/card.reducer";
 import { getUser } from "../store/reducers/user.reducer";
 
 const screenWidth = Dimensions.get("window").width;
-const scannerSize = screenWidth * 0.8;
+const scannerSize = screenWidth * 0.8; // Adjust the size of the scanner box here
 
 export default function ScanScreen(props) {
 	const [hasPermission, setHasPermission] = useState(null);
@@ -124,108 +124,110 @@ export default function ScanScreen(props) {
 }
 
 const styles = StyleSheet.create({
-	addWallet: {
-		backgroundColor: "#E5B824",
-		borderRadius: 20,
-		marginTop: 20,
-		paddingBottom: 10,
-		paddingLeft: 30,
-		paddingRight: 30,
-		paddingTop: 10
-	},
-	barcodeScanner: {
-		width: "100%",
-		height: "100%"
-	},
-	buttonAllowCamera: {
-		backgroundColor: "#E5B824",
-		borderRadius: 20,
-		color: "#fff",
-		fontSize: 16,
-		marginTop: 20,
-		paddingBottom: 10,
-		paddingLeft: 30,
-		paddingRight: 30,
-		paddingTop: 10
-	},
-	buttonTapAgain: {
-		backgroundColor: "#E5B824",
-		borderRadius: 20,
-		marginTop: 20,
-		paddingBottom: 10,
-		paddingLeft: 30,
-		paddingRight: 30,
-		paddingTop: 10
-	},
-	container: {
-		alignItems: "center",
-		backgroundColor: "transparent",
-		flex: 1,
-		justifyContent: "center"
-	},
-	errorMsg: {
-		color: "white",
-		fontSize: 20,
-		padding: 30,
-		textAlign: "center"
-	},
-	maintext: {
-		color: "#fff",
-		fontSize: 20,
-		margin: 10,
-		paddingTop: 30,
-		textAlign: "center"
-	},
-	scannerContainer: {
-		flex: 1,
-		width: "100%",
-		justifyContent: "center",
-		alignItems: "center"
-	},
-	scannerOutline: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: "transparent",
-		alignItems: "center",
-		justifyContent: "center"
-	},
-	scanText: {
-		color: "#424242",
-		fontSize: 22,
-		margin: 10,
-		textAlign: "center",
-		fontWeight: "bold",
-		position: "absolute",
-		zIndex: 1
-	},
-	cornerBorder: {
-		position: "absolute",
-		width: 60,
-		height: 60,
-		borderColor: "#FFF",
-		borderWidth: 5
-	},
-	topLeftCorner: {
-		top: 0,
-		left: 0,
-		borderRightWidth: 0,
-		borderBottomWidth: 0
-	},
-	topRightCorner: {
-		top: 0,
-		right: 0,
-		borderLeftWidth: 0,
-		borderBottomWidth: 0
-	},
-	bottomLeftCorner: {
-		bottom: 0,
-		left: 0,
-		borderRightWidth: 0,
-		borderTopWidth: 0
-	},
-	bottomRightCorner: {
-		bottom: 0,
-		right: 0,
-		borderLeftWidth: 0,
-		borderTopWidth: 0
-	}
+  addWallet: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  barcodeScanner: {
+    width: "100%",
+    height: "100%",
+  },
+  buttonAllowCamera: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    color: "#fff",
+    fontSize: 16,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  buttonTapAgain: {
+    backgroundColor: "#E5B824",
+    borderRadius: 20,
+    marginTop: 20,
+    paddingBottom: 10,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 10,
+  },
+  container: {
+    alignItems: "center",
+    backgroundColor: "transparent",
+    flex: 1,
+    justifyContent: "center",
+  },
+  errorMsg: {
+    color: "white",
+    fontSize: 20,
+    padding: 30,
+    textAlign: "center",
+  },
+  maintext: {
+    color: "#fff",
+    fontSize: 20,
+    margin: 10,
+    paddingTop: 30,
+    textAlign: "center",
+  },
+  scannerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: scannerSize,
+    height: scannerSize,
+    borderWidth: 2,
+    borderColor: "#E6E6E6",
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  scannerOutline: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "transparent", 
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  scanText: {
+    color: "#424242",
+    fontSize: 22,
+    margin: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  cornerBorder: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    borderColor: '#FFF',
+    borderWidth: 5,
+  },
+  topLeftCorner: {
+    top: 0,
+    left: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+  },
+  topRightCorner: {
+    top: 0,
+    right: 0,
+    borderLeftWidth: 0,
+    borderBottomWidth: 0,
+  },
+  bottomLeftCorner: {
+    bottom: 0,
+    left: 0,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+  },
+  bottomRightCorner: {
+    bottom: 0,
+    right: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+  },
 });
