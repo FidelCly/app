@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addCardToWallet } from "../services";
 
 const screenWidth = Dimensions.get("window").width;
-const scannerSize = screenWidth * 0.8; // Adjust the size of the scanner box here
+const scannerSize = screenWidth * 0.8;
 
 export default function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -157,14 +157,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   scannerContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: scannerSize,
-    height: scannerSize,
-    borderWidth: 2,
-    borderColor: "#E6E6E6",
-    borderRadius: 10,
-    overflow: "hidden",
+    flex: 1, 
+    width: '100%', 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scannerOutline: {
     ...StyleSheet.absoluteFillObject,
@@ -178,6 +174,8 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: "center",
     fontWeight: "bold",
+    position: 'absolute',
+    zIndex: 1, 
   },
   cornerBorder: {
     position: 'absolute',
