@@ -30,11 +30,10 @@ export const getUserCards = async (userId: number) => {
  * @param card
  * @returns
  */
-export const addCardToWallet = async (shopId: number, userId: number) => {
+export const addCardToWallet = async (shopId: number) => {
 	const url = process.env.API_URL + "/card";
 	try {
 		const token = await AsyncStorage.getItem("token");
-		const nowDate = new Date();
 		const response = await fetch(url, {
 			method: "POST",
 			mode: "no-cors",
@@ -44,9 +43,7 @@ export const addCardToWallet = async (shopId: number, userId: number) => {
 				Authorization: `Bearer ${token}`
 			},
 			body: JSON.stringify({
-				shopId: shopId,
-				userId: userId,
-				endAt: nowDate.setDate(nowDate.getDate() + 365)
+				shopId: shopId
 			})
 		});
 		return response.json();

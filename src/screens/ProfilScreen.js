@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "../store/reducers/user.reducer";
-import { cardsActions } from "../store/reducers/card.reducer";
 import { logout } from "../services/auth-service";
 
 const ProfilScreen = (props) => {
@@ -21,10 +20,6 @@ const ProfilScreen = (props) => {
 
 	const fetchUserFromStore = (userId) => {
 		dispatch(getUser(userId));
-
-		if (user) {
-			dispatch(cardsActions["cards/setCardsrr"](user.cards));
-		}
 	};
 
 	const getUserFromStore = async () => {
