@@ -49,7 +49,7 @@ const BottomNavigator = () => {
         ],
       })}
     >
-      <Tab.Screen name="Accueil" component={NewsScreen} />
+      <Tab.Screen name="Accueil" component={NewsScreen} options={{ headerShown: false }} />
       <Tab.Screen
         name="Plan"
         component={MapScreen}
@@ -65,7 +65,7 @@ const BottomNavigator = () => {
       <Tab.Screen
         name="Profil"
         component={ProfilScreen}
-        options={{ headerLeft: () => null }}
+        options={{ headerShown: false }}
       />
     </Tab.Navigator>
   );
