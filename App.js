@@ -6,6 +6,7 @@ import MapScreen from "./src/screens/MapScreen";
 import ScanScreen from "./src/screens/ScanScreen";
 import CardScreen from "./src/screens/CardScreen";
 import ProfilScreen from "./src/screens/ProfilScreen";
+import EditProfilScreen from "./src/screens/EditProfilScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import CardScreenInfo from "./src/screens/CardScreenInfo";
@@ -93,6 +94,8 @@ export default function App() {
           />
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
+          <Stack.Screen name="EditProfil" component={EditProfilScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
