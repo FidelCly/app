@@ -56,7 +56,7 @@ const ProfilScreen = (props) => {
 				title="Go to Edit Profile"
 				type="solid"
 				onPress={() => {
-					props.navigation.navigate("Accueil");
+					props.navigation.navigate("EditProfil");
 				}}
 			>
 				<FontAwesome5 name="cog" size={24} color="white" />
@@ -117,7 +117,7 @@ const ProfilScreen = (props) => {
 		<Text style={styles.loadingText}>Chargement ...</Text>
 		</View>
   		)}
-	</View>
+		</View>
      
 
       
