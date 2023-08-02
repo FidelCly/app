@@ -64,6 +64,7 @@ export const logout = async () => {
     ]);
     return true;
   } catch (error) {
+    console.log("🚀 ~ logout ~ error:", error);
     return error;
   }
 };
