@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { getPromotionById, getShopPromotions } from "../services";
 
@@ -26,8 +33,7 @@ export default function CardScreenInfo({ route, navigation }) {
   let [isLoading, setIsLoading] = useState(false);
   let [shopPromotions, setShopPromotions] = useState([]);
 
-	const showImage = pictureUrl && pictureUrl.length > 0;
-
+  const showImage = pictureUrl && pictureUrl.length > 0;
 
   useEffect(() => {
     fetchPromotion(shopId);
@@ -36,7 +42,9 @@ export default function CardScreenInfo({ route, navigation }) {
   const fetchPromotion = async (shopId) => {
     try {
       const promotionArrays = await getShopPromotions(shopId);
-      setShopPromotions(promotionArrays.filter((promotion) => promotion.isActive === true));
+      setShopPromotions(
+        promotionArrays.filter((promotion) => promotion.isActive === true)
+      );
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -48,7 +56,10 @@ export default function CardScreenInfo({ route, navigation }) {
       {/* Header (10%) */}
       <View style={styles.header}>
         {/* Bouton retour à gauche */}
-        <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={styles.goBackButton}
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.backButtonText}>Retour</Text>
         </TouchableOpacity>
       </View>
@@ -59,13 +70,12 @@ export default function CardScreenInfo({ route, navigation }) {
           {/* Affichage de l'image dans la colonne de gauche */}
           <View style={styles.shopImageContainer}>
             {showImage ? (
-              <Image
-                style={styles.shopImage}
-                source={{ uri: pictureUrl }}
-              />
+              <Image style={styles.shopImage} source={{ uri: pictureUrl }} />
             ) : (
               <View style={styles.initialsContainer}>
-                <Text style={styles.cardText}>{getInitials(card.shop.companyName)}</Text>
+                <Text style={styles.cardText}>
+                  {getInitials(card.shop.companyName)}
+                </Text>
               </View>
             )}
           </View>
@@ -89,11 +99,13 @@ export default function CardScreenInfo({ route, navigation }) {
 
       {/* Description (20%) */}
       <View style={styles.description}>
-        <Text style={styles.descriptionTitle}>Un petit mot de votre commerçant</Text>
+        <Text style={styles.descriptionTitle}>
+          Un petit mot de votre commerçant
+        </Text>
         <Text style={styles.descriptionText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sagittis, nisl a sagittis
-          pretium, nunc felis congue est, vitae venenatis orci tellus vitae lacus. Proin sed urna
-          nec lectus eleifend fringilla.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sagittis,
+          nisl a sagittis pretium, nunc felis congue est, vitae venenatis orci
+          tellus vitae lacus. Proin sed urna nec lectus eleifend fringilla.
         </Text>
         <Text style={styles.signature}>Signature du commerçant</Text>
       </View>
@@ -106,12 +118,19 @@ export default function CardScreenInfo({ route, navigation }) {
           {shopPromotions.map((promotion) => (
             <View style={styles.promotionsContainer} key={promotion.id}>
               <View style={styles.promotionsTextContainer}>
-                <Text style={[styles.promotionsText, styles.promotionsTextLeft]}>
+                <Text
+                  style={[styles.promotionsText, styles.promotionsTextLeft]}
+                >
                   {promotion.name}
                 </Text>
-                <Text style={[styles.promotionsText, styles.promotionsTextRight]}>
+                <Text
+                  style={[styles.promotionsText, styles.promotionsTextRight]}
+                >
                   <Text style={styles.soldeTamponsText}>
-                    {balances.find((b) => b.promotionId === promotion.id)?.counter ?? 0}
+                    {balances
+                      .filter((b) => b.isActive)
+                      .find((b) => b.promotionId === promotion.id)?.counter ??
+                      0}
                   </Text>
                   / {promotion.checkoutLimit}
                 </Text>
@@ -132,29 +151,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5F5F5",
   },
-// HEADER STYLES
+  // HEADER STYLES
   header: {
     flex: 0.1,
     backgroundColor: "#5DB075",
-    flexDirection: "row", 
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
   goBackButton: {
     position: "absolute",
     left: 10,
-	paddingHorizontal: 10,
+    paddingHorizontal: 10,
   },
   backButtonText: {
-		color: "#424242",
-		fontSize: 16,
-		marginTop: 20,
-		textDecorationLine: "underline",
-	},
-// HEADER STYLES
-// Info Shop styles
+    color: "#424242",
+    fontSize: 16,
+    marginTop: 20,
+    textDecorationLine: "underline",
+  },
+  // HEADER STYLES
+  // Info Shop styles
   infoShop: {
-    flex: 0.20,
+    flex: 0.2,
     flexDirection: "row",
   },
   leftColumn: {
@@ -182,8 +201,8 @@ const styles = StyleSheet.create({
   companyNameText: {
     fontSize: 20,
     fontWeight: "bold",
-	textTransform: "uppercase",
-	color: "#FECF33",
+    textTransform: "uppercase",
+    color: "#FECF33",
     marginBottom: 10,
   },
   activityContainer: {
@@ -193,7 +212,7 @@ const styles = StyleSheet.create({
   },
   activityText: {
     fontSize: 14,
-	fontWeight: "bold",
+    fontWeight: "bold",
   },
   addressContainer: {
     flexDirection: "row",
@@ -211,16 +230,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-	  display: 'flex',
+    display: "flex",
   },
   cardText: {
     fontSize: 16,
-	  fontWeight: "bold",
+    fontWeight: "bold",
     color: "#424242",
-    textAlign: 'center',
-},
-// Info Shop styles
-// Description styles
+    textAlign: "center",
+  },
+  // Info Shop styles
+  // Description styles
   description: {
     flex: 0.15,
     backgroundColor: "#fff",
@@ -238,17 +257,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginBottom: 20,
     fontSize: 12,
-
   },
   signature: {
     textAlign: "right",
     fontWeight: "bold",
     fontSize: 12,
-
   },
-// Description styles
+  // Description styles
 
-// Promotions styles
+  // Promotions styles
   promotions: {
     flex: 0.55,
     backgroundColor: "#F5F5F5",
@@ -291,9 +308,8 @@ const styles = StyleSheet.create({
   },
   dateText: {
     textAlign: "left",
-	fontSize: 12,
+    fontSize: 12,
     marginTop: 10,
   },
-// Promotions styles
-
+  // Promotions styles
 });

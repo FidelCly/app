@@ -11,116 +11,133 @@ const screenWidth = Dimensions.get("window").width;
 const scannerSize = screenWidth * 0.8; // Adjust the size of the scanner box here
 
 export default function ScanScreen(props) {
-	const [hasPermission, setHasPermission] = useState(null);
-	const [scanned, setScanned] = useState(false);
-	const [shopIdScan, setShopIdScan] = useState(
-		"Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
-	);
-	const shop = useSelector((state) => state.shops.currentShop);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [shopIdScan, setShopIdScan] = useState(
+    "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
+  );
+  const shop = useSelector((state) => state.shops.currentShop);
 
-	// Permet d'aller chercher l'utilisateur et le dans le store
-	const user = useSelector((state) => state.users.currentUser);
-	const dispatch = useDispatch();
+  // Permet d'aller chercher l'utilisateur et le dans le store
+  const user = useSelector((state) => state.users.currentUser);
+  const dispatch = useDispatch();
 
-	const currentDate = new Date();
-	const endAtDate = new Date();
+  const currentDate = new Date();
+  const endAtDate = new Date();
 
-	const askForCameraPermission = () => {
-		(async () => {
-			const { status } = await BarCodeScanner.requestPermissionsAsync();
-			setHasPermission(status === "granted");
-		})();
-	};
+  const askForCameraPermission = () => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  };
 
-	// Request Camera Permission
-	useEffect(() => {
-		getUserFromStore();
-		askForCameraPermission();
-		if (shopIdScan !== "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet") {
-			fetchShop(shopIdScan);
-		}
-	}, [shopIdScan]);
+  // Request Camera Permission
+  useEffect(() => {
+    getUserFromStore();
+    askForCameraPermission();
+    if (
+      shopIdScan !==
+      "Scanner le QR code de votre commerçant pour l'ajouter dans votre wallet"
+    ) {
+      fetchShop(shopIdScan);
+    }
+  }, [shopIdScan]);
 
-	const fetchShop = (shopId) => {
-		dispatch(getShop(shopId));
-	};
+  const fetchShop = (shopId) => {
+    dispatch(getShop(shopId));
+  };
 
-	const getUserFromStore = async () => {
-		try {
-			const value = await AsyncStorage.getItem("userId");
-			if (value !== null) {
-				fetchUserFromStore(value);
-			}
-		} catch (err) {
-			// Implement visual error handling
-		}
-	};
+  const getUserFromStore = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userId");
+      if (value !== null) {
+        fetchUserFromStore(value);
+      }
+    } catch (err) {
+      // Implement visual error handling
+    }
+  };
 
-	const fetchUserFromStore = (userId) => {
-		dispatch(getUser(userId));
-	};
+  const fetchUserFromStore = (userId) => {
+    dispatch(getUser(userId));
+  };
 
-	const handleBarCodeScanned = ({ type, data }) => {
-		setScanned(true);
-		setShopIdScan(+data);
-	};
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    setShopIdScan(+data);
+  };
 
-	const handleClick = async () => {
-		try {
-			await addCardToWallet(shopIdScan);
-			dispatch(getCards());
-			getUserFromStore();
-			await props.navigation.navigate("BottomNavigator", {
-				screen: "Cartes Fid"
-			});
-		} catch (error) {
-			console.error("🚀 ~ handleClick ~ error:", error);
-		}
-	};
+  const handleClick = async () => {
+    try {
+      await addCardToWallet(shopIdScan);
+      dispatch(getCards());
+      getUserFromStore();
+      await props.navigation.navigate("BottomNavigator", {
+        screen: "Cartes Fid",
+      });
+    } catch (error) {
+      console.error("🚀 ~ handleClick ~ error:", error);
+    }
+  };
 
-	if (hasPermission === null) {
-		return <Text>Demande d'autorisation de la caméra</Text>;
-	}
-	if (hasPermission === false) {
-		return (
-			<View style={styles.container}>
-				<Text style={styles.errorMsg}>L'application nécessite une autorisation pour accéder à la caméra</Text>
-				<Pressable title={"Allow Camera"} onPress={() => askForCameraPermission()}>
-					<Text style={styles.buttonAllowCamera}>Autoriser la caméra</Text>
-				</Pressable>
-			</View>
-		);
-	}
+  if (hasPermission === null) {
+    return <Text>Demande d'autorisation de la caméra</Text>;
+  }
+  if (hasPermission === false) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorMsg}>
+          L'application nécessite une autorisation pour accéder à la caméra
+        </Text>
+        <Pressable
+          title={"Allow Camera"}
+          onPress={() => askForCameraPermission()}
+        >
+          <Text style={styles.buttonAllowCamera}>Autoriser la caméra</Text>
+        </Pressable>
+      </View>
+    );
+  }
 
-	return (
-		<View style={styles.container}>
-			<Text style={styles.scanText}>Un scan, un clic, un wallet plein de fidélité !</Text>
-			<Text style={styles.scanText}>Simplifiez vos achats !</Text>
-			<View style={styles.scannerContainer}>
-				<View style={styles.scannerOutline}>
-					<BarCodeScanner
-						onBarCodeScanned={scanned ? false : handleBarCodeScanned}
-						style={[StyleSheet.absoluteFillObject, styles.barcodeScanner]}
-					/>
-					<View style={[styles.cornerBorder, styles.topLeftCorner]} />
-					<View style={[styles.cornerBorder, styles.topRightCorner]} />
-					<View style={[styles.cornerBorder, styles.bottomLeftCorner]} />
-					<View style={[styles.cornerBorder, styles.bottomRightCorner]} />
-				</View>
-			</View>
-			<Text style={styles.maintext}>{shop?.companyName}</Text>
-			{scanned && (
-				<View>
-					<Pressable style={styles.buttonTapAgain} onPress={() => setScanned(false)}>
-						<Text style={{ color: "white", fontSize: 18 }}>Scanner à nouveau</Text>
-					</Pressable>
-					<Pressable style={styles.addWallet} onPress={() => handleClick()}>
-						<Text style={{ color: "white", fontSize: 18 }}>Ajouter aux Cartes</Text>
-					</Pressable>
-				</View>
-			)}
-		</View>
-	);
+  return (
+    <View style={styles.container}>
+      <Text style={styles.scanText}>
+        Un scan, un clic, un wallet plein de fidélité !
+      </Text>
+      <Text style={styles.scanText}>Simplifiez vos achats !</Text>
+      <View style={styles.scannerContainer}>
+        <View style={styles.scannerOutline}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? false : handleBarCodeScanned}
+            style={[StyleSheet.absoluteFillObject, styles.barcodeScanner]}
+          />
+          <View style={[styles.cornerBorder, styles.topLeftCorner]} />
+          <View style={[styles.cornerBorder, styles.topRightCorner]} />
+          <View style={[styles.cornerBorder, styles.bottomLeftCorner]} />
+          <View style={[styles.cornerBorder, styles.bottomRightCorner]} />
+        </View>
+      </View>
+      <Text style={styles.maintext}>{shop?.companyName}</Text>
+      {scanned && (
+        <View>
+          <Pressable
+            style={styles.buttonTapAgain}
+            onPress={() => setScanned(false)}
+          >
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Scanner à nouveau
+            </Text>
+          </Pressable>
+          <Pressable style={styles.addWallet} onPress={() => handleClick()}>
+            <Text style={{ color: "white", fontSize: 18 }}>
+              Ajouter aux Cartes
+            </Text>
+          </Pressable>
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -188,7 +205,7 @@ const styles = StyleSheet.create({
   },
   scannerOutline: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "transparent", 
+    backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -200,10 +217,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cornerBorder: {
-    position: 'absolute',
+    position: "absolute",
     width: 60,
     height: 60,
-    borderColor: '#FFF',
+    borderColor: "#FFF",
     borderWidth: 5,
   },
   topLeftCorner: {

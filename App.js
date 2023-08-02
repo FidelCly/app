@@ -50,12 +50,15 @@ const BottomNavigator = () => {
         ],
       })}
     >
-      <Tab.Screen name="Accueil" component={NewsScreen} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="Accueil"
+        component={NewsScreen}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen
         name="Plan"
         component={MapScreen}
         options={{ unmountOnBlur: true }}
-        
       />
       <Tab.Screen
         name="Scan QR Code"
@@ -95,7 +98,6 @@ export default function App() {
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
           <Stack.Screen name="EditProfil" component={EditProfilScreen} />
-
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
