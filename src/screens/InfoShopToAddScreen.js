@@ -272,16 +272,6 @@ const styles = StyleSheet.create({
   promotionsTextLeft: {
     flex: 0.7,
   },
-  promotionsTextRight: {
-    color: "#666",
-    flex: 0.3,
-    textAlign: "right",
-  },
-  soldeTamponsText: {
-    color: "green",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
   dateText: {
     textAlign: "left",
     fontSize: 12,
