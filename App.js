@@ -10,6 +10,9 @@ import EditProfilScreen from "./src/screens/EditProfilScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import CardScreenInfo from "./src/screens/CardScreenInfo";
+import InfoShopToAddScreen from "./src/screens/InfoShopToAddScreen";
+
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -58,7 +61,7 @@ const BottomNavigator = () => {
       <Tab.Screen
         name="Plan"
         component={MapScreen}
-        options={{ unmountOnBlur: true }}
+        options={{ unmountOnBlur: true, headerShown: false }}
       />
       <Tab.Screen
         name="Scan QR Code"
@@ -98,6 +101,9 @@ export default function App() {
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
           <Stack.Screen name="EditProfil" component={EditProfilScreen} />
+          <Stack.Screen name="InfoShopToAdd" component={InfoShopToAddScreen} />
+
+          
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

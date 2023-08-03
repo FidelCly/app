@@ -1,10 +1,19 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Pressable, StyleSheet, Text, View, Dimensions } from "react-native";
+import { Pressable, StyleSheet, Text, View, Dimensions, TouchableOpacity , Image  } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout  } from "react-native-maps";
 import Slider from "@react-native-community/slider";
 import { getAllShops, getNearShops } from "../services";
+import { addCardToWallet } from "../services";
+
+import { getCards } from "../store/reducers/card.reducer";
+
+import { Ionicons } from '@expo/vector-icons';
+import { useSelector, useDispatch } from "react-redux";
+
+
+
 
 export default function MapScreen(props) {
   const [pin, setPin] = useState({
@@ -24,6 +33,7 @@ export default function MapScreen(props) {
       longitude: location.coords.longitude,
     });
   }, []);
+  const dispatch = useDispatch();
 
   const mapStyle = [
     // Commerces et activités
@@ -49,37 +59,36 @@ export default function MapScreen(props) {
   useEffect(() => {
     (async () => {
       try {
+        await dispatch(getCards());
         const { status } = await Location.requestForegroundPermissionsAsync();
         setHasPermissionLocation(status === "granted");
         if (status === "granted") {
           setLoading(true);
           const { coords } = await Location.getCurrentPositionAsync({});
           setPin({ latitude: coords.latitude, longitude: coords.longitude });
-          // Cette ligne permet de get les shop à proximité de la position de l'utilisateur
           const nearShops = await getNearShops(
             distance,
             coords.latitude,
             coords.longitude
           );
-
-          // cette ligne permet de get tous les shops (sans distance ni critère de position) / à utiliser pour les tests
           const allShop = await getAllShops();
 
           if (nearShops && nearShops.length > 0) {
+            setShopNearMyPosition(nearShops);
+          } else if (allShop && allShop.length > 0) {
             setShopNearMyPosition(allShop);
           }
 
           if (allShop && allShop.length > 0) {
             setAllShop(allShop);
           }
-
           setLoading(false);
         }
       } catch (error) {
         console.warn("🚀 ~ error:", error);
       }
     })();
-  }, [askForLocationPermissionAgain]);
+  }, [askForLocationPermissionAgain, dispatch]);
 
   const handleDistanceChange = async (newDistance) => {
     try {
@@ -168,10 +177,36 @@ export default function MapScreen(props) {
                 latitude: parseFloat(shop.lat),
                 longitude: parseFloat(shop.long),
               }}
-              title={shop.companyName}
-              description={shop.activity}
               image={markerIcons[shop.activity]}
-            />
+            >
+              
+              <Callout style={styles.calloutContainer} onPress={() => {
+                    if (shop) {
+                      props.navigation.navigate("InfoShopToAdd", {
+                        screen: "InfoShopToAddScreen",
+                        params: { shop: shop },
+                      });
+                    } else {
+                      console.error('shop is undefined');
+                    }
+                  }}>
+                  <View style={styles.calloutHeader}>
+                    <Text style={styles.companyName}>{shop.companyName}</Text>
+                    <Image source={{uri: shop.pictureUrl}} style={styles.shopLogo} />
+                  </View>
+                  <View style={styles.separator} />
+                  <View style={styles.calloutDetails}>
+                    <View style={styles.detailsLeftColumn}>
+                      <Text style={styles.activity}>{shop.activity}</Text>
+                      <Text style={styles.address}>{shop.address}</Text>
+                      <Text style={styles.cityZip}>{shop.zipcode} {shop.city}</Text>
+                    </View>
+                    <View style={styles.detailsRightColumn}>
+                      <Ionicons name="add-circle-outline" size={24} color="green" />
+                    </View>
+                  </View>
+              </Callout>
+            </Marker>
           ))}
         </MapView>
       )}
@@ -183,44 +218,96 @@ const styles = StyleSheet.create({
   buttonAllowLocation: {
     backgroundColor: "#E5B824",
     borderRadius: 20,
+    textAlign: "center",
+    padding: 15,
+    fontWeight: "bold",
     color: "#fff",
-    fontSize: 16,
-    marginTop: 20,
-    paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingTop: 10,
   },
   container: {
-    alignItems: "center",
-    backgroundColor: "#6600ff",
     flex: 1,
     justifyContent: "center",
-    textAlign: "center",
-  },
-  errorMsg: {
-    color: "white",
-    fontSize: 20,
-    padding: 30,
-    textAlign: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
   map: {
-    height: Dimensions.get("window").height,
     width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   onLoading: {
-    alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    textAlign: "center",
+    alignItems: "center",
   },
-  slider: {
-    marginTop: 10,
+  errorMsg: {
+    marginBottom: 20,
   },
   sliderContainer: {
-    backgroundColor: "transparent",
+    position: "absolute",
+    zIndex: 1,
+    top: 60,
+    left: 10,
+    right: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  slider: {
+    flex: 1,
+    marginRight: 10,
   },
   sliderValue: {
-    paddingLeft: 20,
+    fontWeight: "bold",
+  },
+  popUpCardInfo: {
+    width: 200,
+  },
+  calloutContainer: {
+    width: 260,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderWidth: 0.5,
+    borderColor: '#ccc',
+  },
+  calloutHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  companyName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  shopLogo: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#bbb",
+    marginVertical: 8,
+  },
+  calloutDetails: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  detailsLeftColumn: {},
+  detailsRightColumn: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activity: {
+    fontSize: 14,
+    color: "#666",
+  },
+  address: {
+    fontSize: 12,
+    color: "#666",
+  },
+  cityZip: {
+    fontSize: 12,
+    color: "#666",
   },
 });
