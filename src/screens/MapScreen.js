@@ -49,11 +49,11 @@ export default function MapScreen(props) {
   ];
 
   const markerIcons = {
-    Restauration: require("../assets/icon_restauration.png"),
-    Supply: require("../assets/icon_supply.png"),
-    Entertainment: require("../assets/icon_entertainement.png"),
-    Store: require("../assets/icon_store.png"),
-    Service: require("../assets/icon_service.png"),
+    Restauration: require("../assets/icon_restauration_v2.png"),
+    Supply: require("../assets/icon_supply_v2.png"),
+    Entertainment: require("../assets/icon_entertainement_v2.png"),
+    Store: require("../assets/icon_store_v2.png"),
+    Service: require("../assets/icon_service_v2.png"),
   };
 
   useEffect(() => {
