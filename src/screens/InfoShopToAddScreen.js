@@ -112,7 +112,6 @@ export default function InfoShopToAddScreen(props) {
         <TouchableOpacity
           title="Ajouter à mon wallet"
           onPress={async () => {
-            
           }}
         >
           <CustomButton title="Ajouter à mon wallet" />

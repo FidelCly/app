@@ -199,10 +199,10 @@ export default function MapScreen(props) {
                     <View style={styles.detailsLeftColumn}>
                       <Text style={styles.activity}>{shop.activity}</Text>
                       <Text style={styles.address}>{shop.address}</Text>
-                      <Text style={styles.cityZip}>{shop.zipcode} {shop.city}</Text>
+                      <Text style={styles.cityZip}>{shop.zipcode}{shop.city}</Text>
                     </View>
                     <View style={styles.detailsRightColumn}>
-                      <Ionicons name="add-circle-outline" size={24} color="green" />
+                      <Ionicons name="add-circle-outline" size={36} color="green" />
                     </View>
                   </View>
               </Callout>
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   activity: {
     fontSize: 14,
-    color: "#666",
+    color: "red",
   },
   address: {
     fontSize: 12,
