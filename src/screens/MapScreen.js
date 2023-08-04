@@ -13,6 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function MapScreen(props) {
+	const ShopActivityTranslation = {
+		["Restauration"]: "Restauration",
+		["Supply"]: "Alimentation",
+		["Entertainment"]: "Divertissement",
+		["Store"]: "Boutique",
+		["Service"]: "Service"
+	};
+
 	const [pin, setPin] = useState({
 		latitude: 48.866667,
 		longitude: 2.333333
@@ -157,7 +165,7 @@ export default function MapScreen(props) {
 								latitude: parseFloat(shop.lat),
 								longitude: parseFloat(shop.long)
 							}}
-							image={markerIcons[shop.activity]}
+							image={markerIcons[ShopActivityTranslation[shop.activity]]}
 						>
 							<Callout
 								style={styles.calloutContainer}
