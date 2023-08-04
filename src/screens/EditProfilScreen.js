@@ -130,6 +130,7 @@ export default function EditProfilScreen({ props, navigation }) {
 
 							if (data && data.message === "User updated") {
 								dispatch(getUser(userId));
+								console.warn("Profil mis à jour");
 								navigation.navigate("BottomNavigator", {
 									screen: "Profil"
 								});
