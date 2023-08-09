@@ -49,14 +49,7 @@ const NewsScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.iconReglage}>
-          <Pressable
-            title="Go to Edit Profile"
-            onPress={() => props.navigation.navigate("EditProfil")}
-          >
-            <FontAwesome5 name="cog" size={24} color="white" />
-          </Pressable>
-        </View>
+        
         <View style={styles.userContainer}>
           <View style={styles.userPhoto}>
             <View style={styles.initialsBubble}>
@@ -240,18 +233,15 @@ const styles = StyleSheet.create({
 // HEADER SECTION
 
   header: {
-    flex: 0.3,
+    flex: 0.28,
     backgroundColor: "#5DB075",
     flexDirection: "column",
   },
-  iconReglage: {
-    flex: 0.2,
-    alignItems: "flex-end",
-    padding: 10,
-    marginTop: 30,
-  },
+ 
   userContainer: {
-    flex: 0.8,
+    marginTop: 30,
+
+    flex: 1,
     flexDirection: "row",
   },
   userPhoto: {
@@ -311,13 +301,13 @@ const styles = StyleSheet.create({
 
 // PROMOTION SECTION
   promotionSection: {
-    flex: 0.35,
+    flex: 0.36,
   },
 // FIN PROMOTION SECTION
 
 // DECOUVREZ SECTION
   decouvrezSection: {
-    flex: 0.35,
+    flex: 0.36,
   },
 // FIN DECOUVREZ SECTION
  sectionTitle: {
