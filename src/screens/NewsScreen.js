@@ -1,6 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import React, { useEffect } from "react";
 import { Text, View, StyleSheet, Pressable, Dimensions, ScrollView } from "react-native";
-import { FontAwesome5, MaterialIcons, MaterialCommunityIcons  } from "@expo/vector-icons";
+import { FontAwesome5, MaterialIcons, MaterialCommunityIcons, Fontisto, FontAwesome  } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "../store/reducers/user.reducer";
@@ -95,51 +97,31 @@ const NewsScreen = (props) => {
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <Fontisto name="shopping-store" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>Monceau Fleurs</Text>
+                <Text style={styles.promoDate}>du 01/08/23 au 31/08/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>10 roses achetées = 1 rose offerte</Text>
           </View>
         {/* Exemple de brique */}
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <FontAwesome5 name="shopping-cart" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>Yi Da Market</Text>
+                <Text style={styles.promoDate}>du 01/01/23 au 31/01/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>5€ au 10ème passage de 100€</Text>
           </View>
         {/* Exemple de brique */}
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <FontAwesome name="cutlery" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>Santa Maria</Text>
+                <Text style={styles.promoDate}>du 01/07/23 au 15/10/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
-          </View>
-        {/* Exemple de brique */}
-              {/* Exemple de brique */}
-          <View style={styles.promoItem}>
-            <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
-            </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
-          </View>
-        {/* Exemple de brique */}
-        {/* Exemple de brique */}
-          <View style={styles.promoItem}>
-            <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
-            </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>10 pizzas achetées = 1 bouteille de vin d'Italie offerte</Text>
           </View>
         {/* Exemple de brique */}
        
@@ -163,53 +145,34 @@ const NewsScreen = (props) => {
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <Fontisto name="shopping-store" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>Boulangerie Petit</Text>
+                <Text style={styles.promoDate}>du 01/08/23 au 31/09/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>5 traditions achetées = 1 offerte</Text>
           </View>
         {/* Exemple de brique */}
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <FontAwesome5 name="gamepad" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>Centre Aquatique</Text>
+                <Text style={styles.promoDate}>du 01/08/23 au 31/08/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>10 entrées achetées = 1 offerte</Text>
           </View>
         {/* Exemple de brique */}
         {/* Exemple de brique */}
           <View style={styles.promoItem}>
             <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
+                <FontAwesome5 name="cog" size={20} color="#5DB075" />
+                <Text style={styles.promoCompany}>DaisyPhone</Text>
+                <Text style={styles.promoDate}>du 01/01/23 au 31/12/23</Text>
             </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
+            <Text style={styles.promoDescription}>5 tickets de plus de 100€ = 1 téléphone offert</Text>
           </View>
         {/* Exemple de brique */}
-              {/* Exemple de brique */}
-          <View style={styles.promoItem}>
-            <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
-            </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
-          </View>
-        {/* Exemple de brique */}
-        {/* Exemple de brique */}
-          <View style={styles.promoItem}>
-            <View style={styles.promoItemHeader}>
-                <FontAwesome5 name="gift" size={20} color="#5DB075" />
-                <Text style={styles.promoCompany}>NOM DE L'ENTREPRISE</Text>
-                <Text style={styles.promoDate}>du XX/XX/XX au XX/XX/XX</Text>
-            </View>
-            <Text style={styles.promoDescription}>Description de la promotion</Text>
-          </View>
-        {/* Exemple de brique */}
+              
        
 
       </ScrollView>
