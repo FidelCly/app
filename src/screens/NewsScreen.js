@@ -135,7 +135,6 @@ const NewsScreen = (props) => {
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 10 }}>
       <Text style={styles.sectionTitle}>DÉCOUVREZ AUSSI</Text>
       <Pressable onPress={() => {
-		      console.log("🚀 ~ NewsScreen ~ Reload Card");
       }}>
           <MaterialCommunityIcons name="refresh-circle" size={24} color="#5DB075" />
       </Pressable>
@@ -176,10 +175,7 @@ const NewsScreen = (props) => {
        
 
       </ScrollView>
-
         
-        
-        {/* Vous pouvez ajouter plus de briques identiques ici */}
     </View>
 </View>
 
@@ -287,12 +283,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     margin: 5,
-    maxHeight: height * 0.25,  // Ajustez selon la taille désirée
+    maxHeight: height * 0.25,
   },
 
   promoItem: {
     flexDirection: 'column',
-    // alignItems: 'center',
     borderBottomColor: 'darkgray',
     borderBottomWidth: 0.3,
     padding: 10
