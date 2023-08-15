@@ -165,6 +165,7 @@ export default function MapScreen(props) {
 									if (shop) {
 										props.navigation.navigate("InfoShopToAdd", {
 											screen: "InfoShopToAddScreen",
+											props,
 											shop
 										});
 									} else {

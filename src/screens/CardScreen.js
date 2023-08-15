@@ -75,7 +75,6 @@ const CardScreen = (props) => {
 	useEffect(() => {
 		// Permet d'aller chercher les cartes de l'utilisateur et de les stocker dans le store
 		dispatch(getCards());
-		console.log("🚀 ~ CardScreen ~ infoUserWallet:", searchCards(""));
 	}, []);
 
 	const renderEmpty = () => {

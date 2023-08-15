@@ -4,11 +4,21 @@ import { Input } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { login } from "../services";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Snackbar, ActivityIndicator, MD2Colors } from "react-native-paper";
+import { httpMessage } from "../store/http-translation";
 import CustomButton from "../components/Button";
+import { getUser } from "../store/reducers/user.reducer";
+import { getCards } from "../store/reducers/card.reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllShop } from "../store/reducers/shop.reducer";
 
 export default function LoginScreen(props) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [snackBarVisible, setSnackbarVisible] = useState(false);
+	const [snackBarMessage, setSnackbarMessage] = useState("");
+	const [loader, setLoader] = useState(false);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const unsubscribe = props.navigation.addListener("focus", () => {
@@ -27,10 +37,16 @@ export default function LoginScreen(props) {
 			const userId = await AsyncStorage.getItem("userId");
 			if (token && userId) {
 				props.navigation.navigate("BottomNavigator", {
-					screen: "Profil"
+					screen: "Accueil"
 				});
 			}
 		} catch (error) {}
+	};
+
+	const initDatasInStore = async (userId) => {
+		dispatch(getUser(userId));
+		dispatch(getAllShop());
+		dispatch(getCards());
 	};
 
 	return (
@@ -54,6 +70,7 @@ export default function LoginScreen(props) {
 					placeholder="Mot de passe"
 					type="password"
 					secureTextEntry={true}
+					minLength={6}
 					rightIcon={<FontAwesome5 name="eye" size={24} style={styles.iconEye} />}
 					onChangeText={(val) => setPassword(val)}
 					errorStyle={{ color: "red" }}
@@ -69,19 +86,31 @@ export default function LoginScreen(props) {
 						type="solid"
 						onPress={async () => {
 							try {
+								setLoader(true);
+								await verifyForm(email, password);
 								await loginUser(email, password);
+								const userId = await AsyncStorage.getItem("userId");
+
+								if (userId) {
+									initDatasInStore(userId);
+								}
+
+								setLoader(false);
 								props.navigation.navigate("BottomNavigator", {
-									screen: "Profil"
+									screen: "Accueil"
 								});
 							} catch (error) {
-								// TODO: visual snackbar error
-								console.error("🚀 Login error : ", error);
+								console.log("🚀 ~ onPress={ ~ error:", error);
+								setLoader(false);
+								setSnackbarVisible(true);
+								setSnackbarMessage(error.message);
 							}
 						}}
 					>
-						<CustomButton title="Se connecter" />
+						<CustomButton title="Se connecter"></CustomButton>
 					</Pressable>
 				</View>
+				<ActivityIndicator size={"large"} animating={loader} color={MD2Colors.red800} />
 
 				<View style={[styles.mb40]}></View>
 				<Text>Pas encore inscrit ?</Text>
@@ -89,19 +118,66 @@ export default function LoginScreen(props) {
 					<Text style={[styles.text__greenUnderline]}>Créer un compte</Text>
 				</Pressable>
 			</View>
+
+			<Snackbar
+				visible={snackBarVisible}
+				onDismiss={() => {
+					setTimeout(() => {
+						setSnackbarVisible(false);
+					}, 3000);
+				}}
+				duration={2500}
+				action={{
+					label: "OK",
+					onPress: () => {
+						setSnackbarVisible(false);
+					}
+				}}
+			>
+				{snackBarMessage}
+			</Snackbar>
 		</View>
 	);
 }
 
+/**
+ * loginUser
+ * @param {*} email
+ * @param {*} password
+ */
 async function loginUser(email, password) {
-	const loginUserData = await login(email, password);
+	const loginResponse = await login(email, password);
+
+	if (loginResponse.status !== 200) {
+		throw new Error(
+			`${httpMessage[loginResponse.status][loginResponse.data.message]}` || "Une erreur est survenue"
+		);
+	}
+
+	const loginUserData = loginResponse.data;
 
 	if (loginUserData && loginUserData?.status === 200) {
 		await AsyncStorage.setItem("token", loginUserData.token);
 		await AsyncStorage.setItem("userId", loginUserData.userUuid);
 	} else {
-		throw new Error(loginUserData.message);
+		throw new Error(`${httpMessage[loginUserData.statusCode][loginUserData.message]}` || "Une erreur est survenue");
 	}
+}
+
+/**
+ * verifyForm
+ */
+async function verifyForm(email, password) {
+	if (email === "" || password === "" || password.length < 8) {
+		throw new Error("Adresse email ou mot de passe incorrect");
+	}
+
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(email)) {
+		throw new Error("Adresse email invalide");
+	}
+
+	return Promise.resolve(true);
 }
 
 const styles = StyleSheet.create({
@@ -154,5 +230,9 @@ const styles = StyleSheet.create({
 		textDecorationLine: "underline",
 		fontSize: 16,
 		fontWeight: "bold"
+	},
+	snackbar: {
+		flex: 1,
+		justifyContent: "space-between"
 	}
 });

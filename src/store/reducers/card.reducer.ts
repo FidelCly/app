@@ -10,7 +10,7 @@ const initialCardState: ICardState = {
 	cardError: null
 };
 
-export const getCards = createAsyncThunk(CardActionTypes.GetCards, async (payload: any) => {
+export const getCards = createAsyncThunk(CardActionTypes.GetCards, async () => {
 	const data = await getUserCards();
 
 	return data;

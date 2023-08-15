@@ -6,15 +6,18 @@ import { getCards } from "../store/reducers/card.reducer";
 import { useSelector, useDispatch } from "react-redux";
 import { addCardToWallet } from "../services";
 import CustomButton from "../components/Button";
+import { Snackbar, ActivityIndicator, MD2Colors } from "react-native-paper";
 
 const { width: screenWidth } = Dimensions.get("window");
 const ctaWidth = screenWidth * 0.8;
 
-export default function InfoShopToAddScreen({ route, props }) {
+export default function InfoShopToAddScreen({ route }) {
+	const props = route?.params?.props;
 	const shop = route.params.shop;
 	const pictureUrl = shop.pictureUrl;
 	infoUserWallet = useSelector((state) => state.cards.cards);
-
+	const [snackBarVisible, setSnackbarVisible] = useState(false);
+	const [snackBarMessage, setSnackbarMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [shopPromotions, setShopPromotions] = useState([]);
 	const [existedCard, setExistedCard] = useState(null);
@@ -23,9 +26,8 @@ export default function InfoShopToAddScreen({ route, props }) {
 
 	useEffect(() => {
 		// get all promotion from shop
-
 		fetchShopPromotions(shop.id);
-	}, []);
+	}, [props]);
 
 	/**
 	 * Check if the card is already in the wallet
@@ -64,8 +66,10 @@ export default function InfoShopToAddScreen({ route, props }) {
 			setShopPromotions(promotionArrays.filter((promotion) => promotion.isActive === true));
 			setIsLoading(false);
 		} catch (err) {
-			console.error("🚀 ~ fetchShopPromotions ~ err:", err);
-			// TODO: Implement visual error handling
+			console.log("🚀 ~ fetchShopPromotions ~ err:", err);
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Une erreur est survenue.");
 		}
 	};
 
@@ -74,15 +78,24 @@ export default function InfoShopToAddScreen({ route, props }) {
 	 */
 	const handleClick = async () => {
 		try {
+			setIsLoading(true);
+
 			await addCardToWallet(shop.id);
 			dispatch(getCards());
-			console.warn("Carte ajoutée au wallet !");
 
-			// await props.navigation.navigate("BottomNavigator", {
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Carte ajoutée au wallet !");
+
+			// props.navigation.navigate("InfoCard", {
 			// 	screen: "CardScreenInfo"
+			// 	// shop
 			// });
 		} catch (error) {
-			console.error("🚀 ~ handleClick ~ error:", error);
+			console.warn("🚀 ~ handleClick ~ error:", error);
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Une erreur est survenue.");
 		}
 	};
 
@@ -95,7 +108,7 @@ export default function InfoShopToAddScreen({ route, props }) {
 					style={styles.goBackButton}
 					onPress={() =>
 						props.navigation.navigate("BottomNavigator", {
-							screen: "Profil"
+							screen: "Plan"
 						})
 					}
 				>
@@ -112,7 +125,7 @@ export default function InfoShopToAddScreen({ route, props }) {
 							{pictureUrl && pictureUrl !== "" ? (
 								<Image style={styles.shopImage} source={{ uri: pictureUrl }} />
 							) : (
-								<Text style={styles.cardText}>getInitials(shop.companyName)</Text>
+								<Text style={styles.cardText}>{getInitials(shop.companyName)}</Text>
 							)}
 						</View>
 					</View>
@@ -168,7 +181,7 @@ export default function InfoShopToAddScreen({ route, props }) {
 				{
 					<TouchableOpacity
 						title="Ajouter à mon wallet"
-						onPress={async () => {
+						onPress={() => {
 							handleClick();
 						}}
 					>
@@ -190,6 +203,25 @@ export default function InfoShopToAddScreen({ route, props }) {
 					</TouchableOpacity>
 				} */}
 			</View>
+			<ActivityIndicator size={"large"} animating={isLoading} color={MD2Colors.red800} />
+
+			<Snackbar
+				visible={snackBarVisible}
+				onDismiss={() => {
+					setTimeout(() => {
+						setSnackbarVisible(false);
+					}, 3000);
+				}}
+				duration={2500}
+				action={{
+					label: "OK",
+					onPress: () => {
+						setSnackbarVisible(false);
+					}
+				}}
+			>
+				{snackBarMessage}
+			</Snackbar>
 		</View>
 	);
 }

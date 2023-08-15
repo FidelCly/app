@@ -1,10 +1,16 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Image, Dimensions, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUser } from "../store/reducers/user.reducer";
+import { getCards } from "../store/reducers/card.reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllShop } from "../store/reducers/shop.reducer";
 
 const { height, width } = Dimensions.get("window");
 
 export default function HomeScreen(props) {
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		const unsubscribe = props.navigation.addListener("focus", () => {
 			handleToken();
@@ -21,11 +27,16 @@ export default function HomeScreen(props) {
 			const token = await AsyncStorage.getItem("token");
 			const userId = await AsyncStorage.getItem("userId");
 			if (token && userId) {
+				dispatch(getUser(userId));
+				dispatch(getAllShop());
+				dispatch(getCards());
 				props.navigation.navigate("BottomNavigator", {
-					screen: "Profil"
+					screen: "Accueil"
 				});
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log("🚀 ~ handleToken ~ error:", error);
+		}
 	};
 
 	return (

@@ -105,16 +105,36 @@ export default function CardScreenInfo({ route, navigation }) {
 								<Text style={[styles.promotionsText, styles.promotionsTextLeft]}>{promotion.name}</Text>
 								<Text style={[styles.promotionsText, styles.promotionsTextRight]}>
 									<Text style={styles.soldeTamponsText}>
-										{balances.filter((b) => b.isActive).find((b) => b.promotionId === promotion.id)
-											?.counter ?? 0}
+										{balances
+											.filter((b) => b.isActive)
+											.find(
+												(b) =>
+													b.promotionId === promotion.id &&
+													b.counter < promotion.checkoutLimit
+											)?.counter ?? 0}
 									</Text>
 									/ {promotion.checkoutLimit}
+									{balances.filter(
+										(b) =>
+											!b.isActive &&
+											b.promotionId === promotion.id &&
+											b.counter === promotion.checkoutLimit
+									).length > 0 ? (
+										<Text>
+											\(
+											{
+												balances.filter(
+													(b) =>
+														!b.isActive &&
+														b.promotionId === promotion.id &&
+														b.counter === promotion.checkoutLimit
+												).length
+											}
+											\)
+										</Text>
+									) : null}
 								</Text>
 							</View>
-							<Text style={styles.dateText}>
-								Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} au{" "}
-								{new Date(promotion.endAt).toLocaleDateString("fr-FR")}
-							</Text>
 						</View>
 					))}
 				</ScrollView>
@@ -268,6 +288,12 @@ const styles = StyleSheet.create({
 	promotionsText: {
 		color: "#333",
 		fontSize: 20
+	},
+	promotionsTextHistorique: {
+		color: "#222",
+		fontSize: 8,
+		paddingRight: 20,
+		paddingTop: 10
 	},
 	promotionsTextLeft: {
 		flex: 0.7

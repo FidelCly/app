@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ICard } from "../store/interfaces";
+import { ICard } from "store/interfaces";
 
 /**
  * getUserCards
@@ -46,6 +46,11 @@ export const addCardToWallet = async (shopId: number) => {
 				shopId: shopId
 			})
 		});
+
+		if (response.status !== 201) {
+			// throw new Error((httpErrorMessages as any)?.[response.status] || "Une erreur est survenue");
+		}
+
 		return response.json();
 	} catch (error) {
 		return error;

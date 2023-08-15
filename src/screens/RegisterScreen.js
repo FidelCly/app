@@ -1,3 +1,4 @@
+import { httpMessage } from "../store/http-translation";
 import React, { useState, useEffect } from "react";
 import { View, Pressable, Text, StyleSheet, Image } from "react-native";
 import { Input } from "@rneui/themed";
@@ -5,10 +6,19 @@ import { login, register } from "../services";
 import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomButton from "../components/Button";
+import { Snackbar, ActivityIndicator, MD2Colors } from "react-native-paper";
+import { getUser } from "../store/reducers/user.reducer";
+import { getCards } from "../store/reducers/card.reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllShop } from "../store/reducers/shop.reducer";
 
 export default function LoginScreen(props) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [snackBarVisible, setSnackbarVisible] = useState(false);
+	const [snackBarMessage, setSnackbarMessage] = useState("");
+	const [loader, setLoader] = useState(false);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		handleToken();
@@ -24,10 +34,16 @@ export default function LoginScreen(props) {
 			const userId = await AsyncStorage.getItem("userId");
 			if (userId && token) {
 				props.navigation.navigate("BottomNavigator", {
-					screen: "Profil"
+					screen: "Accueil"
 				});
 			}
 		} catch (error) {}
+	};
+
+	const initDatasInStore = (userId) => {
+		dispatch(getUser(userId));
+		dispatch(getAllShop());
+		dispatch(getCards());
 	};
 
 	return (
@@ -64,13 +80,23 @@ export default function LoginScreen(props) {
 						type="solid"
 						onPress={async () => {
 							try {
+								setLoader(true);
+								await verifyForm(email, password);
 								await registerUser(email, password);
+								const userId = await AsyncStorage.getItem("userId");
+
+								if (userId) {
+									initDatasInStore(userId);
+								}
+
+								setLoader(false);
 								props.navigation.navigate("BottomNavigator", {
-									screen: "Profil"
+									screen: "Accueil"
 								});
 							} catch (error) {
-								// TODO: visual snackbar error
-								console.error("🚀 Register error : ", error);
+								setLoader(false);
+								setSnackbarVisible(true);
+								setSnackbarMessage(error.message);
 							}
 						}}
 					>
@@ -78,12 +104,32 @@ export default function LoginScreen(props) {
 					</Pressable>
 				</View>
 
+				<ActivityIndicator size={"large"} animating={loader} color={MD2Colors.red800} />
+
 				<View style={[styles.mb40]}></View>
 				<Text>Déjà inscrit ?</Text>
 				<Pressable title="Se connecter" type="solid" onPress={() => props.navigation.navigate("Login")}>
 					<Text style={[styles.text__greenUnderline]}>Se connecter</Text>
 				</Pressable>
 			</View>
+
+			<Snackbar
+				visible={snackBarVisible}
+				onDismiss={() => {
+					setTimeout(() => {
+						setSnackbarVisible(false);
+					}, 3000);
+				}}
+				duration={2500}
+				action={{
+					label: "OK",
+					onPress: () => {
+						setSnackbarVisible(false);
+					}
+				}}
+			>
+				{snackBarMessage}
+			</Snackbar>
 		</View>
 	);
 }
@@ -92,17 +138,55 @@ export default function LoginScreen(props) {
  * registerUser
  */
 async function registerUser(email, password) {
-	const registerUserData = await register(email, password);
+	const registerResponse = await register(email, password);
+	if (registerResponse.status !== 201) {
+		throw new Error(
+			`${httpMessage[registerResponse.status][registerResponse.data.message]}` || "Une erreur est survenue"
+		);
+	}
 
-	if (registerUserData && registerUserData.status === 200) {
-		const loginDatas = await login(email, password);
+	const registerUserData = registerResponse.data;
+
+	if (registerUserData) {
+		const loginResponse = await login(email, password);
+
+		if (loginResponse.status !== 200) {
+			throw new Error(
+				`${httpMessage[loginResponse.status][loginResponse.data.message]}` || "Une erreur est survenue"
+			);
+		}
+
+		const loginDatas = loginResponse.data;
+
 		if (loginDatas && loginDatas.status === 200) {
 			AsyncStorage.setItem("userId", loginDatas.userUuid);
 			AsyncStorage.setItem("token", loginDatas.token);
+
+			return Promise.resolve(true);
+		} else {
+			throw new Error(`${httpMessage[loginDatas.status][loginDatas.message]}` || "Une erreur est survenue");
 		}
 	} else {
-		throw new Error(registerUserData.message);
+		throw new Error(
+			`${httpMessage[registerResponse.status][registerResponse.message]}` || "Une erreur est survenue"
+		);
 	}
+}
+
+/**
+ * verifyForm
+ */
+async function verifyForm(email, password) {
+	if (email === "" || password === "" || password.length < 8) {
+		throw new Error("Adresse email ou mot de passe incorrect");
+	}
+
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(email)) {
+		throw new Error("Adresse email invalide");
+	}
+
+	return Promise.resolve(true);
 }
 
 // Styles

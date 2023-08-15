@@ -6,6 +6,9 @@ import { logout } from "../services/auth-service";
 import { updateUser } from "../services/user-service";
 import CustomButton from "../components/Button";
 import { getUser } from "../store/reducers/user.reducer";
+import { Snackbar, ActivityIndicator, MD2Colors } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NativeModules } from "react-native";
 
 //Récupérer l'initiale du shop pour l'afficher sur la carte si pas d'image
 const getInitials = (username) => {
@@ -26,22 +29,25 @@ export default function EditProfilScreen({ props, navigation }) {
 	// Permet d'aller chercher l'utilisateur et le dans le store
 	const user = useSelector((state) => state.users.currentUser);
 	const userLoader = useSelector((state) => state.users.userLoader);
+	const [snackBarVisible, setSnackbarVisible] = useState(false);
+	const [snackBarMessage, setSnackbarMessage] = useState("");
+	const [loader, setLoader] = useState(false);
 	const dispatch = useDispatch();
 	const [userId, setUserId] = useState(user && user.uuid ? user.uuid : null);
 
-	const fetchUserFromStore = (userId) => {
-		dispatch(getUser(userId));
-	};
-
 	const getUserFromStore = async () => {
 		try {
+			setLoader(true);
 			const value = await AsyncStorage.getItem("userId");
 			if (value !== null) {
 				setUserId(value);
-				fetchUserFromStore(value);
+				dispatch(getUser(value));
 			}
+			setLoader(false);
 		} catch (err) {
-			// Implement visual error handling
+			setLoader(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage(err.message);
 		}
 	};
 	useEffect(() => {
@@ -122,6 +128,7 @@ export default function EditProfilScreen({ props, navigation }) {
 					title="Enregistrer"
 					onPress={async () => {
 						try {
+							setLoader(true);
 							user.username = lastName;
 							user.birthday = birthDate;
 							user.sexe = gender;
@@ -130,15 +137,22 @@ export default function EditProfilScreen({ props, navigation }) {
 
 							if (data && data.message === "User updated") {
 								dispatch(getUser(userId));
-								console.warn("Profil mis à jour");
-								navigation.navigate("BottomNavigator", {
-									screen: "Profil"
-								});
+								setSnackbarVisible(true);
+								setSnackbarMessage("Profil mis à jour !");
+
+								setTimeout(() => {
+									navigation.navigate("BottomNavigator", {
+										screen: "Profil"
+									});
+								}, 1000);
 							} else {
 								throw new Error(data.message);
 							}
+							setLoader(false);
 						} catch (error) {
-							console.error("🚀 ~ Error :", error);
+							setLoader(false);
+							setSnackbarVisible(true);
+							setSnackbarMessage(error.message);
 						}
 					}}
 				>
@@ -150,16 +164,40 @@ export default function EditProfilScreen({ props, navigation }) {
 					title="Se déconnecter"
 					onPress={async () => {
 						try {
+							setLoader(true);
 							const result = await logout();
+							setLoader(false);
+
 							if (result) navigation.navigate("Login");
+							NativeModules.DevSettings.reload();
 						} catch (error) {
-							console.error("🚀 ~ Error : ", error);
+							setLoader(false);
+							setSnackbarVisible(true);
+							setSnackbarMessage(error.message);
 						}
 					}}
 				>
 					<Text style={[styles.ctaLogOut]}>Se déconnecter</Text>
 				</TouchableOpacity>
 			</View>
+			<ActivityIndicator size={"large"} animating={loader} color={MD2Colors.red800} />
+			<Snackbar
+				visible={snackBarVisible}
+				onDismiss={() => {
+					setTimeout(() => {
+						setSnackbarVisible(false);
+					}, 3000);
+				}}
+				duration={2500}
+				action={{
+					label: "OK",
+					onPress: () => {
+						setSnackbarVisible(false);
+					}
+				}}
+			>
+				{snackBarMessage}
+			</Snackbar>
 		</View>
 	);
 }
