@@ -11,6 +11,14 @@ const { width: screenWidth } = Dimensions.get("window");
 const ctaWidth = screenWidth * 0.8;
 
 export default function InfoShopToAddScreen({ route, props }) {
+	const ShopActivityTranslation = {
+		["Restauration"]: "Restauration",
+		["Supply"]: "Alimentation",
+		["Entertainment"]: "Divertissement",
+		["Store"]: "Boutique",
+		["Service"]: "Service"
+	};
+
 	const shop = route.params.shop;
 	const pictureUrl = shop.pictureUrl;
 	infoUserWallet = useSelector((state) => state.cards.cards);
@@ -45,7 +53,7 @@ export default function InfoShopToAddScreen({ route, props }) {
 	 * @returns
 	 */
 	const getInitials = (username) => {
-		if (!username) return "";
+		if (!username) return "--";
 		const words = username.split(" ");
 		return words
 			.map((word) => word.charAt(0))
@@ -112,7 +120,9 @@ export default function InfoShopToAddScreen({ route, props }) {
 							{pictureUrl && pictureUrl !== "" ? (
 								<Image style={styles.shopImage} source={{ uri: pictureUrl }} />
 							) : (
-								<Text style={styles.cardText}>getInitials(shop.companyName)</Text>
+								<View style={styles.initialsContainer}>
+									<Text style={styles.cardText}>{getInitials(shop.companyName)}</Text>
+								</View>
 							)}
 						</View>
 					</View>
@@ -121,7 +131,7 @@ export default function InfoShopToAddScreen({ route, props }) {
 					{/* Contenu de la colonne de droite (70%) */}
 					<Text style={styles.companyNameText}>{shop?.companyName}</Text>
 					<View style={styles.activityContainer}>
-						<Text style={styles.activityText}>{shop?.activity}</Text>
+						<Text style={styles.activityText}>{ShopActivityTranslation[shop?.activity]}</Text>
 					</View>
 					<View style={styles.addressContainer}>
 						<Ionicons name="location-sharp" size={20} color="red" />

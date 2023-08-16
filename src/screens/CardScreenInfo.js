@@ -16,6 +16,14 @@ const getInitials = (companyName) => {
 };
 
 export default function CardScreenInfo({ route, navigation }) {
+	const ShopActivityTranslation = {
+		["Restauration"]: "Restauration",
+		["Supply"]: "Alimentation",
+		["Entertainment"]: "Divertissement",
+		["Store"]: "Boutique",
+		["Service"]: "Service"
+	};
+
 	const { card } = route.params;
 	if (!card) {
 		return null;
@@ -70,7 +78,7 @@ export default function CardScreenInfo({ route, navigation }) {
 					{/* Contenu de la colonne de droite (70%) */}
 					<Text style={styles.companyNameText}>{card.shop.companyName}</Text>
 					<View style={styles.activityContainer}>
-						<Text style={styles.activityText}>{card.shop.activity}</Text>
+						<Text style={styles.activityText}>{ShopActivityTranslation[card.shop.activity]}</Text>
 					</View>
 					<View style={styles.addressContainer}>
 						<Ionicons name="location-sharp" size={20} color="red" />
