@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Luxon from "luxon";
+import { IUser } from "store/interfaces";
 
 export const getUserById = async (userId: string) => {
   const url = process.env.API_URL + "/user/" + userId;
@@ -20,10 +22,32 @@ export const getUserById = async (userId: string) => {
   }
 };
 
-export const updateUser = async (user: any) => {
+export const getAllUserCards = async () => {
+  const url = process.env.API_URL + "/user/cards";
+
+  try {
+    const token = await AsyncStorage.getItem("token");
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.json();
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateUser = async (user: IUser) => {
   const url = process.env.API_URL + "/user/" + user.id;
 
   try {
+    const [day, month, year] = user.birthday.split("/");
+
     const token = await AsyncStorage.getItem("token");
     const response = await fetch(url, {
       method: "PUT",
@@ -37,7 +61,16 @@ export const updateUser = async (user: any) => {
         username: user.username,
         email: user.email,
         sexe: user.sexe,
-        // birthday: user.birthday
+        birthday:
+          day && month && year
+            ? new Date(
+                Luxon.DateTime.local(
+                  Number(year),
+                  Number(month),
+                  Number(day)
+                ).toISODate() as string
+              )
+            : null,
       }),
     });
 
