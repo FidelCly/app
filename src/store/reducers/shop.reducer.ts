@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getNearShops, getShopById } from "../../services";
+import { getAllShops, getNearShops, getShopById } from "../../services";
 import { ShopActionTypes } from "../actions";
 import { IShop, IShopState } from "../interfaces/shop.interface";
 
 const initialShopState: IShopState = {
+  allShops: [],
   shops: [] as IShop[],
   currentShop: {} as IShop,
   shopLoader: false,
@@ -25,12 +26,30 @@ export const getShops = createAsyncThunk(
   }
 );
 
+export const getAllShop = createAsyncThunk(
+  ShopActionTypes.GetAllShops,
+  async () => {
+    return await getAllShops();
+  }
+);
+
 export const shopReducer = createSlice({
   name: "shop",
   initialState: { ...initialShopState },
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(getAllShop.pending, (state) => {
+        state.shopLoader = true;
+      })
+      .addCase(getAllShop.fulfilled, (state, action) => {
+        state.allShops = action.payload;
+        state.shopLoader = false;
+      })
+      .addCase(getAllShop.rejected, (state, action) => {
+        state.shopLoader = false;
+        state.shopError = action.error.message as string;
+      })
       .addCase(getShops.pending, (state) => {
         state.shopLoader = true;
       })

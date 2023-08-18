@@ -5,7 +5,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUser } from "../store/reducers/user.reducer";
-import { logout } from "../services/auth-service";
 
 const ProfilScreen = (props) => {
   // Permet d'aller chercher l'utilisateur et le dans le store

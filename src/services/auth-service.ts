@@ -20,7 +20,8 @@ export const login = async (email: string, password: string) => {
         password,
       }),
     });
-    return response.json();
+    const body = await response.json();
+    return Promise.resolve({ data: body, status: response.status });
   } catch (error) {
     return error;
   }
@@ -46,7 +47,8 @@ export const register = async (email: string, password: string) => {
         role: "User",
       }),
     });
-    return response.json();
+    const body = await response.json();
+    return Promise.resolve({ data: body, status: response.status });
   } catch (error) {
     return error;
   }
@@ -64,7 +66,6 @@ export const logout = async () => {
     ]);
     return true;
   } catch (error) {
-    console.log("🚀 ~ logout ~ error:", error);
     return error;
   }
 };

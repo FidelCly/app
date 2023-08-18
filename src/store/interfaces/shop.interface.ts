@@ -22,6 +22,7 @@ export interface IShop {
 }
 
 export interface IShopState {
+  allShops: IShop[];
   shops: IShop[];
   currentShop: IShop | null;
   shopLoader: boolean;

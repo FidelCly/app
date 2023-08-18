@@ -12,7 +12,6 @@ import LoginScreen from "./src/screens/LoginScreen";
 import CardScreenInfo from "./src/screens/CardScreenInfo";
 import InfoShopToAddScreen from "./src/screens/InfoShopToAddScreen";
 
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -56,7 +55,7 @@ const BottomNavigator = () => {
       <Tab.Screen
         name="Accueil"
         component={NewsScreen}
-        options={{ headerShown: false }}
+        options={{ unmountOnBlur: true, headerShown: false }}
       />
       <Tab.Screen
         name="Plan"
@@ -68,7 +67,11 @@ const BottomNavigator = () => {
         component={ScanScreen}
         options={{ unmountOnBlur: true, headerShown: false }}
       />
-      <Tab.Screen name="Cartes Fid" component={CardScreen} />
+      <Tab.Screen
+        name="Cartes Fid"
+        component={CardScreen}
+        options={{ unmountOnBlur: true, headerShown: false }}
+      />
       <Tab.Screen
         name="Profil"
         component={ProfilScreen}
@@ -101,9 +104,11 @@ export default function App() {
           <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="InfoCard" component={CardScreenInfo} />
           <Stack.Screen name="EditProfil" component={EditProfilScreen} />
-          <Stack.Screen name="InfoShopToAdd" component={InfoShopToAddScreen} />
-
-          
+          <Stack.Screen
+            name="InfoShopToAdd"
+            component={InfoShopToAddScreen}
+            options={{ unmountOnBlur: true, headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
