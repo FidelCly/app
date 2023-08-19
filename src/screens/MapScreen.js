@@ -62,6 +62,14 @@ export default function MapScreen(props) {
     Service: require("../assets/icon_service_v2.png"),
   };
 
+  const activityLabels = {
+    Restauration: "Restauration",
+    Entertainment: "Divertissement",
+    Service: "Service",
+    Supply: "Alimentation",
+    Store: "Magasin",
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -216,7 +224,7 @@ export default function MapScreen(props) {
                 <View style={styles.separator} />
                 <View style={styles.calloutDetails}>
                   <View style={styles.detailsLeftColumn}>
-                    <Text style={styles.activity}>{shop.activity}</Text>
+                    <Text style={styles.activity}>{activityLabels[shop.activity]}</Text>
                     <Text style={styles.address}>{shop.address}</Text>
                     <Text style={styles.cityZip}>
                       {shop.zipcode}
