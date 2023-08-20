@@ -70,6 +70,15 @@ export default function MapScreen(props) {
     Store: "Magasin",
   };
 
+  function formatAddress(address) {
+  const parts = address.split(', ');
+  if (parts.length >= 2) {
+    const [street, cityZip] = parts;
+    return `${street}\n${cityZip}`;
+  }
+  return address;
+}
+
   useEffect(() => {
     (async () => {
       try {
@@ -196,11 +205,7 @@ export default function MapScreen(props) {
                 <View style={styles.calloutDetails}>
                   <View style={styles.detailsLeftColumn}>
                     <Text style={styles.activity}>{activityLabels[shop.activity]}</Text>
-                    <Text style={styles.address}>{shop.address}</Text>
-                    <Text style={styles.cityZip}>
-                      {shop.zipcode}
-                      {shop.city}
-                    </Text>
+                    <Text style={styles.address}>{formatAddress(shop.address)}</Text>
                   </View>
                   <View style={styles.detailsRightColumn}>
                     <Ionicons
@@ -295,11 +300,7 @@ export default function MapScreen(props) {
                 <View style={styles.calloutDetails}>
                   <View style={styles.detailsLeftColumn}>
                     <Text style={styles.activity}>{activityLabels[shop.activity]}</Text>
-                    <Text style={styles.address}>{shop.address}</Text>
-                    <Text style={styles.cityZip}>
-                      {shop.zipcode}
-                      {shop.city}
-                    </Text>
+                    <Text style={styles.address}>{formatAddress(shop.address)}</Text>
                   </View>
                   <View style={styles.detailsRightColumn}>
                     <Ionicons
@@ -410,9 +411,6 @@ const styles = StyleSheet.create({
   address: {
     fontSize: 12,
     color: "#666",
-  },
-  cityZip: {
-    fontSize: 12,
-    color: "#666",
+    maxWidth: 180,
   },
 });
