@@ -169,15 +169,16 @@ export default function CardScreenInfo({ route, navigation }) {
         <Text style={styles.signature}>Signature du commerçant</Text>
       </View>
 
-      {/* Promotions en cours (55%) */}
-      <View style={styles.promotions}>
-        <ScrollView style={styles.promotions}>
-          <View style={styles.titreBloc}>
-            <Text style={styles.promotionsTitle}>Promotions en cours</Text>
-          </View>
-          {/* Liste des promotions */}
-          {shopPromotions.map((promotion) => (
-            <View style={styles.promotionsContainer} key={promotion.id}>
+
+
+          <View style={styles.promotions}>
+  <ScrollView style={styles.promotions}>
+    <View style={styles.titreBloc}>
+      <Text style={styles.promotionsTitle}>Promotions en cours</Text>
+    </View>
+    {/* Liste des promotions en cours */}
+    {shopPromotions.map((promotion) => (
+     <View style={styles.promotionsContainer} key={promotion.id}>
               <View style={styles.promotionsTextContainer}>
                 <Text
                   style={[styles.promotionsText, styles.promotionsTextLeft]}
@@ -218,70 +219,81 @@ export default function CardScreenInfo({ route, navigation }) {
                     </Text>
                   ) : null}
                 </Text>
-                {balances.filter(
-                  (b) =>
-                    !b.isActive &&
-                    b.promotionId === promotion.id &&
-                    b.counter === promotion.checkoutLimit
-                ).length > 0 ? (
-                  <View style={styles.balanceHistoryBloc}>
-                    <Text style={styles.titleTextHistorique}>
-                      Dates des précédentes utilisations :
-                    </Text>
-                    {balances
-                      .filter(
-                        (b) =>
-                          !b.isActive &&
-                          b.promotionId === promotion.id &&
-                          b.counter === promotion.checkoutLimit
-                      )
-                      .map((balance, index) => (
-                        <Text key={index} style={styles.balanceHistory}>
-                          {/* {Luxon.DateTime.fromJSDate(balance.updatedAt)}/ */}
-                          {getDayNameByNumber(
-                            Luxon.DateTime.fromISO(balance.updatedAt)
-                              .toJSDate()
-                              .getDay()
-                          )}
-                          ,{" "}
-                          {Luxon.DateTime.fromISO(
-                            balance.updatedAt
-                          ).day.toString()}{" "}
-                          {getMonthNameByNumber(
-                            Luxon.DateTime.fromISO(balance.updatedAt)
-                              .toJSDate()
-                              .getMonth()
-                          )}{" "}
-                          {Luxon.DateTime.fromISO(
-                            balance.updatedAt
-                          ).year.toString()}{" "}
-                          à{" "}
-                          {Luxon.DateTime.fromISO(
-                            balance.updatedAt
-                          ).hour.toString()}
-                          :
-                          {Luxon.DateTime.fromISO(
-                            balance.updatedAt
-                          ).minute.toString()}{" "}
-                          (
-                          {
-                            Luxon.DateTime.fromISO(balance.updatedAt)
-                              .offsetNameLong
-                          }
-                          )
-                        </Text>
-                      ))}
-                  </View>
-                ) : (
-                  <Text style={styles.titleTextHistorique}>
-                    Aucun historique pour cette carte
-                  </Text>
-                )}
+                
               </View>
             </View>
+    ))}
+  </ScrollView>
+</View>
+
+<View style={styles.promotions}>
+  <ScrollView style={styles.promotions}>
+    <View style={styles.titreBloc}>
+      <Text style={styles.promotionsTitle}>Historique de vos promotions</Text>
+    </View>
+    {/* Liste des promotions historiques */}
+    {balances.filter(
+      (b) =>
+        !b.isActive &&
+        b.promotionId === promotion.id &&
+        b.counter === promotion.checkoutLimit
+    ).length > 0 ? (
+      <View style={styles.balanceHistoryBloc}>
+        <Text style={styles.titleTextHistorique}>
+          Dates des précédentes utilisations :
+        </Text>
+        {balances
+          .filter(
+            (b) =>
+              !b.isActive &&
+              b.promotionId === promotion.id &&
+              b.counter === promotion.checkoutLimit
+          )
+          .map((balance, index) => (
+            <Text key={index} style={styles.balanceHistory}>
+              {/* {Luxon.DateTime.fromJSDate(balance.updatedAt)}/ */}
+              {getDayNameByNumber(
+                Luxon.DateTime.fromISO(balance.updatedAt)
+                  .toJSDate()
+                  .getDay()
+              )}
+              ,{" "}
+              {Luxon.DateTime.fromISO(
+                balance.updatedAt
+              ).day.toString()}{" "}
+              {getMonthNameByNumber(
+                Luxon.DateTime.fromISO(balance.updatedAt)
+                  .toJSDate()
+                  .getMonth()
+              )}{" "}
+              {Luxon.DateTime.fromISO(
+                balance.updatedAt
+              ).year.toString()}{" "}
+              à{" "}
+              {Luxon.DateTime.fromISO(
+                balance.updatedAt
+              ).hour.toString()}
+              :
+              {Luxon.DateTime.fromISO(
+                balance.updatedAt
+              ).minute.toString()}{" "}
+              (
+              {
+                Luxon.DateTime.fromISO(balance.updatedAt)
+                  .offsetNameLong
+              }
+              )
+            </Text>
           ))}
-        </ScrollView>
       </View>
+    ) : (
+      <Text style={styles.titleTextHistorique}>
+        Aucun historique pour cette carte
+      </Text>
+    )}
+  </ScrollView>
+</View>
+
     </View>
   );
 }
@@ -406,7 +418,7 @@ const styles = StyleSheet.create({
 
   // Promotions styles
   promotions: {
-    flex: 0.55,
+    flex: 0.25,
     backgroundColor: "#F5F5F5",
     padding: 10,
   },
