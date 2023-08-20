@@ -31,15 +31,15 @@ export default function MapScreen(props) {
   const [allShop, setAllShop] = useState([]);
   const [distance, setDistance] = useState(10000);
 
-  const askForLocationPermissionAgain = useCallback(async () => {
-    const location = await Location.getCurrentPositionAsync({});
-    console.log("🚀 ~ askForLocationPermissionAgain ~ location:", location);
-    setPin({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-  }, []);
+
   const dispatch = useDispatch();
+
+  // Dans le cas où l'utilisateur n'a pas autorisé la localisation
+  // On affiche la carte à PARIS
+  const PARIS_COORDINATES = {
+    latitude: 48.866667,
+    longitude: 2.333333,
+  };
 
   const mapStyle = [
     // Commerces et activités
@@ -85,24 +85,30 @@ export default function MapScreen(props) {
             coords.latitude,
             coords.longitude
           );
-          const allShop = await getAllShops();
-
           if (nearShops && nearShops.length > 0) {
             setShopNearMyPosition(nearShops);
-          } else if (allShop && allShop.length > 0) {
-            setShopNearMyPosition(allShop);
           }
-
-          if (allShop && allShop.length > 0) {
-            setAllShop(allShop);
+          const allShopData = await getAllShops();
+          if (allShopData && allShopData.length > 0) {
+            setAllShop(allShopData);
           }
           setLoading(false);
         }
-      } catch (error) {
+        else {
+      // Dans le cas où il a refusé la localisation
+          setLoading(true);
+          const allShopData = await getAllShops();
+          if (allShopData && allShopData.length > 0) {
+            setAllShop(allShopData);
+          }
+          setLoading(false);
+      }
+    }
+      catch (error) {
         console.error("🚀 ~ error:", error);
       }
     })();
-  }, [askForLocationPermissionAgain, dispatch]);
+  }, [distance, dispatch]);
 
   const handleDistanceChange = async (newDistance) => {
     try {
@@ -129,23 +135,87 @@ export default function MapScreen(props) {
     return <Text>Demande d'autorisation de la localisation</Text>;
   }
   if (hasPermissionLocation === false) {
+
+    
     return (
-      <View style={styles.container}>
-        <Text style={styles.errorMsg}>
-          L'application nécessite une autorisation pour accéder à la
-          localisation
-        </Text>
-        <Pressable
-          title={"Autoriser la localisation"}
-          onPress={() => askForLocationPermissionAgain()}
-          style={styles.text}
+    <View style={styles.container}>
+      <Text style={styles.errorMsg}>
+        L'application nécessite une autorisation pour accéder à la localisation
+      </Text>
+
+      <MapView
+          style={styles.map}
+          customMapStyle={mapStyle}
+          initialRegion={{
+            latitude: PARIS_COORDINATES.latitude,
+            longitude: PARIS_COORDINATES.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showsUserLocation={true}
         >
-          <Text style={styles.buttonAllowLocation}>
-            Autoriser la localisation
-          </Text>
-        </Pressable>
-      </View>
-    );
+          <Marker
+            key={"currentPos"}
+            coordinate={pin}
+            pinColor="red"
+            title="Hii"
+            description="I'am here"
+          />
+          {allShop.map((shop) => (
+            <Marker
+              key={shop.id}
+              coordinate={{
+                latitude: parseFloat(shop.lat),
+                longitude: parseFloat(shop.long),
+              }}
+              image={markerIcons[shop.activity]}
+            >
+              <Callout
+                style={styles.calloutContainer}
+                onPress={() => {
+                  if (shop) {
+                    props.navigation.navigate("InfoShopToAdd", {
+                      screen: "InfoShopToAddScreen",
+                      props,
+                      shop,
+                      previousScreen: "Plan",
+                    });
+                  } else {
+                    console.error("shop is undefined");
+                  }
+                }}
+              >
+                <View style={styles.calloutHeader}>
+                  <Text style={styles.companyName}>{shop.companyName}</Text>
+                  <Image
+                    source={{ uri: shop.pictureUrl }}
+                    style={styles.shopLogo}
+                  />
+                </View>
+                <View style={styles.separator} />
+                <View style={styles.calloutDetails}>
+                  <View style={styles.detailsLeftColumn}>
+                    <Text style={styles.activity}>{activityLabels[shop.activity]}</Text>
+                    <Text style={styles.address}>{shop.address}</Text>
+                    <Text style={styles.cityZip}>
+                      {shop.zipcode}
+                      {shop.city}
+                    </Text>
+                  </View>
+                  <View style={styles.detailsRightColumn}>
+                    <Ionicons
+                      name="add-circle-outline"
+                      size={36}
+                      color="green"
+                    />
+                  </View>
+                </View>
+              </Callout>
+            </Marker>
+          ))}
+        </MapView>
+    </View>
+  );
   }
 
   return (
@@ -256,12 +326,13 @@ const styles = StyleSheet.create({
     padding: 15,
     fontWeight: "bold",
     color: "#fff",
+    marginTop: 100,
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
   },
   map: {
     width: Dimensions.get("window").width,
