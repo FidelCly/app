@@ -231,7 +231,7 @@ export default function InfoShopToAddScreen({ route }) {
           // 	<CustomButton title="Carte déjà dans le wallet" />
           // )
           <TouchableOpacity
-            title="Voir la carte sur mon wallet"
+            title="Voir ma carte"
             onPress={async () => {
               const card = existedCard;
 
@@ -241,7 +241,7 @@ export default function InfoShopToAddScreen({ route }) {
               });
             }}
           >
-            <CustomButton title="Voir la carte sur mon wallet" />
+            <CustomButton title="Voir ma carte" />
           </TouchableOpacity>
         )}
       </View>
