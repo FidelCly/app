@@ -46,7 +46,30 @@ const NewsScreen = (props) => {
   const [snackBarVisible, setSnackbarVisible] = useState(false);
   const [checkOutInfo, setCheckOutInfo] = useState(null);
 
+  const [shuffledUserPromotions, setShuffledUserPromotions] = useState([]);
+  const [shuffledNotUserPromotions, setShuffledNotUserPromotions] = useState([]);
+
   const dispatch = useDispatch();
+
+  // Afficher les promotions en cours de façon aléatoire
+  const shuffleArray = (array) => {
+    let shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  const regenerateUserPromotions = () => {
+  const shuffled = shuffleArray(userPromotions);
+  setShuffledUserPromotions(shuffled);
+};
+
+const regenerateNotUserPromotions = () => {
+  const shuffled = shuffleArray(notUserPromotions);
+  setShuffledNotUserPromotions(shuffled);
+};
 
   useEffect(() => {
     setDatas();
@@ -74,6 +97,7 @@ const NewsScreen = (props) => {
           userPromotions.push(...shopPromotions);
         }
         setUserPromotions(userPromotions.filter((promo) => promo.isActive));
+        setShuffledUserPromotions(shuffleArray(userPromotions.filter((promo) => promo.isActive)));
         setUserPromotionsLoader(false);
         for (let i = 0; i < notUserCards.length; i++) {
           const shopPromotions = await getShopPromotions(notUserCards[i].id);
@@ -82,6 +106,7 @@ const NewsScreen = (props) => {
         setNotUserPromotions(
           notUserPromotions.filter((promo) => promo.isActive)
         );
+        setShuffledNotUserPromotions(shuffleArray(notUserPromotions.filter((promo) => promo.isActive)));
         setUserNotPromotionsLoader(false);
 
         // get user card that has balances counter equal to promotion checkoutLimit
@@ -150,16 +175,10 @@ const NewsScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      {/* Section Header */}
       <View style={styles.header}>
-        <View style={styles.userContainer}>
-          <View style={styles.userPhoto}>
-            <View style={styles.initialsBubble}>
-              <Text style={styles.initialText}>
-                {user ? getInitials(user.username) : ""}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.userName}>
+        <View style={styles.infoUser}>
+          <View style={styles.leftColumn}>
             {userLoader ? (
               <View>
                 {/* <Text>Chargement ...</Text> */}
@@ -170,14 +189,13 @@ const NewsScreen = (props) => {
                 />
               </View>
             ) : user ? (
-              <View style={styles.usernameContainer}>
+
+              <View>
                 <View>
-                  <Text style={styles.usernameText}>
-                    Bonjour {user.username}
-                  </Text>
+                  <Text style={styles.textBonjour}>Bonjour {user.username}</Text>
                 </View>
-                <View style={styles.fullWidth}>
-                  <View style={styles.columnIcon}>
+                <View style={styles.rowNotif}>
+                  <View style={styles.iconNotif}>
                     <MaterialIcons
                       name="notifications-active"
                       size={24}
@@ -203,16 +221,14 @@ const NewsScreen = (props) => {
                       color={MD2Colors.green200}
                     />
                   ) : checkOutInfo ? (
-                    <View style={styles.columnText}>
-                      <Text style={styles.infoText}>
-                        Une de vos cartes de fidélité est complète
-                      </Text>
-                      <Text style={styles.infoText}>
-                        Bénéficiez de votre promotion chez{" "}
-                        {checkOutInfo?.shop?.companyName}
-                      </Text>
-                    </View>
-                  ) : (
+                  <View style={styles.colNotif}>
+                    <Text style={styles.infoNotif}>Une de vos cartes de fidélité est complète&nbsp;!</Text>
+                    <Text style={styles.infoNotif}>
+                      Bénéficiez de votre promotion chez{" "}
+                      <Text style={styles.boldText}>{checkOutInfo?.shop?.companyName}</Text>
+                    </Text>
+                  </View>
+                   ) : (
                     <View style={styles.columnText}>
                       <Text style={styles.infoText}>
                         Vous n'avez pas de carte compète pour le moment
@@ -228,14 +244,40 @@ const NewsScreen = (props) => {
                 </Text>
               </View>
             )}
+              
+          </View>
+          <View style={styles.rightColumn}>
+            <View style={styles.initialsBubble}>
+                <Text style={styles.initialText}>
+                  {user ? getInitials(user.username) : ""}
+                </Text>
+              </View>
           </View>
         </View>
       </View>
-      <View style={styles.promotionSection}>
-        <Text style={styles.sectionTitle}>
-          LES PROMOTIONS DE VOS COMMERÇANTS
-        </Text>
-        <View style={styles.scrollableCard}>
+      <ScrollView>
+      {/* Section Promotion de vos commerçants  */}
+
+        <View style={styles.sectionPromotions}>
+          <View style={styles.alignColumn}>
+            <Text style={styles.sectionTitle}>Les promotions de vos commerçants</Text>
+            <View></View>
+            <View>
+              <Pressable
+                style={styles.refreshIcon}
+                onPress={() => {
+                  regenerateUserPromotions();
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="refresh-circle"
+                  size={24}
+                  color="#5DB075"
+                />
+              </Pressable>
+            </View>
+          </View>
+          <View >
           <ScrollView>
             {cardsLoader || userPromotionsLoader ? (
               <ActivityIndicator
@@ -243,8 +285,8 @@ const NewsScreen = (props) => {
                 animating={cardsLoader || userPromotionsLoader}
                 color={MD2Colors.green200}
               />
-            ) : userPromotions.length > 0 ? (
-              userPromotions.map((promo, index) => (
+            ) : shuffledUserPromotions.length > 0 ? (
+              shuffledUserPromotions.slice(0, 3).map((promo, index) => (
                 <Pressable
                   title="Go info"
                   type="solid"
@@ -259,32 +301,42 @@ const NewsScreen = (props) => {
                     });
                   }}
                 >
-                  <View key={index} style={styles.promoItem}>
-                    <View style={styles.promoItemHeader}>
-                      <FontAwesome5
-                        name={
-                          markerIcons[
-                            getShopByPromotionId(promo.shopId, promo.id)
-                              ?.activity
-                          ]
-                        }
-                        size={20}
-                        color="#5DB075"
-                      />
-                      <Text style={styles.promoCompany}>
-                        {
-                          getShopByPromotionId(promo.shopId, promo.id)
-                            ?.companyName
-                        }
-                      </Text>
-                      <Text style={styles.promoDate}>
-                        du {new Date(promo.startAt).toLocaleDateString("fr")} au{" "}
-                        {new Date(promo.endAt).toLocaleDateString("fr")}
-                      </Text>
+                  <View key={index} style={ styles.scrollableCard}>
+                    <View style={styles.alignColumn}>
+                      <View>
+                        <View style={styles.firstRow}>
+                          <FontAwesome5
+                            name={
+                              markerIcons[
+                                getShopByPromotionId(promo.shopId, promo.id)
+                                  ?.activity
+                              ]
+                            }
+                            size={20}
+                            color="#5DB075"
+                          />
+                          <Text style={styles.promoCompany}>
+                            {
+                              getShopByPromotionId(promo.shopId, promo.id)
+                                ?.companyName
+                            }
+                          </Text>
+                        </View>
+                        <View>
+                          <Text style={styles.promoDescription}>
+                            {promo.description}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.secondColumn}>
+                        <View >
+                          <Text style={styles.promoDate}>
+                            Du {new Date(promo.startAt).toLocaleDateString("fr")} {"\n"}au{" "}
+                            {new Date(promo.endAt).toLocaleDateString("fr")}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                    <Text style={styles.promoDescription}>
-                      {promo.description}
-                    </Text>
                   </View>
                 </Pressable>
               ))
@@ -295,33 +347,41 @@ const NewsScreen = (props) => {
             )}
           </ScrollView>
         </View>
-      </View>
-
-      <View style={styles.decouvrezSection}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 10,
-          }}
-        >
-          <Text style={styles.sectionTitle}>DÉCOUVREZ AUSSI</Text>
-          {/* <Pressable onPress={() => {}}>
-						<MaterialCommunityIcons name="refresh-circle" size={24} color="#5DB075" />
-					</Pressable> */}
         </View>
-        {shopLoader || userNotPromotionsLoader ? (
+
+      {/* Section Découvrez aussi  */}
+      
+        <View style={styles.sectionPromotions}>
+          <View style={styles.alignColumn}>
+            <View>
+              <Text style={styles.sectionTitle}>DÉCOUVREZ AUSSI</Text>
+            </View>
+            <View>
+              <Pressable
+                style={styles.refreshIcon}
+                onPress={() => {
+                  regenerateNotUserPromotions();
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="refresh-circle"
+                  size={24}
+                  color="#5DB075"
+                />
+              </Pressable>
+            </View>
+          </View>
+          {shopLoader || userNotPromotionsLoader ? (
           <ActivityIndicator
             size={"large"}
             animating={shopLoader || userNotPromotionsLoader}
             color={MD2Colors.green200}
           />
         ) : (
-          <View style={styles.scrollableCard}>
+          <View>
             <ScrollView>
-              {notUserPromotions.length > 0 ? (
-                notUserPromotions.map((promo, index) => (
+              {shuffledNotUserPromotions.length > 0 ? (
+                shuffledNotUserPromotions.slice(0, 3).map((promo, index) => (
                   <Pressable
                     title="Go info"
                     type="solid"
@@ -336,32 +396,42 @@ const NewsScreen = (props) => {
                       });
                     }}
                   >
-                    <View key={index} style={styles.promoItem}>
-                      <View style={styles.promoItemHeader}>
-                        <FontAwesome5
-                          name={
-                            markerIcons[
-                              getShopByPromotionId(promo.shopId, promo.id)
-                                ?.activity
-                            ]
-                          }
-                          size={20}
-                          color="#5DB075"
-                        />
-                        <Text style={styles.promoCompany}>
-                          {
-                            getShopByPromotionId(promo.shopId, promo.id)
-                              ?.companyName
-                          }
-                        </Text>
-                        <Text style={styles.promoDate}>
-                          du {new Date(promo.startAt).toLocaleDateString("fr")}{" "}
-                          au {new Date(promo.endAt).toLocaleDateString("fr")}
-                        </Text>
+                    <View key={index} style={ styles.scrollableCard}>
+                      <View style={styles.alignColumn}>
+                        <View>
+                          <View style={styles.firstRow}>
+                            <FontAwesome5
+                              name={
+                                markerIcons[
+                                  getShopByPromotionId(promo.shopId, promo.id)
+                                    ?.activity
+                                ]
+                              }
+                              size={20}
+                              color="#5DB075"
+                            />
+                            <Text style={styles.promoCompany}>
+                              {
+                                getShopByPromotionId(promo.shopId, promo.id)
+                                  ?.companyName
+                              }
+                            </Text>
+                          </View>
+                          <View>
+                            <Text style={styles.promoDescription}>
+                              {promo.description}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.secondColumn}>
+                          <View >
+                            <Text style={styles.promoDate}>
+                              Du {new Date(promo.startAt).toLocaleDateString("fr")} {"\n"}au{" "}
+                              {new Date(promo.endAt).toLocaleDateString("fr")}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
-                      <Text style={styles.promoDescription}>
-                        {promo.description}
-                      </Text>
                     </View>
                   </Pressable>
                 ))
@@ -374,7 +444,8 @@ const NewsScreen = (props) => {
             </ScrollView>
           </View>
         )}
-      </View>
+        </View>
+      </ScrollView>
       <Snackbar
         style={{ position: "absolute", bottom: 0, width: "100%" }}
         visible={snackBarVisible}
@@ -392,7 +463,7 @@ const NewsScreen = (props) => {
         }}
       >
         {snackBarMessage}
-      </Snackbar>
+      </Snackbar> 
     </View>
   );
 };
@@ -404,24 +475,25 @@ const styles = StyleSheet.create({
   },
 
   // HEADER SECTION
-
   header: {
-    flex: 0.28,
-    backgroundColor: "#5DB075",
-    flexDirection: "column",
+    paddingTop: 40,
+		position: 'sticky',
+		top: 0,
+		backgroundColor: "#5DB075",
+		zIndex: 1,
   },
-
-  userContainer: {
-    marginTop: 30,
-
+  infoUser: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 20,
+    width: "auto",
+	},
+  leftColumn: {
+		justifyContent: "center",
+    paddingRight: 20,
     flex: 1,
-    flexDirection: "row",
-  },
-  userPhoto: {
-    flex: 0.3,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
+	},
   initialsBubble: {
     width: 70,
     height: 70,
@@ -435,97 +507,77 @@ const styles = StyleSheet.create({
     color: "#5DB075",
     fontWeight: "bold",
   },
-  userName: {
-    flex: 0.7,
-  },
-  usernameContainer: {
-    flex: 0.9,
-    justifyContent: "center",
-  },
-  usernameText: {
+	rightColumn: {
+		justifyContent: "flex-start",
+	},
+  textBonjour: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff",
+    paddingBottom: 15,
+  },
+  rowNotif: {
+		flexDirection: 'row',
+  },
+  iconNotif: {
     padding: 10,
-    paddingTop: 55,
+    justifyContent: "center",
   },
-  errorTextStyle: {
-    color: "red",
-    fontWeight: "bold",
+  colNotif: {
+    width: "80%",
   },
-  infoText: {
+  infoNotif: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 14,
   },
-  fullWidth: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
+  boldText: {
+    fontWeight: 'bold',
   },
-  columnIcon: {
-    flex: 0.15,
-  },
-  columnText: {
-    flex: 0.85,
-    marginLeft: 5,
-  },
-  // FIN HEADER SECTION
 
-  // PROMOTION SECTION
-  promotionSection: {
-    flex: 0.36,
-  },
-  // FIN PROMOTION SECTION
-
-  // DECOUVREZ SECTION
-  decouvrezSection: {
-    marginTop: 60,
-    flex: 0.36,
-  },
-  // FIN DECOUVREZ SECTION
+  // SECTION PROMOTIONS DE VOS COMMERCANTS
+  sectionPromotions: {
+		flex: "auto",
+		padding: 15,
+		backgroundColor: "#F5F5F5",
+	},
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#666666",
-    textTransform: "uppercase",
-    padding: 10,
-    height: height * 0.06,
-  },
-
+		textTransform: "uppercase",
+		fontSize: 14,
+		fontWeight: "bold",
+		marginBottom: 10,
+		textAlign: "left",
+	},
   scrollableCard: {
-    backgroundColor: "white",
-    borderRadius: 10,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     padding: 5,
-    margin: 5,
-    // maxHeight: height * 0.25
+    margin: 1,
+    borderColor: "#CAD3C8",
+		borderWidth: 1,
   },
-
-  promoItem: {
-    flexDirection: "column",
-    borderBottomColor: "darkgray",
-    borderBottomWidth: 0.3,
-    padding: 10,
-  },
-  promoItemHeader: {
+  alignColumn: {
     flexDirection: "row",
-    alignItems: "center",
+    justifyContent: "space-between",
   },
-
+  firstRow: {
+    flexDirection: "row",
+  },
+  secondColumn: {
+    justifyContent: "center",
+  },
   promoCompany: {
-    color: "#E5B824",
+    color: "#424242",
     textTransform: "uppercase",
     fontWeight: "bold",
     marginLeft: 10,
     marginRight: 10,
     flex: 2,
   },
-
   promoDate: {
     fontSize: 9,
     flex: 1,
+    textAlign: "right",
   },
-
   promoDescription: {
     fontSize: 12,
     color: "darkgray",

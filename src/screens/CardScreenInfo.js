@@ -91,7 +91,7 @@ export default function CardScreenInfo({ route, navigation }) {
 				) : null}
 				{/* Section Promotion */}
 				<View style={styles.promotions}>
-					<View style={styles.titreBloc}>
+					<View>
 						<Text style={styles.sectionTitle}>Promotions en cours</Text>
 					</View>
 					{/* Liste des promotions en cours */}
@@ -100,7 +100,7 @@ export default function CardScreenInfo({ route, navigation }) {
 							<View style={styles.promotionsTextContainer}>
 								<View style={styles.promotionsTextRow}>
 									<Text style={[styles.promotionsText, styles.promotionsTextLeft]}>{promotion.name}</Text>
-									<Text style={[styles.promotionsText, styles.promotionsTextRight]}>
+									<Text style={styles.promotionsTextRight}>
 										<Text style={styles.soldeTamponsText}>
 											{balances
 												.filter((b) => b.isActive)
@@ -110,7 +110,7 @@ export default function CardScreenInfo({ route, navigation }) {
 														b.counter < promotion.checkoutLimit
 												)?.counter ?? 0}
 										</Text>
-										/ {promotion.checkoutLimit}
+										/{promotion.checkoutLimit}
 									</Text>
 								</View>
 								<View style={styles.promotionsTextRow}>
@@ -122,7 +122,7 @@ export default function CardScreenInfo({ route, navigation }) {
 				</View>
 				{/* Section Historique */}
 				<View style={styles.historique}>
-					<View style={styles.titreBloc}>
+					<View>
 						<Text style={styles.sectionTitle}>Historique de vos promotions</Text>
 					</View>
 					{/* Liste des promotions historiques */}
@@ -293,10 +293,11 @@ const styles = StyleSheet.create({
 	},
 	promotionsContainer: {
 		backgroundColor: "#fff",
-		borderRadius: 10,
-		marginTop: 5,
-		paddingVertical: 10,
-		paddingHorizontal: 15,
+		borderRadius: 5,
+		marginTop: 2,
+		padding:5,
+		borderColor: "#CAD3C8",
+		borderWidth: 1,
 	},
 	promotionsTextRow: {
 		flexDirection: "row",
@@ -310,14 +311,14 @@ const styles = StyleSheet.create({
 		width: "100%"
 	},
 	promotionsText: {
-		color: "#333",
-		fontSize: 16
+		color: "#424242",
+		textTransform: "uppercase",
+    	fontWeight: "bold",
 	},
 	promotionsTextLeft: {
 		flex: 0.7
 	},
 	promotionsTextRight: {
-		color: "#666",
 		flex: 0.3,
 		textAlign: "right"
 	},
@@ -340,20 +341,18 @@ const styles = StyleSheet.create({
 	},
 	historyContainer: {
 		backgroundColor: "#F5F5F5",
-		borderColor: "#fff",
+		borderColor: "#CAD3C8",
 		borderWidth: 1,
-		borderRadius: 10,
-		marginTop: 5,
-		paddingVertical: 10,
-		paddingHorizontal: 15,
+		borderRadius: 5,
+		marginTop: 2,
+		padding:5,
 	},
 	balanceHistoryBloc: {
 		display: "Block",
 		width: "100%",
 	},
 	titleTextHistorique: {
-		color: "#444",
-		fontSize: 12,
+		color: "#424242",
 		paddingRight: 20,
 		paddingTop: 10,
 		fontStyle: "italic"

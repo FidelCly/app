@@ -206,6 +206,10 @@ export default function InfoShopToAddScreen({ route }) {
 									/ {promotion.checkoutLimit} */}
                 {/* </Text> */}
               </View>
+              <Text style={styles.descText}>
+                  {promotion.description}
+                
+              </Text>
               <Text style={styles.dateText}>
                 Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} au{" "}
                 {new Date(promotion.endAt).toLocaleDateString("fr-FR")}
@@ -406,21 +410,31 @@ const styles = StyleSheet.create({
   },
   promotionsContainer: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    marginTop: 20,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    borderRadius: 5,
+    padding: 5,
+    margin: 2,
+    borderColor: "#CAD3C8",
+		borderWidth: 1,
   },
   promotionsTextContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
   promotionsText: {
-    color: "#333",
+    color: "#424242",
     fontSize: 20,
+    textTransform: "uppercase",
+    fontWeight: "bold",
+
+
   },
   promotionsTextLeft: {
     flex: 0.7,
+  },
+  descText: {
+    textAlign: "left",
+    fontSize: 14,
+    marginTop: 10,
   },
   dateText: {
     textAlign: "left",
