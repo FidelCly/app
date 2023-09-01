@@ -56,14 +56,19 @@ export default function InfoShopToAddScreen({ route }) {
     return false;
   };
 
-  /**
-   * Get initials from username
-   * @param {*} username
-   * @returns
-   */
-  const getInitials = (username) => {
-    if (!username) return "";
-    const words = username.split(" ");
+  function formatAddress(address) {
+		const parts = address.split(', ');
+		if (parts.length >= 2) {
+		const [street, cityZip] = parts;
+		return `${street}\n${cityZip}`;
+		}
+		return address;
+	}
+
+//Récupérer l'initiale du shop pour l'afficher sur la carte si pas d'image
+  const getInitials = (companyName) => {
+    if (!companyName) return "";
+    const words = companyName.split(" ");
     return words
       .map((word) => word.charAt(0))
       .join("")
@@ -121,71 +126,63 @@ export default function InfoShopToAddScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      {/* Header (10%) */}
+
+
+
       <View style={styles.header}>
-        {/* Bouton retour à gauche */}
-        <TouchableOpacity
-          style={styles.goBackButton}
-          onPress={() =>
+				{/* Section Bouton Retour */}
+				<View style={styles.goBackButton}>
+					<TouchableOpacity style={styles.goBackButton} onPress={() =>
             props.navigation.navigate("BottomNavigator", {
               screen: route.params.previousScreen,
             })
-          }
-        >
-          <Text style={styles.backButtonText}>Retour</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Info Shop (15%) */}
-      <View style={styles.infoShop}>
-        <View style={styles.leftColumn}>
-          {/* Affichage de l'image dans la colonne de gauche */}
-          <View style={styles.shopImageContainer}>
-            <View style={styles.initialsContainer}>
-              {pictureUrl && pictureUrl !== "" ? (
+          }>
+						<Text style={styles.backButtonText}>Retour</Text>
+					</TouchableOpacity>
+				</View>
+				{/* Section InfoShop */}
+				<View style={styles.infoShop}>
+					<View style={styles.leftColumn}>
+						<View style={styles.shopImageContainer}>
+							{pictureUrl && pictureUrl !== "" ? (
                 <Image style={styles.shopImage} source={{ uri: pictureUrl }} />
               ) : (
                 <Text style={styles.cardText}>
                   {getInitials(shop.companyName)}
                 </Text>
               )}
+						</View>
+					</View>
+					<View style={styles.rightColumn}>
+							<Text style={styles.companyNameText}>{shop?.companyName}</Text>
+						<View style={styles.activityContainer}>
+							<Text style={styles.activityText}>{shop?.activity}</Text>
+						</View>
+						
+            <View style={styles.addressContainer}>
+              <Ionicons name="location-sharp" size={20} color="red" />
+              <Text style={styles.addressText}>{formatAddress(shop?.address)}</Text>
             </View>
-          </View>
-        </View>
-        <View style={styles.rightColumn}>
-          {/* Contenu de la colonne de droite (70%) */}
-          <Text style={styles.companyNameText}>{shop?.companyName}</Text>
-          <View style={styles.activityContainer}>
-            <Text style={styles.activityText}>{shop?.activity}</Text>
-          </View>
-          <View style={styles.addressContainer}>
-            <Ionicons name="location-sharp" size={20} color="red" />
-            <Text style={styles.addressText}>{shop?.address}</Text>
-          </View>
-        </View>
-      </View>
+						
+					</View>
+				</View>
+			</View>
 
-      {/* Description (20%) */}
-      <View style={styles.description}>
-        <Text style={styles.descriptionTitle}>
-          Un petit mot de votre commerçant
-        </Text>
-        <Text style={styles.descriptionText}>
-          {shop && shop.description && shop.description !== "" ? (
-            <Text style={styles.descriptionText}>{shop.description}</Text>
-          ) : (
-            <Text style={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              sagittis, nisl a sagittis pretium, nunc felis congue est, vitae
-              venenatis orci tellus vitae lacus. Proin sed urna nec lectus
-              eleifend fringilla.
-            </Text>
-          )}
-        </Text>
-        <Text style={styles.signature}>{shop.companyName?.toUpperCase()}</Text>
-      </View>
+      <ScrollView>
+        {/* Section Description */}
+				{shop.description && shop.description !== "" ? (
+					<View style={styles.description}>
+						<Text style={styles.descriptionTitle}>Un petit mot de votre commerçant</Text>
+						<Text style={styles.descriptionText}>{shop.description}</Text>
+						<Text style={styles.signature}>{shop.companyName?.toUpperCase()}</Text>
+					</View>
+				) : null}
 
-      {/* Promotions en cours (45%) */}
+
+
+
+        
+        {/* Promotions en cours */}
       <View style={styles.promotions}>
         <ScrollView style={styles.promotions}>
           <Text style={styles.promotionsTitle}>Promotions en cours</Text>
@@ -198,13 +195,6 @@ export default function InfoShopToAddScreen({ route }) {
                 >
                   {promotion.name}
                 </Text>
-                {/* <Text style={[styles.promotionsText, styles.promotionsTextRight]}> */}
-                {/* <Text style={styles.soldeTamponsText}>
-										{balances.filter((b) => b.isActive).find((b) => b.promotionId === promotion.id)
-											?.counter ?? 0}
-									</Text>
-									/ {promotion.checkoutLimit} */}
-                {/* </Text> */}
               </View>
               <Text style={styles.descText}>
                   {promotion.description}
@@ -218,6 +208,30 @@ export default function InfoShopToAddScreen({ route }) {
           ))}
         </ScrollView>
       </View>
+      </ScrollView>
+
+
+
+     
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+  
+
+    
       {/* CTA ajouter (10%) */}
 
       <View style={styles.ctaContainer}>
@@ -279,99 +293,100 @@ export default function InfoShopToAddScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: "#F5F5F5",
   },
-  // HEADER STYLES
-  header: {
-    flex: 0.1,
-    backgroundColor: "#5DB075",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  goBackButton: {
-    position: "absolute",
-    left: 10,
-    paddingHorizontal: 10,
-  },
-  backButtonText: {
-    color: "#424242",
-    fontSize: 16,
-    marginTop: 20,
-    textDecorationLine: "underline",
-  },
-  // HEADER STYLES
-  // Info Shop styles
-  infoShop: {
-    flex: 0.2,
-    flexDirection: "row",
-  },
-  leftColumn: {
-    flex: 0.35,
-    backgroundColor: "#5DB075",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  rightColumn: {
-    flex: 0.65,
-    backgroundColor: "#5DB075",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
-  shopImageContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    overflow: "hidden",
-  },
-  shopImage: {
-    width: "100%",
-    height: "100%",
-  },
-  companyNameText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    color: "#FECF33",
-    marginBottom: 10,
-  },
-  activityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  activityText: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  addressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  addressText: {
-    fontSize: 12,
-    marginLeft: 5,
-  },
-  initialsContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    display: "flex",
-  },
-  cardText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#424242",
-    textAlign: "center",
-  },
-  // Info Shop styles
+  // Section Header
+	header: {
+		paddingTop: 20,
+		paddingHorizontal: 15,
+		position: 'sticky',
+		top: 0,
+		backgroundColor: "#5DB075",
+		zIndex: 1,
+	},
+	goBackButton: {
+		left: 10,
+		paddingTop: 10,
+	},
+	backButtonText: {
+		color: "#424242",
+		fontSize: 16,
+		textDecorationLine: "underline"
+	},
+	// Section Header Infoshop
+	infoShop: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 10,
+	},
+	leftColumn: {
+		flex: 0.35,
+		backgroundColor: "#5DB075",
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	rightColumn: {
+		flex: 0.65,
+		backgroundColor: "#5DB075",
+		justifyContent: "center",
+	},
+	shopImageContainer: {
+		width: 70,
+		height: 70,
+		borderRadius: 35,
+		overflow: "hidden",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "#fff",
+		display: "flex"
+	},
+	shopImage: {
+		width: "100%",
+		height: "100%"
+	},
+	companyNameText: {
+		fontSize: 20,
+		fontWeight: "bold",
+		textTransform: "uppercase",
+		color: "#FECF33",
+		marginBottom: 10
+	},
+	activityContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 10
+	},
+	activityText: {
+		fontSize: 14,
+		fontWeight: "bold"
+	},
+	addressContainer: {
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	addressText: {
+		fontSize: 12,
+		marginLeft: 5
+	},
+	initialsContainer: {
+		width: 70,
+		height: 70,
+		borderRadius: 35,
+		overflow: "hidden",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "#fff",
+		display: "flex"
+	},
+	cardText: {
+		fontSize: 16,
+		fontWeight: "bold",
+		color: "#424242",
+		textAlign: "center"
+	},
   // Description styles
   description: {
-    flex: 0.15,
     backgroundColor: "#fff",
     padding: 20,
   },
@@ -397,7 +412,7 @@ const styles = StyleSheet.create({
 
   // Promotions styles
   promotions: {
-    flex: 0.45,
+    flex: 1,
     backgroundColor: "#F5F5F5",
     padding: 10,
   },
@@ -422,11 +437,9 @@ const styles = StyleSheet.create({
   },
   promotionsText: {
     color: "#424242",
-    fontSize: 20,
+    fontSize: 16,
     textTransform: "uppercase",
     fontWeight: "bold",
-
-
   },
   promotionsTextLeft: {
     flex: 0.7,
@@ -443,7 +456,11 @@ const styles = StyleSheet.create({
   },
   // Promotions styles
   ctaContainer: {
-    flex: 0.1,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',  // Assurez-vous qu'il prend toute la largeur
     alignItems: "center",
+    padding: 10,  // Ajoutez un peu de padding pour un meilleur look
+    backgroundColor: "#F5F5F5",  // Optionnel : définissez une couleur d'arrière-plan si nécessaire
   },
 });

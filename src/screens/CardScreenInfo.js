@@ -27,6 +27,15 @@ export default function CardScreenInfo({ route, navigation }) {
 
 	const showImage = pictureUrl && pictureUrl.length > 0;
 
+	function formatAddress(address) {
+		const parts = address.split(', ');
+		if (parts.length >= 2) {
+		const [street, cityZip] = parts;
+		return `${street}\n${cityZip}`;
+		}
+		return address;
+	}
+
 	useEffect(() => {
 		fetchPromotion(shopId);
 	}, []);
@@ -72,9 +81,7 @@ export default function CardScreenInfo({ route, navigation }) {
 						<View style={styles.addressContainer}>
 							<Ionicons name="location-sharp" size={20} color="red" />
 							<Text style={styles.addressText}>
-								{card.shop.address}
-								{"\n"}
-								{card.shop.zipCode}&nbsp;{card.shop.city}
+								{formatAddress(card.shop.address)}
 							</Text>
 						</View>
 					</View>
@@ -185,7 +192,6 @@ const styles = StyleSheet.create({
 	},
 	// Section Header Infoshop
 	infoShop: {
-		// flex: 0.2,
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingVertical: 10,
@@ -200,7 +206,6 @@ const styles = StyleSheet.create({
 		flex: 0.65,
 		backgroundColor: "#5DB075",
 		justifyContent: "center",
-		paddingHorizontal: 20
 	},
 	shopImageContainer: {
 		width: 70,
@@ -230,7 +235,8 @@ const styles = StyleSheet.create({
 	},
 	addressContainer: {
 		flexDirection: "row",
-		alignItems: "center"
+		alignItems: "center",
+		flexWrap: 'wrap',
 	},
 	addressText: {
 		fontSize: 12,

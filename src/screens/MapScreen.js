@@ -71,13 +71,13 @@ export default function MapScreen(props) {
   };
 
   function formatAddress(address) {
-  const parts = address.split(', ');
-  if (parts.length >= 2) {
-    const [street, cityZip] = parts;
-    return `${street}\n${cityZip}`;
+    const parts = address.split(', ');
+    if (parts.length >= 2) {
+      const [street, cityZip] = parts;
+      return `${street}\n${cityZip}`;
+    }
+    return address;
   }
-  return address;
-}
 
   useEffect(() => {
     (async () => {
