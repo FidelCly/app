@@ -64,11 +64,14 @@ const NewsScreen = (props) => {
   const regenerateUserPromotions = () => {
   const shuffled = shuffleArray(userPromotions);
   setShuffledUserPromotions(shuffled);
+  console.log("userPromotions", shuffledUserPromotions);
 };
 
 const regenerateNotUserPromotions = () => {
   const shuffled = shuffleArray(notUserPromotions);
   setShuffledNotUserPromotions(shuffled);
+  console.log("notUserPromotions", shuffledNotUserPromotions);
+
 };
 
   useEffect(() => {
@@ -537,7 +540,7 @@ const styles = StyleSheet.create({
   // SECTION PROMOTIONS DE VOS COMMERCANTS
   sectionPromotions: {
 		flex: "auto",
-		padding: 15,
+		padding: 10,
 		backgroundColor: "#F5F5F5",
 	},
   sectionTitle: {
