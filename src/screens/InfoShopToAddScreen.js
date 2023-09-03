@@ -189,21 +189,31 @@ export default function InfoShopToAddScreen({ route }) {
           {/* Liste des promotions */}
           {shopPromotions.map((promotion) => (
             <View style={styles.promotionsContainer} key={promotion.id}>
-              <View style={styles.promotionsTextContainer}>
-                <Text
-                  style={[styles.promotionsText, styles.promotionsTextLeft]}
-                >
-                  {promotion.name}
-                </Text>
+
+
+              <View style={styles.alignColumn}>
+                <View>
+                  <View style={styles.firstRow}>
+                    <Text style={styles.promoCompany}>
+                      {promotion.name}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.promoDescription}>
+                        {promotion.description}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.secondColumn}>
+                  <View >
+                    <Text style={styles.promoDate}>
+                      Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} {"\n"}au{" "}
+                      {new Date(promotion.endAt).toLocaleDateString("fr-FR")}
+                    </Text>
+                  </View>
+                </View>
               </View>
-              <Text style={styles.descText}>
-                  {promotion.description}
-                
-              </Text>
-              <Text style={styles.dateText}>
-                Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} au{" "}
-                {new Date(promotion.endAt).toLocaleDateString("fr-FR")}
-              </Text>
+              
             </View>
           ))}
         </ScrollView>
@@ -427,40 +437,42 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 5,
     padding: 5,
-    margin: 2,
+    marginVertical: 1,
     borderColor: "#CAD3C8",
 		borderWidth: 1,
   },
-  promotionsTextContainer: {
+  alignColumn: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  promotionsText: {
+  firstRow: {
+    flexDirection: "row",
+  },
+  secondColumn: {
+    justifyContent: "center",
+  },
+  promoCompany: {
     color: "#424242",
-    fontSize: 16,
     textTransform: "uppercase",
     fontWeight: "bold",
   },
-  promotionsTextLeft: {
-    flex: 0.7,
+  promoDate: {
+    fontSize: 9,
+    flex: 1,
+    textAlign: "right",
   },
-  descText: {
-    textAlign: "left",
-    fontSize: 14,
-    marginTop: 10,
-  },
-  dateText: {
-    textAlign: "left",
+  promoDescription: {
     fontSize: 12,
-    marginTop: 10,
+    color: "darkgray",
+    marginTop: 5,
   },
   // Promotions styles
   ctaContainer: {
     position: 'absolute',
     bottom: 0,
-    width: '100%',  // Assurez-vous qu'il prend toute la largeur
+    width: '100%',  
     alignItems: "center",
-    padding: 10,  // Ajoutez un peu de padding pour un meilleur look
-    backgroundColor: "#F5F5F5",  // Optionnel : définissez une couleur d'arrière-plan si nécessaire
+    padding: 10,
+    backgroundColor: "#F5F5F5",  
   },
 });
