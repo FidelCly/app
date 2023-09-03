@@ -34,8 +34,6 @@ const NewsScreen = (props) => {
 	const [shuffledUserPromotions, setShuffledUserPromotions] = useState([]);
 	const [shuffledNotUserPromotions, setShuffledNotUserPromotions] = useState([]);
 
-	// const dispatch = useDispatch();
-
 	// Afficher les promotions en cours de façon aléatoire
 	const shuffleArray = (array) => {
 		setUserPromotionsLoader(true);
@@ -48,29 +46,23 @@ const NewsScreen = (props) => {
 			const shop = allShop.find((shop) => shop.id === promo.shopId);
 			shuffled[index]["shop"] = shop;
 		});
-
 		setUserPromotionsLoader(false);
-
 		return shuffled;
 	};
 
 	const regenerateUserPromotions = () => {
 		setUserPromotionsLoader(true);
 		let shuffled = shuffleArray(userPromotions);
-
 		setShuffledUserPromotions(shuffled);
 		setUserPromotionsLoader(false);
 	};
 
 	const regenerateNotUserPromotions = () => {
 		setUserPromotionsLoader(true);
-
 		const shuffled = shuffleArray(notUserPromotions);
-
 		setShuffledNotUserPromotions(shuffled);
 		setUserPromotionsLoader(false);
 
-		// console.log("notUserPromotions", shuffledNotUserPromotions);
 	};
 
 	useEffect(() => {
@@ -84,7 +76,6 @@ const NewsScreen = (props) => {
 		if (user) {
 			try {
 				const allShop = await getAllShops();
-				// if (allShop && userCards && userCards.length > 0 && allShop.length > 0) {
 				const notUserCards = allShop.filter((shop) => !userCards.find((card) => card.shop.id === shop.id));
 				setNotUserPromotions(notUserCards);
 				setNotUserCards(notUserCards);
@@ -289,7 +280,6 @@ const NewsScreen = (props) => {
 															color="#5DB075"
 														/>
 														<Text style={styles.promoCompany}>
-															{/* {console.log(promo.shop.companyName)} */}
 															{promo["shop"].companyName}
 														</Text>
 													</View>
@@ -529,12 +519,11 @@ const styles = StyleSheet.create({
 	},
 
 	promoCompany: {
-		// color: "#424242",
+		color: "#424242",
 		textTransform: "uppercase",
 		fontWeight: "bold",
 		marginLeft: 10,
 		marginRight: 10
-		// flex: 2
 	},
 	promoDate: {
 		fontSize: 9,
