@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from "rea
 import { Ionicons } from "@expo/vector-icons";
 import { getShopPromotions } from "../services";
 import * as Luxon from "luxon";
+import { LogBox } from "react-native";
 
 //Récupérer l'initiale du shop pour l'afficher sur la carte si pas d'image
 const getInitials = (companyName) => {
@@ -15,6 +16,8 @@ const getInitials = (companyName) => {
 };
 
 export default function CardScreenInfo({ route, navigation }) {
+	LogBox.ignoreAllLogs(); // Ignore all log notifications
+
 	const { card } = route.params;
 	if (!card) {
 		return null;
@@ -28,10 +31,10 @@ export default function CardScreenInfo({ route, navigation }) {
 	const showImage = pictureUrl && pictureUrl.length > 0;
 
 	function formatAddress(address) {
-		const parts = address.split(', ');
+		const parts = address.split(", ");
 		if (parts.length >= 2) {
-		const [street, cityZip] = parts;
-		return `${street}\n${cityZip}`;
+			const [street, cityZip] = parts;
+			return `${street}\n${cityZip}`;
 		}
 		return address;
 	}
@@ -52,7 +55,7 @@ export default function CardScreenInfo({ route, navigation }) {
 
 	return (
 		<View style={styles.container}>
-				{/* Section Header */}
+			{/* Section Header */}
 			<View style={styles.header}>
 				{/* Section Bouton Retour */}
 				<View style={styles.goBackButton}>
@@ -74,15 +77,13 @@ export default function CardScreenInfo({ route, navigation }) {
 						</View>
 					</View>
 					<View style={styles.rightColumn}>
-							<Text style={styles.companyNameText}>{card.shop.companyName}</Text>
+						<Text style={styles.companyNameText}>{card.shop.companyName}</Text>
 						<View style={styles.activityContainer}>
 							<Text style={styles.activityText}>{card.shop.activity}</Text>
 						</View>
 						<View style={styles.addressContainer}>
 							<Ionicons name="location-sharp" size={20} color="red" />
-							<Text style={styles.addressText}>
-								{formatAddress(card.shop.address)}
-							</Text>
+							<Text style={styles.addressText}>{formatAddress(card.shop.address)}</Text>
 						</View>
 					</View>
 				</View>
@@ -106,7 +107,9 @@ export default function CardScreenInfo({ route, navigation }) {
 						<View style={styles.promotionsContainer} key={promotion.id}>
 							<View style={styles.promotionsTextContainer}>
 								<View style={styles.promotionsTextRow}>
-									<Text style={[styles.promotionsText, styles.promotionsTextLeft]}>{promotion.name}</Text>
+									<Text style={[styles.promotionsText, styles.promotionsTextLeft]}>
+										{promotion.name}
+									</Text>
 									<Text style={styles.promotionsTextRight}>
 										<Text style={styles.soldeTamponsText}>
 											{balances
@@ -121,7 +124,9 @@ export default function CardScreenInfo({ route, navigation }) {
 									</Text>
 								</View>
 								<View style={styles.promotionsTextRow}>
-									<Text style={[styles.promotionsDescText, styles.promotionsTextLeft]}>{promotion.description}</Text>
+									<Text style={[styles.promotionsDescText, styles.promotionsTextLeft]}>
+										{promotion.description}
+									</Text>
 								</View>
 							</View>
 						</View>
@@ -142,21 +147,22 @@ export default function CardScreenInfo({ route, navigation }) {
 									<View style={styles.historyContainer} key={index}>
 										<View style={styles.promotionsTextContainer}>
 											<View style={styles.promotionsTextRow}>
-												<Text  style={[styles.promotionsText, styles.promotionsTextLeft]}>
+												<Text style={[styles.promotionsText, styles.promotionsTextLeft]}>
 													{balance.promotion.name}
 												</Text>
 												<Text>
-													{balance.counter}/
-													{balance.promotion.checkoutLimit}
+													{balance.counter}/{balance.promotion.checkoutLimit}
 												</Text>
 											</View>
 											<View style={styles.promotionsTextRow}>
-												<Text  style={styles.balanceHistory}>
-													{Luxon.DateTime.fromISO(balance.updatedAt).setLocale('fr').toFormat('DDDD t')}
+												<Text style={styles.balanceHistory}>
+													{Luxon.DateTime.fromISO(balance.updatedAt)
+														.setLocale("fr")
+														.toFormat("DDDD t")}
 												</Text>
 											</View>
 										</View>
-									</View>	
+									</View>
 								))}
 						</View>
 					) : (
@@ -176,14 +182,14 @@ const styles = StyleSheet.create({
 	header: {
 		paddingTop: 20,
 		paddingHorizontal: 15,
-		position: 'sticky',
+		position: "sticky",
 		top: 0,
 		backgroundColor: "#5DB075",
-		zIndex: 1,
+		zIndex: 1
 	},
 	goBackButton: {
 		left: 10,
-		paddingTop: 10,
+		paddingTop: 10
 	},
 	backButtonText: {
 		color: "#424242",
@@ -192,9 +198,9 @@ const styles = StyleSheet.create({
 	},
 	// Section Header Infoshop
 	infoShop: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 10,
+		flexDirection: "row",
+		alignItems: "center",
+		paddingVertical: 10
 	},
 	leftColumn: {
 		flex: 0.35,
@@ -205,7 +211,7 @@ const styles = StyleSheet.create({
 	rightColumn: {
 		flex: 0.65,
 		backgroundColor: "#5DB075",
-		justifyContent: "center",
+		justifyContent: "center"
 	},
 	shopImageContainer: {
 		width: 70,
@@ -236,7 +242,7 @@ const styles = StyleSheet.create({
 	addressContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		flexWrap: 'wrap',
+		flexWrap: "wrap"
 	},
 	addressText: {
 		fontSize: 12,
@@ -263,7 +269,7 @@ const styles = StyleSheet.create({
 	description: {
 		padding: 15,
 		flex: "auto",
-		backgroundColor: "#fff",
+		backgroundColor: "#fff"
 	},
 	descriptionTitle: {
 		textTransform: "uppercase",
@@ -288,28 +294,28 @@ const styles = StyleSheet.create({
 	promotions: {
 		flex: "auto",
 		padding: 15,
-		backgroundColor: "#F5F5F5",
+		backgroundColor: "#F5F5F5"
 	},
 	sectionTitle: {
 		textTransform: "uppercase",
 		fontSize: 14,
 		fontWeight: "bold",
 		marginBottom: 10,
-		textAlign: "left",
+		textAlign: "left"
 	},
 	promotionsContainer: {
 		backgroundColor: "#fff",
 		borderRadius: 5,
 		marginTop: 2,
-		padding:5,
+		padding: 5,
 		borderColor: "#CAD3C8",
-		borderWidth: 1,
+		borderWidth: 1
 	},
 	promotionsTextRow: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		width: "100%",
+		width: "100%"
 	},
 	promotionsTextContainer: {
 		display: "flex",
@@ -319,7 +325,7 @@ const styles = StyleSheet.create({
 	promotionsText: {
 		color: "#424242",
 		textTransform: "uppercase",
-    	fontWeight: "bold",
+		fontWeight: "bold"
 	},
 	promotionsTextLeft: {
 		flex: 0.7
@@ -343,7 +349,7 @@ const styles = StyleSheet.create({
 	// Section Historique
 	historique: {
 		padding: 15,
-		backgroundColor: "#F5F5F5",
+		backgroundColor: "#F5F5F5"
 	},
 	historyContainer: {
 		backgroundColor: "#F5F5F5",
@@ -351,11 +357,11 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 5,
 		marginTop: 2,
-		padding:5,
+		padding: 5
 	},
 	balanceHistoryBloc: {
 		display: "Block",
-		width: "100%",
+		width: "100%"
 	},
 	titleTextHistorique: {
 		color: "#424242",
@@ -369,6 +375,6 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		width: "100%",
 		textAlign: "left",
-		textTransform: 'capitalize',
+		textTransform: "capitalize"
 	}
 });
