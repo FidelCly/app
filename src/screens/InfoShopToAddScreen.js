@@ -1,14 +1,6 @@
 import { LogBox } from "react-native";
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { getShopPromotions } from "../services";
 import { getCards, setCurrentCard } from "../store/reducers/card.reducer";
@@ -21,122 +13,129 @@ const { width: screenWidth } = Dimensions.get("window");
 const ctaWidth = screenWidth * 0.8;
 
 export default function InfoShopToAddScreen({ route }) {
-  const props = route?.params?.props;
-  const shop = route.params.shop;
-  const pictureUrl = shop.pictureUrl;
-  infoUserWallet = useSelector((state) => state.cards.cards);
-  const currentCard = useSelector((state) => state.cards.currentCard);
-  const [snackBarVisible, setSnackbarVisible] = useState(false);
-  const [snackBarMessage, setSnackbarMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [shopPromotions, setShopPromotions] = useState([]);
-  const [existedCard, setExistedCard] = useState(null);
+	const props = route?.params?.props;
+	const shop = route.params.shop;
+	const pictureUrl = shop.pictureUrl;
+	infoUserWallet = useSelector((state) => state.cards.cards);
+	const currentCard = useSelector((state) => state.cards.currentCard);
+	const [snackBarVisible, setSnackbarVisible] = useState(false);
+	const [snackBarMessage, setSnackbarMessage] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
+	const [shopPromotions, setShopPromotions] = useState([]);
+	const [existedCard, setExistedCard] = useState(null);
 
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  // ignore all log notifications:
-  LogBox.ignoreAllLogs(); // Ignore all log notifications
+	// ignore all log notifications:
+	LogBox.ignoreAllLogs(); // Ignore all log notifications
 
-  useEffect(() => {
-    // get all promotion from shop
-    fetchShopPromotions(shop.id);
-    checkIfCardIsInWallet(shop.id);
-  }, [props]);
+	useEffect(() => {
+		// get all promotion from shop
+		fetchShopPromotions(shop.id);
+		checkIfCardIsInWallet(shop.id);
+	}, [props, existedCard]);
 
-  /**
-   * Check if the card is already in the wallet
-   */
-  checkIfCardIsInWallet = (shopId) => {
-    const card = infoUserWallet.find((card) => card.shop.id === shopId);
-    if (card) {
-      dispatch(setCurrentCard(card.id));
-      setExistedCard(card);
-      return true;
-    }
-    return false;
-  };
+	/**
+	 * Check if the card is already in the wallet
+	 */
+	checkIfCardIsInWallet = (shopId) => {
+		const card = infoUserWallet.find((card) => card.shop.id === shopId);
+		if (card) {
+			dispatch(setCurrentCard(card.id));
+			setExistedCard(card);
+			return true;
+		}
+		return false;
+	};
 
-  function formatAddress(address) {
-		const parts = address.split(', ');
+	function formatAddress(address) {
+		const parts = address.split(", ");
 		if (parts.length >= 2) {
-		const [street, cityZip] = parts;
-		return `${street}\n${cityZip}`;
+			const [street, cityZip] = parts;
+			return `${street}\n${cityZip}`;
 		}
 		return address;
 	}
 
-//Récupérer l'initiale du shop pour l'afficher sur la carte si pas d'image
-  const getInitials = (companyName) => {
-    if (!companyName) return "";
-    const words = companyName.split(" ");
-    return words
-      .map((word) => word.charAt(0))
-      .join("")
-      .toUpperCase();
-  };
+	//Récupérer l'initiale du shop pour l'afficher sur la carte si pas d'image
+	const getInitials = (companyName) => {
+		if (!companyName) return "";
+		const words = companyName.split(" ");
+		return words
+			.map((word) => word.charAt(0))
+			.join("")
+			.toUpperCase();
+	};
 
-  /**
-   * fetchShopPromotions
-   * @param {*} shopId
-   */
-  const fetchShopPromotions = async (shopId) => {
-    try {
-      setIsLoading(true);
-      const promotionArrays = await getShopPromotions(shopId);
-      setShopPromotions(
-        promotionArrays.filter((promotion) => promotion.isActive === true)
-      );
-      setIsLoading(false);
-    } catch (err) {
-      console.log("🚀 ~ fetchShopPromotions ~ err:", err);
-      setIsLoading(false);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Une erreur est survenue.");
-    }
-  };
+	/**
+	 * fetchShopPromotions
+	 * @param {*} shopId
+	 */
+	const fetchShopPromotions = async (shopId) => {
+		try {
+			setIsLoading(true);
+			const promotionArrays = await getShopPromotions(shopId);
+			setShopPromotions(promotionArrays.filter((promotion) => promotion.isActive === true));
+			setIsLoading(false);
+		} catch (err) {
+			console.log("🚀 ~ fetchShopPromotions ~ err:", err);
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Une erreur est survenue.");
+		}
+	};
 
-  /**
-   * Add card to wallet
-   */
-  const handleClick = async () => {
-    try {
-      setIsLoading(true);
+	/**
+	 * Add card to wallet
+	 */
+	const handleClick = async () => {
+		try {
+			setIsLoading(true);
 
-      await addCardToWallet(shop.id);
-      dispatch(getCards());
-      const card = infoUserWallet.find((card) => card.shop.id === shop.id);
-      if (card) {
-        dispatch(setCurrentCard(card.id));
-      }
-      setIsLoading(false);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Carte ajoutée au wallet !");
+			await addCardToWallet(shop.id);
+			dispatch(getCards());
 
-      // props.navigation.navigate("InfoCard", {
-      // 	screen: "CardScreenInfo"
-      // 	// shop
-      // });
-    } catch (error) {
-      console.log("🚀 ~ handleClick ~ error:", error);
-      setIsLoading(false);
-      setSnackbarVisible(true);
-      setSnackbarMessage("Une erreur est survenue.");
-    }
-  };
+			const card = infoUserWallet.find((card) => card.shop.id === shop.id);
+			checkIfCardIsInWallet(shop.id);
 
-  return (
-    <View style={styles.container}>
+			if (card) {
+				dispatch(setCurrentCard(card.id));
+			}
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Carte ajoutée au wallet !");
 
+			setTimeout(() => {
+				props.navigation.navigate("BottomNavigator", {
+					screen: route.params.previousScreen
+				});
+			}, 1000);
 
+			// props.navigation.navigate("InfoCard", {
+			// 	screen: "CardScreenInfo"
+			// 	// shop
+			// });
+		} catch (error) {
+			console.log("🚀 ~ handleClick ~ error:", error);
+			setIsLoading(false);
+			setSnackbarVisible(true);
+			setSnackbarMessage("Une erreur est survenue.");
+		}
+	};
 
-      <View style={styles.header}>
+	return (
+		<View style={styles.container}>
+			<View style={styles.header}>
 				{/* Section Bouton Retour */}
 				<View style={styles.goBackButton}>
-					<TouchableOpacity style={styles.goBackButton} onPress={() =>
-            props.navigation.navigate("BottomNavigator", {
-              screen: route.params.previousScreen,
-            })
-          }>
+					<TouchableOpacity
+						style={styles.goBackButton}
+						onPress={() =>
+							props.navigation.navigate("BottomNavigator", {
+								screen: route.params.previousScreen
+							})
+						}
+					>
 						<Text style={styles.backButtonText}>Retour</Text>
 					</TouchableOpacity>
 				</View>
@@ -145,31 +144,28 @@ export default function InfoShopToAddScreen({ route }) {
 					<View style={styles.leftColumn}>
 						<View style={styles.shopImageContainer}>
 							{pictureUrl && pictureUrl !== "" ? (
-                <Image style={styles.shopImage} source={{ uri: pictureUrl }} />
-              ) : (
-                <Text style={styles.cardText}>
-                  {getInitials(shop.companyName)}
-                </Text>
-              )}
+								<Image style={styles.shopImage} source={{ uri: pictureUrl }} />
+							) : (
+								<Text style={styles.cardText}>{getInitials(shop.companyName)}</Text>
+							)}
 						</View>
 					</View>
 					<View style={styles.rightColumn}>
-							<Text style={styles.companyNameText}>{shop?.companyName}</Text>
+						<Text style={styles.companyNameText}>{shop?.companyName}</Text>
 						<View style={styles.activityContainer}>
 							<Text style={styles.activityText}>{shop?.activity}</Text>
 						</View>
-						
-            <View style={styles.addressContainer}>
-              <Ionicons name="location-sharp" size={20} color="red" />
-              <Text style={styles.addressText}>{formatAddress(shop?.address)}</Text>
-            </View>
-						
+
+						<View style={styles.addressContainer}>
+							<Ionicons name="location-sharp" size={20} color="red" />
+							<Text style={styles.addressText}>{formatAddress(shop?.address)}</Text>
+						</View>
 					</View>
 				</View>
 			</View>
 
-      <ScrollView>
-        {/* Section Description */}
+			<ScrollView>
+				{/* Section Description */}
 				{shop.description && shop.description !== "" ? (
 					<View style={styles.description}>
 						<Text style={styles.descriptionTitle}>Un petit mot de votre commerçant</Text>
@@ -178,146 +174,106 @@ export default function InfoShopToAddScreen({ route }) {
 					</View>
 				) : null}
 
+				{/* Promotions en cours */}
+				<View style={styles.promotions}>
+					<ScrollView style={styles.promotions}>
+						<Text style={styles.promotionsTitle}>Promotions en cours</Text>
+						{/* Liste des promotions */}
+						{shopPromotions.map((promotion) => (
+							<View style={styles.promotionsContainer} key={promotion.id}>
+								<View style={styles.alignColumn}>
+									<View>
+										<View style={styles.firstRow}>
+											<Text style={styles.promoCompany}>{promotion.name}</Text>
+										</View>
+										<View>
+											<Text style={styles.promoDescription}>{promotion.description}</Text>
+										</View>
+									</View>
+									<View style={styles.secondColumn}>
+										<View>
+											<Text style={styles.promoDate}>
+												Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} {"\n"}au{" "}
+												{new Date(promotion.endAt).toLocaleDateString("fr-FR")}
+											</Text>
+										</View>
+									</View>
+								</View>
+							</View>
+						))}
+					</ScrollView>
+				</View>
+			</ScrollView>
 
+			{/* CTA ajouter (10%) */}
 
+			<View style={styles.ctaContainer}>
+				{!existedCard ? (
+					<TouchableOpacity
+						title="Ajouter à mon wallet"
+						onPress={() => {
+							handleClick();
+						}}
+					>
+						<CustomButton title="Ajouter à mon wallet" />
+					</TouchableOpacity>
+				) : (
+					<TouchableOpacity
+						title="Voir ma carte"
+						onPress={async () => {
+							const card = existedCard;
 
-        
-        {/* Promotions en cours */}
-      <View style={styles.promotions}>
-        <ScrollView style={styles.promotions}>
-          <Text style={styles.promotionsTitle}>Promotions en cours</Text>
-          {/* Liste des promotions */}
-          {shopPromotions.map((promotion) => (
-            <View style={styles.promotionsContainer} key={promotion.id}>
+							props.navigation.navigate("InfoCard", {
+								screen: "CardScreenInfo",
+								card
+							});
+						}}
+					>
+						<CustomButton title="Voir ma carte" />
+					</TouchableOpacity>
+				)}
+			</View>
+			<ActivityIndicator size={"large"} animating={isLoading} color={MD2Colors.green200} />
 
-
-              <View style={styles.alignColumn}>
-                <View>
-                  <View style={styles.firstRow}>
-                    <Text style={styles.promoCompany}>
-                      {promotion.name}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={styles.promoDescription}>
-                        {promotion.description}
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.secondColumn}>
-                  <View >
-                    <Text style={styles.promoDate}>
-                      Du {new Date(promotion.startAt).toLocaleDateString("fr-FR")} {"\n"}au{" "}
-                      {new Date(promotion.endAt).toLocaleDateString("fr-FR")}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-      </ScrollView>
-
-
-
-     
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-  
-
-    
-      {/* CTA ajouter (10%) */}
-
-      <View style={styles.ctaContainer}>
-        {!existedCard ? (
-          <TouchableOpacity
-            title="Ajouter à mon wallet"
-            onPress={() => {
-              handleClick();
-            }}
-          >
-            <CustomButton title="Ajouter à mon wallet" />
-          </TouchableOpacity>
-        ) : (
-          // : (
-          // 	<CustomButton title="Carte déjà dans le wallet" />
-          // )
-          <TouchableOpacity
-            title="Voir ma carte"
-            onPress={async () => {
-              const card = existedCard;
-
-              props.navigation.navigate("InfoCard", {
-                screen: "CardScreenInfo",
-                card,
-              });
-            }}
-          >
-            <CustomButton title="Voir ma carte" />
-          </TouchableOpacity>
-        )}
-      </View>
-      <ActivityIndicator
-        size={"large"}
-        animating={isLoading}
-        color={MD2Colors.green200}
-      />
-
-      <Snackbar
-        visible={snackBarVisible}
-        onDismiss={() => {
-          setTimeout(() => {
-            setSnackbarVisible(false);
-          }, 3000);
-        }}
-        duration={2500}
-        action={{
-          label: "OK",
-          onPress: () => {
-            setSnackbarVisible(false);
-          },
-        }}
-      >
-        {snackBarMessage}
-      </Snackbar>
-    </View>
-  );
+			<Snackbar
+				visible={snackBarVisible}
+				onDismiss={() => {
+					setTimeout(() => {
+						setSnackbarVisible(false);
+					}, 3000);
+				}}
+				duration={2500}
+				action={{
+					label: "OK",
+					onPress: () => {
+						setSnackbarVisible(false);
+					}
+				}}
+			>
+				{snackBarMessage}
+			</Snackbar>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: "#F5F5F5",
-  },
-  // Section Header
+	container: {
+		flex: 1,
+		flexDirection: "column",
+		backgroundColor: "#F5F5F5"
+	},
+	// Section Header
 	header: {
 		paddingTop: 20,
 		paddingHorizontal: 15,
-		position: 'sticky',
+		position: "sticky",
 		top: 0,
 		backgroundColor: "#5DB075",
-		zIndex: 1,
+		zIndex: 1
 	},
 	goBackButton: {
 		left: 10,
-		paddingTop: 10,
+		paddingTop: 10
 	},
 	backButtonText: {
 		color: "#424242",
@@ -326,9 +282,9 @@ const styles = StyleSheet.create({
 	},
 	// Section Header Infoshop
 	infoShop: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 10,
+		flexDirection: "row",
+		alignItems: "center",
+		paddingVertical: 10
 	},
 	leftColumn: {
 		flex: 0.35,
@@ -339,7 +295,7 @@ const styles = StyleSheet.create({
 	rightColumn: {
 		flex: 0.65,
 		backgroundColor: "#5DB075",
-		justifyContent: "center",
+		justifyContent: "center"
 	},
 	shopImageContainer: {
 		width: 70,
@@ -395,84 +351,84 @@ const styles = StyleSheet.create({
 		color: "#424242",
 		textAlign: "center"
 	},
-  // Description styles
-  description: {
-    backgroundColor: "#fff",
-    padding: 20,
-  },
-  descriptionTitle: {
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "left",
-  },
-  descriptionText: {
-    fontStyle: "italic",
-    textAlign: "left",
-    marginBottom: 20,
-    fontSize: 12,
-  },
-  signature: {
-    textAlign: "right",
-    fontWeight: "bold",
-    fontSize: 12,
-  },
-  // Description styles
+	// Description styles
+	description: {
+		backgroundColor: "#fff",
+		padding: 20
+	},
+	descriptionTitle: {
+		textTransform: "uppercase",
+		fontSize: 14,
+		fontWeight: "bold",
+		marginBottom: 10,
+		textAlign: "left"
+	},
+	descriptionText: {
+		fontStyle: "italic",
+		textAlign: "left",
+		marginBottom: 20,
+		fontSize: 12
+	},
+	signature: {
+		textAlign: "right",
+		fontWeight: "bold",
+		fontSize: 12
+	},
+	// Description styles
 
-  // Promotions styles
-  promotions: {
-    flex: 1,
-    backgroundColor: "#F5F5F5",
-    padding: 10,
-  },
-  promotionsTitle: {
-    textTransform: "uppercase",
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "left",
-  },
-  promotionsContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    padding: 5,
-    marginVertical: 1,
-    borderColor: "#CAD3C8",
-		borderWidth: 1,
-  },
-  alignColumn: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  firstRow: {
-    flexDirection: "row",
-  },
-  secondColumn: {
-    justifyContent: "center",
-  },
-  promoCompany: {
-    color: "#424242",
-    textTransform: "uppercase",
-    fontWeight: "bold",
-  },
-  promoDate: {
-    fontSize: 9,
-    flex: 1,
-    textAlign: "right",
-  },
-  promoDescription: {
-    fontSize: 12,
-    color: "darkgray",
-    marginTop: 5,
-  },
-  // Promotions styles
-  ctaContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',  
-    alignItems: "center",
-    padding: 10,
-    backgroundColor: "#F5F5F5",  
-  },
+	// Promotions styles
+	promotions: {
+		flex: 1,
+		backgroundColor: "#F5F5F5",
+		padding: 10
+	},
+	promotionsTitle: {
+		textTransform: "uppercase",
+		fontSize: 14,
+		fontWeight: "bold",
+		marginBottom: 10,
+		textAlign: "left"
+	},
+	promotionsContainer: {
+		backgroundColor: "#fff",
+		borderRadius: 5,
+		padding: 5,
+		marginVertical: 1,
+		borderColor: "#CAD3C8",
+		borderWidth: 1
+	},
+	alignColumn: {
+		flexDirection: "row",
+		justifyContent: "space-between"
+	},
+	firstRow: {
+		flexDirection: "row"
+	},
+	secondColumn: {
+		justifyContent: "center"
+	},
+	promoCompany: {
+		color: "#424242",
+		textTransform: "uppercase",
+		fontWeight: "bold"
+	},
+	promoDate: {
+		fontSize: 9,
+		flex: 1,
+		textAlign: "right"
+	},
+	promoDescription: {
+		fontSize: 12,
+		color: "darkgray",
+		marginTop: 5
+	},
+	// Promotions styles
+	ctaContainer: {
+		position: "absolute",
+		bottom: 15,
+		width: "100%",
+		alignItems: "center",
+		padding: 10,
+		backgroundColor: "#F5F5F5"
+	}
 });

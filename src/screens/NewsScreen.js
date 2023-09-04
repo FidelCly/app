@@ -290,7 +290,7 @@ const NewsScreen = (props) => {
 														/>
 														<Text style={styles.promoCompany}>
 															{/* {console.log(promo.shop.companyName)} */}
-															{promo["shop"].companyName}
+															{getShopByPromotionId(promo.shopId, promo.id)?.companyName}
 														</Text>
 													</View>
 													<View>
