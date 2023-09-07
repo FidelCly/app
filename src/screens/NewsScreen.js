@@ -167,7 +167,7 @@ const NewsScreen = (props) => {
 						) : user ? (
 							<View>
 								<View>
-									<Text style={styles.textBonjour}>Bonjour {user.username}</Text>
+									<Text style={styles.textBonjour}>Bonjour, {user.username}</Text>
 								</View>
 								<View style={styles.rowNotif}>
 									<View style={styles.iconNotif}>
@@ -202,9 +202,9 @@ const NewsScreen = (props) => {
 											</Text>
 										</View>
 									) : (
-										<View style={styles.columnText}>
-											<Text style={styles.infoText}>
-												Vous n'avez pas de carte compète pour le moment
+										<View style={styles.colNotif}>
+											<Text style={styles.infoNotif}>
+												Vous n'avez pas encore de carte complétée!
 											</Text>
 										</View>
 									)}
