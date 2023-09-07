@@ -169,8 +169,7 @@ export default function EditProfilScreen({ props, navigation }) {
             style={styles.input}
             onChangeText={setBirthDate}
             value={birthDate}
-            // keyboardType="numeric"
-            placeholder="Entrez votre date de naissance"
+            placeholder="Entrez votre date de naissance JJ/MM/AAAA"
           />
           <TextInput
             style={styles.input}

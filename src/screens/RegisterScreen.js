@@ -68,7 +68,7 @@ export default function LoginScreen(props) {
           containerStyle={{ width: "85%" }}
           inputStyle={styles.app__inputStyle}
           placeholder="Adresse email"
-          onChangeText={(val) => setEmail(val)}
+          onChangeText={(val) => setEmail(val.toLowerCase())}
         />
         <Input
           containerStyle={{ width: "85%" }}
@@ -156,6 +156,7 @@ export default function LoginScreen(props) {
  * registerUser
  */
 async function registerUser(email, password) {
+  email = email.toLowerCase();
   const registerResponse = await register(email, password);
   if (registerResponse.status !== 201) {
     throw new Error(
@@ -202,6 +203,8 @@ async function registerUser(email, password) {
  * verifyForm
  */
 async function verifyForm(email, password) {
+  email = email.toLowerCase();
+  
   if (email === "" || password === "" || password.length < 8) {
     throw new Error("Adresse email ou mot de passe incorrect");
   }
