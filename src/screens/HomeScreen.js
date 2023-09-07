@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logo: {
-    width: 200,
-    height: 150,
+    width: 300,
+    height: 300,
     marginTop: height * 0.15,
   },
   row__login: {
