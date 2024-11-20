@@ -12,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
   "dependencies": {
-    "@expo/webpack-config": "^18.0.4",
+    "@expo/webpack-config": "^18.1.0",
     "@react-native-async-storage/async-storage": "1.19.2",
     "@react-native-community/cli-server-api": "^11.3.5",
     "@react-native-community/slider": "^4.4.2",
@@ -24,7 +24,7 @@
     "@rneui/base": "^4.0.0-rc.5",
     "@rneui/themed": "^4.0.0-rc.7",
     "@types/luxon": "^3.3.1",
-    "expo": "^48.0.19",
+    "expo": "^52.0.8",
     "expo-barcode-scanner": "~12.3.1",
     "expo-constants": "~14.2.1",
     "expo-file-system": "^15.1.1",
